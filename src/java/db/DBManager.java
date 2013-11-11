@@ -17,6 +17,37 @@ import java.sql.SQLException;
  * @author jibbo
  */
 public class DBManager implements Serializable {
+    
+//  users
+    public static final String USERID = "userid";
+    public static final String USERNAME = "username";
+    public static final String PASSWORD = "password";
+    public static final String AVATAR = "avatar"; //(file)
+
+//  group
+    public static final String GROUP_ID = "groupid";
+    public static final String GROUP_NAME = "groupname";
+    public static final String OWNER_ID = "ownerid";
+    public static final String CREATION_DATE =  "creationdate";
+
+//  user_group relational between group and users
+
+//  post
+    public static final String POST_ID = "postid";
+    public static final String POST_DATE = "date";
+    //field groupid 
+    public static final String CONTENT = "text";
+    //field post creator id
+
+//  post_file
+    public static final String FILE_ID = "fileid";
+    public static final String FILE_CONTENT =  "file";
+    //facultative (id_gruppo)
+    //facultative (id_scrivente)
+    // field id_post
+
+//  invites relational between group and users, we can also add a field in 
+//  the group members table with a value as "accepted", "pending", "declined", etc.
 
  // transient == non viene serializzato
     private static transient Connection con;
