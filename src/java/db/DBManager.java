@@ -18,33 +18,37 @@ import java.sql.SQLException;
  */
 public class DBManager implements Serializable {
     
-//  users
+    public static final String USER_TABLE = "users";
     public static final String USERID = "userid";
     public static final String USERNAME = "username";
     public static final String PASSWORD = "password";
     public static final String AVATAR = "avatar"; //(file)
 
-//  group
+    public static final String GROUP_TABLE = "group";
     public static final String GROUP_ID = "groupid";
     public static final String GROUP_NAME = "groupname";
-    public static final String OWNER_ID = "ownerid";
-    public static final String CREATION_DATE =  "creationdate";
+    public static final String GROUP_OWNER_ID = "ownerid";
+    public static final String GROUP_CREATION_DATE =  "groupcreation";
 
-//  user_group relational between group and users
+    public static final String RELATION_USER_GROUP = "user_group";
+    public static final String RELATION_USER_GROUP_ID = "id";
+    // field userid
+    //fiel groupid
+    public static final String RELATION_USER_GROUP_STATUS = "status";
 
-//  post
+    public static final String POST_TABLE = "post";
     public static final String POST_ID = "postid";
     public static final String POST_DATE = "date";
-    //field groupid 
-    public static final String CONTENT = "text";
-    //field post creator id
+    public static final String POST_GROUP_ID = "groupid"; 
+    public static final String POST_CONTENT = "content";
+    public static final String POST_OWNER = "ownerid";
 
-//  post_file
+    public static final String FILE_TABLE = "post_file";
     public static final String FILE_ID = "fileid";
     public static final String FILE_CONTENT =  "file";
+    public static final String FILE_POST_ID = "postid";
     //facultative (id_gruppo)
     //facultative (id_scrivente)
-    // field id_post
 
 //  invites relational between group and users, we can also add a field in 
 //  the group members table with a value as "accepted", "pending", "declined", etc.

@@ -1,0 +1,37 @@
+CREATE TABLE users(
+    userid INTEGER PRIMARY KEY AUTOINCREMENT,
+    username TEXT,
+    password TEXT,
+    avatar TEXT
+);
+
+CREATE TABLE group(
+    groupid INTEGER PRIMARY KEY AUTOINCREMENT,
+    groupname TEXT,
+    ownerid INTEGER,
+    creationdate TEXT
+);
+
+CREATE TABLE user_group(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    userid INTEGER,
+    groupid INTEGER,
+    status INTEGER,
+    FOREIGNKEY(userid) REFERENCES users(userid),
+    FOREIGNKEY(groupid) REFERENCES group(groupid)
+);
+
+CREATE TABLE post(
+    postid INTEGER PRIMARY KEY AUTOINCREMENT,
+    groupid INTEGER,
+    ownerid INTEGER,
+    date TEXT,
+    content TEXT
+);
+
+CREATE TABLE post_file(
+    fileid INTEGER PRIMARY KEY AUTOINCREMENT,
+    postid INTEGER,
+    filepath TEXT,
+);
+
