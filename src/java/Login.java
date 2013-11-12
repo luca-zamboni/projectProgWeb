@@ -34,14 +34,15 @@ public class Login extends HttpServlet {
             throws ServletException, IOException {
         connectToDatabase();
         PrintWriter pw = response.getWriter();
-        if (loginValid(request)) {
+        int login = loginValid(request);
+        if (loginValid(request) == 0) {
             pw.println("<html>");
             checkAndSetSession(request,user);      
             pw.println(constructStringLogin(setDateCookie(request, response, user),user));
             pw.println("<a href='logout'>Logout</a>");
             pw.println("</html>");
         }else{
-            response.sendRedirect("./?error=1");
+            response.sendRedirect("./?error="+login);
         }
     }
     
@@ -65,10 +66,14 @@ public class Login extends HttpServlet {
         }
         return "";
     }
+    
+    /**
+     * 
+     * @param request
+     * @return 0 se giusto 1 se sbagliati 2 se minori di 6 caratteri 3 se errore sql
+     */
+    private int loginValid(HttpServletRequest request) {
 
-    private boolean loginValid(HttpServletRequest request) {
-        
-        
         Enumeration paramNames = request.getParameterNames();
         while (paramNames.hasMoreElements()) {
             String paramName = (String) paramNames.nextElement();
@@ -80,9 +85,18 @@ public class Login extends HttpServlet {
                 password = paramValues[0];
             }
         }
+        if(user.length() <6 || password.length() < 6)
+            return 2;
+        try {
+            if(!dbm.login(user, password))
+                return 1;
+        } catch (SQLException ex) {
+            Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+            return 3;
+        }
         
+        return 0;
         
-        return true;
     }
     
     private String constructStringLogin(String date,String user){
