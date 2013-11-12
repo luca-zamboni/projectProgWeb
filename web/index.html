@@ -17,12 +17,12 @@ and open the template in the editor.
                 $("form").validate({
                     rules: {
                         username: {
-                            minlegnth: 6,
-                            required: true
+                            required: true,
+                            minlength: 6
                         },
                         password: {
-                            minlength: 6,
-                            required: true
+                            required: true,
+                            minlength: 6
                         }
                     },
                     highlight: function(element) {
@@ -51,13 +51,13 @@ and open the template in the editor.
                 <div class="form-group">
                     <label class="col-sm-2 control-label">UserName</label>
                     <div class="col-sm-10">
-                        <input name="username" type="text" class="form-control" placeholder="Username">
+                        <input id="username" name="username" type="text" class="form-control" placeholder="Username">
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="col-sm-2 control-label">Password</label>
                     <div class="col-sm-10">
-                        <input name="password" type="password" class="form-control" id="inputPassword3" placeholder="Password">
+                        <input id="password" name="password" type="password" class="form-control" id="inputPassword3" placeholder="Password">
                     </div>
                 </div>
                 <div class="form-group">

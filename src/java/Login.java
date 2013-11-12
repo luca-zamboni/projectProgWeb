@@ -43,7 +43,6 @@ public class Login extends HttpServlet {
         while (paramNames.hasMoreElements()) {
             String paramName = (String) paramNames.nextElement();
             String[] paramValues = request.getParameterValues(paramName);
-            pw.println(paramName + " " + paramValues[0]);
             if (paramName.equals(CAMPOSUSER)) {
                 user = paramValues[0];
             }
@@ -52,11 +51,26 @@ public class Login extends HttpServlet {
             }
 
         }
+        
         setSessionParams(request, user, new Date());
-        //TODO check del login
-        // solo debug per la data
-        pw.print(setDateCookie(request, response, user));
-
+        
+        pw.print("<html>");
+        
+        String date = setDateCookie(request, response, user);
+        if(date.equals("")){
+            pw.println("Primo accesso eseguito");
+        }else{
+            Date data = new Date();
+            data.setTime(Long.parseLong(date));
+            DateFormat formatter = new SimpleDateFormat("HH:mm:ss");
+            String dateFormatted = formatter.format(data);
+            pw.print("Ultimo accesso eseguito il " + data.toString());
+        }
+        
+        pw.print("<a href='logout'>Logout</a>");
+        
+        pw.print("</html>");
+            
     }
 
     private String setDateCookie(HttpServletRequest request,
