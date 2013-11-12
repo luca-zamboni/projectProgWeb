@@ -48,7 +48,8 @@ public class Login extends HttpServlet {
     
     private void connectToDatabase(){
       try {
-             dbm= new DBManager("db.sqlite");
+          //cambiare qua cazzo
+             dbm= new DBManager("/home/luca/projects/JavaServlet/oneProject/db.sqlite");
         } catch (SQLException ex) {
             Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
         }  
@@ -91,6 +92,7 @@ public class Login extends HttpServlet {
             if(!dbm.login(user, password))
                 return 1;
         } catch (SQLException ex) {
+            System.out.print(ex.getErrorCode());
             Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
             return 3;
         }

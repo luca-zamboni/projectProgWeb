@@ -54,7 +54,7 @@ public class DBManager implements Serializable {
 //  the group members table with a value as "accepted", "pending", "declined", etc.
 
  // transient == non viene serializzato
-    private static transient Connection con;
+    public static transient Connection con;
     private static final String URL_PREFIX = "jdbc:sqlite:";
 
     public DBManager(String dburl) throws SQLException {
@@ -63,22 +63,23 @@ public class DBManager implements Serializable {
 
             Class.forName("org.sqlite.JDBC", true,
                     getClass().getClassLoader());
-            Connection con = DriverManager.getConnection(URL_PREFIX+dburl);
-            this.con = con;
+            DBManager.con = DriverManager.getConnection(URL_PREFIX+dburl);
+            System.out.print(URL_PREFIX+dburl);
         } catch (ClassNotFoundException | SQLException e) {
             throw new RuntimeException(e.toString(), e);
         }
+        
     }
     
     public boolean login(String user, String passwd) throws SQLException{
-        String sql= "select count(*) where username=? passwd=?";
-        PreparedStatement stm = con.prepareStatement("sql");
+        String sql= "select count(*) from users where username=? AND password=?";
+        PreparedStatement stm = con.prepareStatement(sql);
         stm.setString(1, user);
         stm.setString(2, passwd);
         ResultSet rs = stm.executeQuery();
         try{
             if(rs.next()){
-                return rs.getInt(0)==1;
+                return rs.getInt(1)==1;
             }
         }finally{
             rs.close();
