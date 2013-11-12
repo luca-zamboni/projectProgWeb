@@ -1,24 +1,24 @@
 CREATE TABLE users(
     userid INTEGER PRIMARY KEY AUTOINCREMENT,
-    username TEXT,
-    password TEXT,
+    username TEXT NOT NULL,
+    password TEXT NOT NULL,
     avatar TEXT
 );
 
-CREATE TABLE group(
+CREATE TABLE groups(
     groupid INTEGER PRIMARY KEY AUTOINCREMENT,
-    groupname TEXT,
-    ownerid INTEGER,
+    ownerid INTEGER NOT NULL,
+    groupname TEXT NOT NULL,
     creationdate TEXT
 );
 
-CREATE TABLE user_group(
+CREATE TABLE user_groups (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    userid INTEGER,
-    groupid INTEGER,
+    userid INTEGER NOT NULL,
+    groupid INTEGER NOT NULL,
     status INTEGER,
-    FOREIGNKEY(userid) REFERENCES users(userid),
-    FOREIGNKEY(groupid) REFERENCES group(groupid)
+    FOREIGN KEY(userid) REFERENCES users(userid),
+    FOREIGN KEY(groupid) REFERENCES groups(groupid)
 );
 
 CREATE TABLE post(
@@ -32,6 +32,6 @@ CREATE TABLE post(
 CREATE TABLE post_file(
     fileid INTEGER PRIMARY KEY AUTOINCREMENT,
     postid INTEGER,
-    filepath TEXT,
+    filepath TEXT
 );
 
