@@ -24,13 +24,13 @@ public class DBManager implements Serializable {
     public static final String PASSWORD = "password";
     public static final String AVATAR = "avatar"; //(file)
 
-    public static final String GROUP_TABLE = "group";
+    public static final String GROUP_TABLE = "groups";
     public static final String GROUP_ID = "groupid";
     public static final String GROUP_NAME = "groupname";
     public static final String GROUP_OWNER_ID = "ownerid";
     public static final String GROUP_CREATION_DATE =  "groupcreation";
 
-    public static final String RELATION_USER_GROUP = "user_group";
+    public static final String RELATION_USER_GROUP = "user_groups";
     public static final String RELATION_USER_GROUP_ID = "id";
     // field userid
     //fiel groupid
@@ -45,7 +45,7 @@ public class DBManager implements Serializable {
 
     public static final String FILE_TABLE = "post_file";
     public static final String FILE_ID = "fileid";
-    public static final String FILE_CONTENT =  "file";
+    public static final String FILE_CONTENT =  "filepath";
     public static final String FILE_POST_ID = "postid";
     //facultative (id_gruppo)
     //facultative (id_scrivente)
