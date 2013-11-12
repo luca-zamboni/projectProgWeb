@@ -17,28 +17,58 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 public class Login extends HttpServlet {
-    
+
     //Session variables
-    public static final String SESSION_USER="username";
-    public static final String SESSION_DATA="data";
-    
+    public static final String SESSION_USER = "username";
+    public static final String SESSION_DATA = "data";
 
     private final String CAMPOSUSER = "username";
     private final String CAMPOPASS = "password";
 
     private String user;
     private String password;
+    private DBManager dbm;
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        try {
-            DBManager dbm = new DBManager("db.sqlite");
+        connectToDatabase();
+        PrintWriter pw = response.getWriter();
+        if (loginValid(request)) {
+            pw.println("<html>");
+            checkAndSetSession(request,user);      
+            pw.println(constructStringLogin(setDateCookie(request, response, user),user));
+            pw.println("<a href='logout'>Logout</a>");
+            pw.println("</html>");
+        }else{
+            response.sendRedirect("./?error=1");
+        }
+    }
+    
+    private void connectToDatabase(){
+      try {
+             dbm= new DBManager("db.sqlite");
         } catch (SQLException ex) {
             Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+        }  
+    }
+    
+    private String  checkAndSetSession(HttpServletRequest request,String user){
+        HttpSession session = request.getSession();
+        String usersession = (String) session.getAttribute(SESSION_USER);
+        if (usersession == null) {
+            setSessionParams(request, user, new Date());
+        } else {
+            if (!user.equals(usersession)) {
+                setSessionParams(request, user, new Date());
+            }
         }
+        return "";
+    }
 
-        PrintWriter pw = response.getWriter();
+    private boolean loginValid(HttpServletRequest request) {
+        
+        
         Enumeration paramNames = request.getParameterNames();
         while (paramNames.hasMoreElements()) {
             String paramName = (String) paramNames.nextElement();
@@ -49,28 +79,24 @@ public class Login extends HttpServlet {
             if (paramName.equals(CAMPOPASS)) {
                 password = paramValues[0];
             }
-
         }
         
-        setSessionParams(request, user, new Date());
         
-        pw.print("<html>");
-        
-        String date = setDateCookie(request, response, user);
-        if(date.equals("")){
-            pw.println("Primo accesso eseguito");
-        }else{
+        return true;
+    }
+    
+    private String constructStringLogin(String date,String user){
+        String ret = "";
+        if (date.equals("")) {
+            ret += "Primo accesso eseguito";
+        } else {
             Date data = new Date();
             data.setTime(Long.parseLong(date));
             DateFormat formatter = new SimpleDateFormat("HH:mm:ss");
             String dateFormatted = formatter.format(data);
-            pw.print("Ultimo accesso eseguito il " + data.toString());
+            ret += "Ultimo accesso eseguito il " + data.toString();
         }
-        
-        pw.print("<a href='logout'>Logout</a>");
-        
-        pw.print("</html>");
-            
+        return ret;
     }
 
     private String setDateCookie(HttpServletRequest request,
@@ -84,6 +110,7 @@ public class Login extends HttpServlet {
         }
         userCookie = new Cookie(user, a.getTime() + "");
         response.addCookie(userCookie);
+        
         return ret;
     }
 
