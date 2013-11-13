@@ -1,10 +1,12 @@
 
 import db.DBManager;
+import html.HtmlHelper;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.logging.Level;
@@ -15,6 +17,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import models.Group;
 
 public class Login extends HttpServlet {
 
@@ -39,11 +42,24 @@ public class Login extends HttpServlet {
             pw.println("<html>");
             checkAndSetSession(request,user);      
             pw.println(constructStringLogin(setDateCookie(request, response, user),user));
+            pw.println(getAllGroups(user));
             pw.println("<a href='logout'>Logout</a>");
             pw.println("</html>");
         }else{
             response.sendRedirect("./?error="+login);
         }
+    }
+    
+    private String getAllGroups(String user){
+        ArrayList<Group> mGroups;
+        String ret = "";
+        try {
+            mGroups = dbm.getAllGroups(user);
+            ret = HtmlHelper.getAllGroups(mGroups);
+        } catch (SQLException ex) {
+            Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return ret;
     }
     
     private void connectToDatabase(){

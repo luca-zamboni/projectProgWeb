@@ -11,6 +11,8 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import models.Group;
 
 /**
  *
@@ -71,12 +73,42 @@ public class DBManager implements Serializable {
         
     }
     
+    public ArrayList<Group> getAllGroups(String user) throws SQLException{
+        String sql= "select groups.groupid,groupname,creationdate,ownerid "
+                + "from groups,users,user_groups "
+                + "WHERE groups.groupid = user_groups.groupid "
+                + "AND users.userid= user_groups.userid "
+                + "AND username = 'asdasd'";
+        PreparedStatement stm = con.prepareStatement(sql);
+        //stm.setString(1, user);
+        ResultSet rs;
+        rs = stm.executeQuery();
+        ArrayList<Group> mGroups = new ArrayList<>();
+        try{
+            while(rs.next()){
+                int i1,i4;
+                String s2,s3;
+                i1 = rs.getInt(1);
+                s2 = rs.getString(2);
+                s3 = rs.getString(3);
+                i4 = rs.getInt(4);
+                mGroups.add(new Group(i1, i4, s2, s3));
+            }
+        }finally{
+            rs.close();
+            stm.close();
+        }
+        return mGroups;
+        
+    }
+    
     public boolean login(String user, String passwd) throws SQLException{
         String sql= "select count(*) from users where username=? AND password=?";
         PreparedStatement stm = con.prepareStatement(sql);
         stm.setString(1, user);
         stm.setString(2, passwd);
-        ResultSet rs = stm.executeQuery();
+        ResultSet rs;
+        rs = stm.executeQuery();
         try{
             if(rs.next()){
                 return rs.getInt(1)==1;
