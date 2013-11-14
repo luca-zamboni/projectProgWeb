@@ -16,6 +16,7 @@ public class Group {
     int owner;
     String groupName;
     String CreationDate;
+    String ownername;
 
     public int getId() {
         return id;
@@ -26,6 +27,14 @@ public class Group {
         this.owner = owner;
         this.groupName = groupName;
         this.CreationDate = CreationDate;
+    }
+
+    public String getOwnerName() {
+        return ownername;
+    }
+    
+    public void setOwnerName(String ow){
+        ownername = ow;
     }
 
     public void setId(int id) {

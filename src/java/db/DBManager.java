@@ -92,7 +92,9 @@ public class DBManager implements Serializable {
                 s2 = rs.getString(2);
                 s3 = rs.getString(3);
                 i4 = rs.getInt(4);
-                mGroups.add(new Group(i1, i4, s2, s3));
+                Group aux = new Group(i1, i4, s2, s3);
+                aux.setOwnerName(getUserFormId(i4));
+                mGroups.add(aux);
             }
         }finally{
             rs.close();
@@ -100,6 +102,23 @@ public class DBManager implements Serializable {
         }
         return mGroups;
         
+    }
+    
+    public String getUserFormId(int id) throws SQLException{
+        String sql= "select username from users where userid = ?";
+        PreparedStatement stm = con.prepareStatement(sql);
+        stm.setInt(1,id);
+        ResultSet rs;
+        rs = stm.executeQuery();
+        try{
+            if(rs.next()){
+                return rs.getString(1);
+            }
+        }finally{
+            rs.close();
+            stm.close();
+        }
+        return "";
     }
     
     public boolean login(String user, String passwd) throws SQLException{

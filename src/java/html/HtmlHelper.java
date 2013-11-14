@@ -49,6 +49,7 @@ public class HtmlHelper {
     
     public static String getAllGroups(ArrayList<Group> groups){
         String html = "";
+        html += "<br><h3>Your groups</h3>";
         html += "<table class=\"table table-bordered\">";
         html += "<tr>";
         html += "<td><b>Owner</b></td>";
@@ -59,7 +60,7 @@ public class HtmlHelper {
         while(i.hasNext()){
             Group aux = i.next();
             html += "<tr>";
-            html += "<td>"+aux.getOwner()+"</td>";
+            html += "<td>"+aux.getOwnerName()+"</td>";
             html += "<td>"+aux.getGroupName()+"</td>";
             html += "<td>"+aux.getCreationDate()+"</td>";
             html += "</tr>";

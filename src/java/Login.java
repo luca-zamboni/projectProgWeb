@@ -9,6 +9,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Enumeration;
+import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
@@ -79,6 +80,7 @@ public class Login extends HttpServlet {
         try {
             mGroups = dbm.getAllGroups(user);
             ret = HtmlHelper.getAllGroups(mGroups);
+            
         } catch (SQLException ex) {
             Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -149,7 +151,7 @@ public class Login extends HttpServlet {
             data.setTime(Long.parseLong(date));
             DateFormat formatter = new SimpleDateFormat("HH:mm:ss");
             String dateFormatted = formatter.format(data);
-            ret += "<br><br><h3>Ultimo accesso eseguito il " + data.toString() +"<h3>";
+            ret += "<br><h3>Ultimo accesso eseguito il " + data.toString() +"<h3>";
             ret += "<h1> Re-Welcome " + user + "</h1>";
         }
         return ret;
