@@ -16,6 +16,15 @@ import models.Group;
  */
 public class HtmlHelper {
     
+    public static String includeBootstrapJquey(){
+        String ret = "";
+        ret+= "<link href=\"css/bootstrap.min.css\" rel=\"stylesheet\">\n"+
+        "<script src=\"https://code.jquery.com/jquery.js\"></script>\n"+
+        "<script src=\"js/bootstrap.min.js\"></script>\n";
+        return ret;
+        
+    }
+    
     public static String getTableFrom(ArrayList<String> columns, ArrayList<ArrayList> data){
         String html = "";
         html += "<table>";
@@ -40,11 +49,11 @@ public class HtmlHelper {
     
     public static String getAllGroups(ArrayList<Group> groups){
         String html = "";
-        html += "<table>";
+        html += "<table class=\"table table-bordered\">";
         html += "<tr>";
-        html += "<td>Owner</td>";
-        html += "<td>Group Name</td>";
-        html += "<td>Creation Date</td>";
+        html += "<td><b>Owner</b></td>";
+        html += "<td><b>Group Name</b></td>";
+        html += "<td><b>Creation Date</b></td>";
         html += "</tr>";
         Iterator<Group> i = groups.iterator();
         while(i.hasNext()){

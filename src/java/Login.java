@@ -33,24 +33,47 @@ public class Login extends HttpServlet {
     private DBManager dbm;
 
     @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        HttpSession session = request.getSession();
+        String username = (String) session.getAttribute(SESSION_USER);
+        if(username.equals("")){
+            response.sendRedirect("./");
+        }else{
+            generateHtml(request,response,username);
+        }
+        
+    }
+
+    @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         connectToDatabase();
-        PrintWriter pw = response.getWriter();
         int login = loginValid(request);
         if (loginValid(request) == 0) {
-            pw.println("<html>");
-            checkAndSetSession(request,user);      
-            pw.println(constructStringLogin(setDateCookie(request, response, user),user));
-            pw.println(getAllGroups(user));
-            pw.println("<a href='logout'>Logout</a>");
-            pw.println("</html>");
+            checkAndSetSession(request,user);
+            generateHtml(request, response, user);
         }else{
             response.sendRedirect("./?error="+login);
         }
     }
     
-    private String getAllGroups(String user){
+    private void generateHtml(HttpServletRequest request, HttpServletResponse response,String user) throws IOException{
+        
+        PrintWriter pw = response.getWriter();
+        pw.println("<html>");
+        pw.print("<head>");
+        pw.print(HtmlHelper.includeBootstrapJquey());
+        pw.print("</head>");
+        pw.print("<div style=\"width:1000px; margin:0 auto;\">");
+        pw.println(constructStringLogin(setDateCookie(request, response, user),user));
+        pw.println(getTableGroups(user));
+        pw.println("<a href='logout'>Logout</a></div>");
+        pw.println("");
+        pw.println("</html>");
+        
+    }
+    
+    private String getTableGroups(String user){
         ArrayList<Group> mGroups;
         String ret = "";
         try {
@@ -120,13 +143,14 @@ public class Login extends HttpServlet {
     private String constructStringLogin(String date,String user){
         String ret = "";
         if (date.equals("")) {
-            ret += "Primo accesso eseguito";
+            ret += "Primo accesso eseguito -- Welcome " + user;
         } else {
             Date data = new Date();
             data.setTime(Long.parseLong(date));
             DateFormat formatter = new SimpleDateFormat("HH:mm:ss");
             String dateFormatted = formatter.format(data);
-            ret += "Ultimo accesso eseguito il " + data.toString();
+            ret += "<br><br><h3>Ultimo accesso eseguito il " + data.toString() +"<h3>";
+            ret += "<h1> Re-Welcome " + user + "</h1>";
         }
         return ret;
     }

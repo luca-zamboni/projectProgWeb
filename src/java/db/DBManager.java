@@ -78,9 +78,9 @@ public class DBManager implements Serializable {
                 + "from groups,users,user_groups "
                 + "WHERE groups.groupid = user_groups.groupid "
                 + "AND users.userid= user_groups.userid "
-                + "AND username = 'asdasd'";
+                + "AND username = ?";
         PreparedStatement stm = con.prepareStatement(sql);
-        //stm.setString(1, user);
+        stm.setString(1, user);
         ResultSet rs;
         rs = stm.executeQuery();
         ArrayList<Group> mGroups = new ArrayList<>();
