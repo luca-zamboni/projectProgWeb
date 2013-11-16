@@ -11,6 +11,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import models.Group;
 
@@ -71,6 +72,37 @@ public class DBManager implements Serializable {
         } catch (ClassNotFoundException | SQLException e) {
             throw new RuntimeException(e.toString(), e);
         }
+    }
+    
+    public void newGroup(String title, String[] users, int owner) throws SQLException{
+        
+        String sql = "INSERT into GROUPS(ownerid,groupname,creationdate)"
+                + "VALUES (?,?,strftime('%s', 'now'))";
+        PreparedStatement stm = con.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS);
+        stm.setInt(1,owner);
+        stm.setString(2, title);
+        stm.executeUpdate();
+        PreparedStatement stmaux = con.prepareStatement("SELECT last_insert_rowid()");
+        int groupid = -1;
+        ResultSet res = stmaux.executeQuery();
+        if (res.next()) {
+            groupid = res.getInt(1);
+        }
+        res.close();
+        stm.close();
+        
+        System.err.println(groupid);
+        String sql2;
+        
+        for(String mUser : users){
+            int aux = getIdFromUser(mUser);
+            sql2 = "INSERT INTO user_groups(userid,groupid) VALUES (?,?)";
+            PreparedStatement stm2 = con.prepareStatement(sql2);
+            stm2.setInt(1, aux);
+            stm2.setInt(2, groupid);
+            stm2.executeUpdate();
+            stm2.close();
+        }
         
     }
     
@@ -120,6 +152,23 @@ public class DBManager implements Serializable {
         }
         return mGroups;
         
+    }
+    
+    public int getIdFromUser(String user) throws SQLException{
+        String sql= "select userid from users where username = ?";
+        PreparedStatement stm = con.prepareStatement(sql);
+        stm.setString(1, user);
+        ResultSet rs;
+        rs = stm.executeQuery();
+        try{
+            if(rs.next()){
+                return rs.getInt(1);
+            }
+        }finally{
+            rs.close();
+            stm.close();
+        }
+        return -1;
     }
     
     public String getUserFormId(int id) throws SQLException{
