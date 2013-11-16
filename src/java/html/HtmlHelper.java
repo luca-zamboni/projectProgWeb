@@ -16,11 +16,14 @@ import models.Group;
  */
 public class HtmlHelper {
     
-    public static String includeBootstrapJquey(){
+    public static String includeHead(){
         String ret = "";
+        
+        ret += "<head>";
         ret+= "<link href=\"css/bootstrap.min.css\" rel=\"stylesheet\">\n"+
         "<script src=\"https://code.jquery.com/jquery.js\"></script>\n"+
         "<script src=\"js/bootstrap.min.js\"></script>\n";
+        ret += "</head>";
         return ret;
         
     }

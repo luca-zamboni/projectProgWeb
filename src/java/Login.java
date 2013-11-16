@@ -9,7 +9,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Enumeration;
-import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
@@ -62,15 +61,19 @@ public class Login extends HttpServlet {
         
         PrintWriter pw = response.getWriter();
         pw.println("<html>");
-        pw.print("<head>");
-        pw.print(HtmlHelper.includeBootstrapJquey());
-        pw.print("</head>");
-        pw.print("<div style=\"width:1000px; margin:0 auto;\">");
+        pw.print(HtmlHelper.includeHead());
+        pw.print("<body>");
+        pw.print("<div class=\"row\">"
+                + "<div class=\"col-md-2\">&nbsp.</div>"
+                + "<div class=\"col-md-8\">");
         pw.println(constructStringLogin(setDateCookie(request, response, user),user));
+        pw.println("<a href='#' type=\"button\" class=\"btn btn-primary btn-lg\">"
+                + "Creat Group"
+                + "</a>");
         pw.println(getTableGroups(user));
         pw.println("<a href='logout'>Logout</a></div>");
         pw.println("");
-        pw.println("</html>");
+        pw.println("</div></div></body>");
         
     }
     
@@ -90,7 +93,7 @@ public class Login extends HttpServlet {
     private void connectToDatabase(){
       try {
           //cambiare qua cazzo
-             dbm= new DBManager("/home/luca/projects/JavaServlet/oneProject/db.sqlite");
+             dbm= new DBManager(DBManager.DB_URL);
         } catch (SQLException ex) {
             Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
         }  
@@ -145,13 +148,14 @@ public class Login extends HttpServlet {
     private String constructStringLogin(String date,String user){
         String ret = "";
         if (date.equals("")) {
-            ret += "Primo accesso eseguito -- Welcome " + user;
+            ret += "<br><h3>Primo accesso eseguito su questo pc</h3>";
+            ret += "<h1> Welcome " + user + "</h1>";
         } else {
             Date data = new Date();
             data.setTime(Long.parseLong(date));
             DateFormat formatter = new SimpleDateFormat("HH:mm:ss");
             String dateFormatted = formatter.format(data);
-            ret += "<br><h3>Ultimo accesso eseguito il " + data.toString() +"<h3>";
+            ret += "<br><h3>Ultimo accesso eseguito il " + data.toString() +"</h3>";
             ret += "<h1> Re-Welcome " + user + "</h1>";
         }
         return ret;
@@ -167,6 +171,7 @@ public class Login extends HttpServlet {
             ret = userCookie.getValue();
         }
         userCookie = new Cookie(user, a.getTime() + "");
+        userCookie.setMaxAge(3600 * 24 * 30 * 6);
         response.addCookie(userCookie);
         
         return ret;
