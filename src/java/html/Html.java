@@ -14,7 +14,26 @@ import models.Group;
  *
  * @author luca
  */
-public class HtmlHelper {
+public class Html {
+    
+    public static final String POST = "POST";
+    public static final String GET = "GET";        
+    
+    public static String generateForm(String action,String method,String content){
+        String ret ="";
+        ret += "<form method='" +method+"' action='"+action+"'>";
+        ret += content;
+        ret += "</form>";
+        return ret;
+    }
+    
+    public static String h1String(String text){
+        return "<h1>" + text + "</h1>";
+    }
+    
+    public static String generateH(int h,String text){
+         return "<h"+h+">" + text + "</h"+h+">";
+    }
     
     public static String includeHead(){
         String ret = "";
@@ -26,6 +45,16 @@ public class HtmlHelper {
         ret += "</head>";
         return ret;
         
+    }
+    
+    public static String centerInPage(String html){
+        String ret = "";
+        ret += "<div class=\"row\">"
+            +  "<div class=\"col-md-2\">&nbsp.</div>"
+            +  "<div class=\"col-md-8\">";
+        ret += html;
+        ret += "</div>";
+        return ret;
     }
     
     public static String getTableFrom(ArrayList<String> columns, ArrayList<ArrayList> data){

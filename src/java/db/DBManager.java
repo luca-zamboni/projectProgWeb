@@ -74,6 +74,23 @@ public class DBManager implements Serializable {
         
     }
     
+    public ArrayList<String> getAllUSer() throws SQLException{
+        String sql = "SELECT username FROM users";
+        PreparedStatement stm = con.prepareStatement(sql);
+        ResultSet rs;
+        rs = stm.executeQuery();
+        ArrayList<String> mUsers = new ArrayList<>();
+        try{
+            while(rs.next()){
+                mUsers.add(rs.getString(1));
+            }
+        }finally{
+            rs.close();
+            stm.close();
+        }
+        return mUsers;
+    }
+    
     public ArrayList<Group> getAllGroups(String user) throws SQLException{
         String sql= "select groups.groupid,groupname,creationdate,ownerid "
                 + "from groups,users,user_groups "

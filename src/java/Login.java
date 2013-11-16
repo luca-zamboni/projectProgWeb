@@ -1,6 +1,6 @@
 
 import db.DBManager;
-import html.HtmlHelper;
+import html.Html;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
@@ -34,6 +34,7 @@ public class Login extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        connectToDatabase();
         HttpSession session = request.getSession();
         String username = (String) session.getAttribute(SESSION_USER);
         if(username.equals("")){
@@ -61,19 +62,18 @@ public class Login extends HttpServlet {
         
         PrintWriter pw = response.getWriter();
         pw.println("<html>");
-        pw.print(HtmlHelper.includeHead());
+        pw.print(Html.includeHead());
         pw.print("<body>");
-        pw.print("<div class=\"row\">"
-                + "<div class=\"col-md-2\">&nbsp.</div>"
-                + "<div class=\"col-md-8\">");
-        pw.println(constructStringLogin(setDateCookie(request, response, user),user));
-        pw.println("<a href='#' type=\"button\" class=\"btn btn-primary btn-lg\">"
-                + "Creat Group"
-                + "</a>");
-        pw.println(getTableGroups(user));
-        pw.println("<a href='logout'>Logout</a></div>");
-        pw.println("");
-        pw.println("</div></div></body>");
+        String body = "";
+        body += constructStringLogin(setDateCookie(request, response, user),user);
+        body += "<a href='newGroup' type=\"button\" class=\"btn btn-primary btn-lg\">"
+                + "Create Group"
+                + "</a>";
+        body += getTableGroups(user);
+        body +="<a href='logout'>Logout</a></div>";
+        pw.print(Html.centerInPage(body));
+        pw.println("</body>");
+        pw.println("</html>");
         
     }
     
@@ -82,7 +82,7 @@ public class Login extends HttpServlet {
         String ret = "";
         try {
             mGroups = dbm.getAllGroups(user);
-            ret = HtmlHelper.getAllGroups(mGroups);
+            ret = Html.getAllGroups(mGroups);
             
         } catch (SQLException ex) {
             Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
