@@ -35,6 +35,10 @@ public class Html {
          return "<h"+h+">" + text + "</h"+h+">";
     }
     
+    public static String generateHWithColor(int h,String text,String cClass){
+         return "<h"+h+" class=\""+cClass+"\">" + text + "</h"+h+">";
+    }
+    
     public static String includeHead(){
         String ret = "";
         
@@ -79,22 +83,38 @@ public class Html {
         return html+"<br>";
     }
     
-    public static String getAllGroups(ArrayList<Group> groups){
+    public static String getAllGroups(ArrayList<Group> groups, String user){
         String html = "";
+        html += "<style> .table td {\n" +
+                "   text-align: center;   \n" +
+                "}"
+                + "</style>";
         html += "<br><h3>Your groups</h3>";
-        html += "<table class=\"table table-bordered\">";
+        html += "<table class=\"table table-condensed table-hover\">";
         html += "<tr>";
         html += "<td><b>Owner</b></td>";
         html += "<td><b>Group Name</b></td>";
         html += "<td><b>Creation Date</b></td>";
+        html += "<td><b>Admin</b></td>";
         html += "</tr>";
         Iterator<Group> i = groups.iterator();
         while(i.hasNext()){
             Group aux = i.next();
-            html += "<tr>";
-            html += "<td>"+aux.getOwnerName()+"</td>";
-            html += "<td>"+aux.getGroupName()+"</td>";
-            html += "<td>"+aux.getCreationDate()+"</td>";
+            if(aux.getOwnerName().equals(user)){
+                html += "<tr class=\"success\">";
+                html += "<td>"+aux.getOwnerName()+"</td>";
+                html += "<td>"+aux.getGroupName()+"</td>";
+                html += "<td>"+aux.getCreationDate()+"</td>";
+                html += "<td><button type=\"button\" class=\"btn btn-default btn-xs\">\n" +
+                        "  <span class=\"glyphicon glyphicon-th\"></span> Manage\n" +
+                        "</button></td>";
+            }else{
+                html += "<tr>";
+                html += "<td>"+aux.getOwnerName()+"</td>";
+                html += "<td>"+aux.getGroupName()+"</td>";
+                html += "<td>"+aux.getCreationDate()+"</td>";
+                html += "<td></td>";
+            }
             html += "</tr>";
         }
         return html+"</table>";

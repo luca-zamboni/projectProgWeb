@@ -13,23 +13,23 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 public class NewGroup extends HttpServlet {
-    
+
     private DBManager dbm;
-    private static final String USERCHECKBOX ="users";
-    private static final String TITLE ="title-group";
+    private static final String USERCHECKBOX = "users";
+    private static final String TITLE = "title-group";
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        try{
+        try {
             connectToDatabase();
             HttpSession session = req.getSession();
             String username = (String) session.getAttribute(Login.SESSION_USER);
-            if(username.equals("")){
+            if (username.equals("")) {
                 resp.sendRedirect("./");
-            }else{
-                generateHtml(req,resp,username);
+            } else {
+                generateHtml(req, resp, username);
             }
-        }catch(IOException e){
+        } catch (IOException e) {
             resp.sendRedirect("./");
         }
     }
@@ -39,39 +39,41 @@ public class NewGroup extends HttpServlet {
         connectToDatabase();
         HttpSession session = req.getSession();
         String username = (String) session.getAttribute(Login.SESSION_USER);
-        if(username.equals("")){
+        if (username.equals("")) {
             resp.sendRedirect("./");
-        }else{
+        } else {
             String title = req.getParameter(TITLE);
             String[] users = req.getParameterValues(USERCHECKBOX);
-            
-            if(checkParameter(title,users)){
+            int check = checkParameter(title, users);
+            if (check == 0) {
                 try {
                     dbm.newGroup(title, users, dbm.getIdFromUser(username));
                     resp.sendRedirect("./login");
                 } catch (SQLException ex) {
                     Logger.getLogger(NewGroup.class.getName()).log(Level.SEVERE, null, ex);
                 }
-            }else{
-                resp.sendRedirect("./newGroup?err=1");
+            } else {
+                resp.sendRedirect("./newGroup?err=" + check);
             }
         }
     }
-    
-    private boolean checkParameter(String title,String[] users) {  
-        try{
-            for(String i : users){
-                
-            }
-        }catch(Exception e){
-            return false;
+
+    private int checkParameter(String title, String[] users) {
+        if (title.length() < 4) {
+            return 1;
         }
-        return (title.length() > 4);
-        
+        try {
+            for (String i : users) {
+
+            }
+        } catch (Exception e) {
+            return 2;
+        }
+        return 0;
+
     }
-    
-    private void generateHtml(HttpServletRequest request, HttpServletResponse response,String user) throws IOException{
-        
+
+    private void generateHtml(HttpServletRequest request, HttpServletResponse response, String user) throws IOException {
         PrintWriter pw = response.getWriter();
         pw.println("<html>");
         pw.print(Html.includeHead());
@@ -79,46 +81,69 @@ public class NewGroup extends HttpServlet {
         pw.print(Html.centerInPage(generateStringBody(request, response, user)));
         pw.println("</body>");
         pw.println("</html>");
-        
     }
-    
-    private String generateStringBody(HttpServletRequest request, HttpServletResponse response,String user){
+
+    private String generateStringBody(HttpServletRequest request, HttpServletResponse response, String user) {
         String body = "";
         String form = "";
-        
+
         body += Html.h1String("Create a new Group");
-        
-        form = Html.generateForm("./newGroup", Html.POST, getStringForm());
+
+        form = Html.generateForm("./newGroup", Html.POST, getStringForm(user, request));
         body += form;
-        
+
         return body;
     }
-    
-    public String getStringForm(){
+
+    public String getStringForm(String user, HttpServletRequest request) {
+
+        String err = (String) request.getParameter("err");
+
+        if (err == null) {
+            err = "-1";
+        }
         String form = "";
-        form += Html.generateH(3, "Group's title")
-                + "<input name='title-group' type=\"text\" class=\"form-control\" placeholder=\"Title\">";
+
+        if (err.equals("1")) {
+            form += Html.generateH(3, "Group's title")
+                    + "<div class=\"form-group has-error\">"
+                    + "<input name='title-group' type=\"text\" class=\"form-control\" placeholder=\"Title\">"
+                    + "</div>";
+        } else {
+            form += Html.generateH(3, "Group's title")
+                    + "<input name='title-group' type=\"text\" class=\"form-control\" placeholder=\"Title\">";
+        }
         form += Html.generateH(3, "Segli chi invitare");
-        ///form += "<label class=\"checkbox\">";
         try {
-            for(String i : dbm.getAllUSer()){
-                form +="<input type='checkbox' name=\"users\" value='"+ i +"'>" + i + "<br>";
+            if (err.equals("2")) {
+                form += html.Html.generateHWithColor(3, "Add at least one user","text-danger");
+                for (String i : dbm.getAllUSer()) {
+                    if (!user.equals(i)) {
+                        form += "<input type='checkbox' name=\"users\" value='" + i + "'>" + i + "<br>";
+                    }
+                }
+            } else {
+                for (String i : dbm.getAllUSer()) {
+                    if (!user.equals(i)) {
+                        form += "<input type='checkbox' name=\"users\" value='" + i + "'>" + i + "<br>";
+                    }
+                }
             }
         } catch (SQLException ex) {
             Logger.getLogger(NewGroup.class.getName()).log(Level.SEVERE, null, ex);
         }
         //form += "</label>";
-        form+="<button type=\"submit\" class=\"btn btn-default\">Submit</button>";
+        form += "<br><button type=\"submit\" class=\"btn btn-default\">Submit</button>";
+
         return form;
     }
-    
-    private void connectToDatabase(){
-      try {
-          //cambiare qua cazzo
-             dbm= new DBManager(DBManager.DB_URL);
+
+    private void connectToDatabase() {
+        try {
+            dbm = new DBManager(DBManager.DB_URL);
         } catch (SQLException ex) {
             Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
-        }  
+        }
     }
-    
+
 }

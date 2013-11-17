@@ -85,7 +85,7 @@ public class Login extends HttpServlet {
         String ret = "";
         try {
             mGroups = dbm.getAllGroups(user);
-            ret = Html.getAllGroups(mGroups);
+            ret = Html.getAllGroups(mGroups,user);
 
         } catch (SQLException ex) {
             Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
