@@ -55,9 +55,7 @@ public class NewGroup extends HttpServlet {
             }else{
                 resp.sendRedirect("./newGroup?err=1");
             }
-            
         }
-        
     }
     
     private boolean checkParameter(String title,String[] users) {  

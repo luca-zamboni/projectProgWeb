@@ -37,12 +37,15 @@ public class Login extends HttpServlet {
         connectToDatabase();
         HttpSession session = request.getSession();
         String username = (String) session.getAttribute(SESSION_USER);
-        if(username.equals("")){
+        try {
+            if (username.equals("")) {
+                response.sendRedirect("./");
+            } else {
+                generateHtml(request, response, username);
+            }
+        } catch (NullPointerException e) {
             response.sendRedirect("./");
-        }else{
-            generateHtml(request,response,username);
         }
-        
     }
 
     @Override
@@ -51,55 +54,55 @@ public class Login extends HttpServlet {
         connectToDatabase();
         int login = loginValid(request);
         if (loginValid(request) == 0) {
-            checkAndSetSession(request,user);
+            checkAndSetSession(request, user);
             generateHtml(request, response, user);
-        }else{
-            response.sendRedirect("./?error="+login);
+        } else {
+            response.sendRedirect("./?error=" + login);
         }
     }
-    
-    private void generateHtml(HttpServletRequest request, HttpServletResponse response,String user) throws IOException{
-        
+
+    private void generateHtml(HttpServletRequest request, HttpServletResponse response, String user) throws IOException {
+
         PrintWriter pw = response.getWriter();
         pw.println("<html>");
         pw.print(Html.includeHead());
         pw.print("<body>");
         String body = "";
-        body += constructStringLogin(setDateCookie(request, response, user),user);
+        body += constructStringLogin(setDateCookie(request, response, user), user);
         body += "<a href='newGroup' type=\"button\" class=\"btn btn-primary btn-lg\">"
                 + "Create Group"
                 + "</a>";
         body += getTableGroups(user);
-        body +="<a href='logout'>Logout</a></div>";
+        body += "<a href='logout'>Logout</a></div>";
         pw.print(Html.centerInPage(body));
         pw.println("</body>");
         pw.println("</html>");
-        
+
     }
-    
-    private String getTableGroups(String user){
+
+    private String getTableGroups(String user) {
         ArrayList<Group> mGroups;
         String ret = "";
         try {
             mGroups = dbm.getAllGroups(user);
             ret = Html.getAllGroups(mGroups);
-            
+
         } catch (SQLException ex) {
             Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
         }
         return ret;
     }
-    
-    private void connectToDatabase(){
-      try {
-          //cambiare qua cazzo
-             dbm= new DBManager(DBManager.DB_URL);
+
+    private void connectToDatabase() {
+        try {
+            //cambiare qua cazzo
+            dbm = new DBManager(DBManager.DB_URL);
         } catch (SQLException ex) {
             Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
-        }  
+        }
     }
-    
-    private String  checkAndSetSession(HttpServletRequest request,String user){
+
+    private String checkAndSetSession(HttpServletRequest request, String user) {
         HttpSession session = request.getSession();
         String usersession = (String) session.getAttribute(SESSION_USER);
         if (usersession == null) {
@@ -111,11 +114,12 @@ public class Login extends HttpServlet {
         }
         return "";
     }
-    
+
     /**
-     * 
+     *
      * @param request
-     * @return 0 se giusto 1 se sbagliati 2 se minori di 6 caratteri 3 se errore sql
+     * @return 0 se giusto 1 se sbagliati 2 se minori di 6 caratteri 3 se errore
+     * sql
      */
     private int loginValid(HttpServletRequest request) {
 
@@ -130,22 +134,24 @@ public class Login extends HttpServlet {
                 password = paramValues[0];
             }
         }
-        if(user.length() <6 || password.length() < 6)
+        if (user.length() < 6 || password.length() < 6) {
             return 2;
+        }
         try {
-            if(!dbm.login(user, password))
+            if (!dbm.login(user, password)) {
                 return 1;
+            }
         } catch (SQLException ex) {
             System.out.print(ex.getErrorCode());
             Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
             return 3;
         }
-        
+
         return 0;
-        
+
     }
-    
-    private String constructStringLogin(String date,String user){
+
+    private String constructStringLogin(String date, String user) {
         String ret = "";
         if (date.equals("")) {
             ret += "<br><h3>Primo accesso eseguito su questo pc</h3>";
@@ -155,7 +161,7 @@ public class Login extends HttpServlet {
             data.setTime(Long.parseLong(date));
             DateFormat formatter = new SimpleDateFormat("HH:mm:ss");
             String dateFormatted = formatter.format(data);
-            ret += "<br><h3>Ultimo accesso eseguito il " + data.toString() +"</h3>";
+            ret += "<br><h3>Ultimo accesso eseguito il " + data.toString() + "</h3>";
             ret += "<h1> Re-Welcome " + user + "</h1>";
         }
         return ret;
@@ -173,7 +179,7 @@ public class Login extends HttpServlet {
         userCookie = new Cookie(user, a.getTime() + "");
         userCookie.setMaxAge(3600 * 24 * 30 * 6);
         response.addCookie(userCookie);
-        
+
         return ret;
     }
 
