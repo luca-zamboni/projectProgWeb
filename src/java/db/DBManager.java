@@ -103,6 +103,12 @@ public class DBManager implements Serializable {
             stm2.executeUpdate();
             stm2.close();
         }
+        sql2 = "INSERT INTO user_groups(userid,groupid) VALUES (?,?)";
+        PreparedStatement stm2 = con.prepareStatement(sql2);
+        stm2.setInt(1, owner);
+        stm2.setInt(2, groupid);
+        stm2.executeUpdate();
+        stm2.close();
         
     }
     
