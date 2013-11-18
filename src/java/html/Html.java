@@ -6,7 +6,9 @@
 
 package html;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import models.Group;
 
@@ -17,7 +19,14 @@ import models.Group;
 public class Html {
     
     public static final String POST = "POST";
-    public static final String GET = "GET";        
+    public static final String GET = "GET";     
+    
+    public static String getDateFromTimestamp(String timestamp){
+        int l = Integer.parseInt(timestamp);
+                String dateAsText = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
+                          .format(new Date(l * 1000L));
+                return dateAsText;
+    }
     
     public static String generateForm(String action,String method,String content){
         String ret ="";
@@ -104,7 +113,8 @@ public class Html {
                 html += "<tr class=\"success\">";
                 html += "<td>"+aux.getOwnerName()+"</td>";
                 html += "<td>"+aux.getGroupName()+"</td>";
-                html += "<td>"+aux.getCreationDate()+"</td>";
+                
+                html += "<td>"+getDateFromTimestamp(aux.getCreationDate())+"</td>";
                 html += "<td><button type=\"button\" class=\"btn btn-default btn-xs\">\n" +
                         "  <span class=\"glyphicon glyphicon-th\"></span> Manage\n" +
                         "</button></td>";
