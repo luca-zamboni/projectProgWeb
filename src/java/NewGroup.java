@@ -6,6 +6,7 @@ import java.io.PrintWriter;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -56,15 +57,22 @@ public class NewGroup extends HttpServlet {
                     }
                     else{
                         int aux = Integer.parseInt(group);
-                        dbm.updateGroup(aux, title, users, username);
+                        int owid = dbm.getGroupOwnerById(aux);
+                        if (owid==dbm.getIdFromUser(username)) {
+                            dbm.updateGroup(aux, title, users, username);
+                        } else {
+                            resp.sendRedirect("./home?error=10&g="+aux);
+                        }
                     }
-                    
-                    resp.sendRedirect("./login");
+                    resp.sendRedirect("./home");
                 } catch (SQLException ex) {
                     Logger.getLogger(NewGroup.class.getName()).log(Level.SEVERE, null, ex);
                 }
             } else {
-                resp.sendRedirect("./newGroup?err=" + check);
+                if (group == null)
+                    resp.sendRedirect("./newGroup?err=" + check);
+                else 
+                    resp.sendRedirect("./newGroup?err=" + check+"&g="+group);
             }
         }
     }
@@ -89,20 +97,30 @@ public class NewGroup extends HttpServlet {
         pw.println("<html>");
         pw.print(Html.includeHead());
         pw.print("<body>");
-        pw.print(Html.centerInPage(generateStringBody(request, response, user)));
+        int i;        
+        try {
+            pw.print(Html.centerInPage(generateStringBody(request, response, user)));
+        } catch (Exception e){
+            e.printStackTrace();
+            pw.println("\t"+e.getClass());
+        }
         pw.println("</body>");
         pw.println("</html>");
     }
 
-    private String generateStringBody(HttpServletRequest request, HttpServletResponse response, String user) {
+    private String generateStringBody(HttpServletRequest request, HttpServletResponse response, String user) throws Exception {
         String body = "";
         String form = "";
 
         String gpaux = (String) request.getParameter("g");
-        if(gpaux == null )
+        if(gpaux == null || gpaux.equals("-1"))
             body += Html.h1String("Create a new Group");
-        else
+        else if (dbm.getGroupOwnerById(Integer.parseInt(gpaux)) == dbm
+                    .getIdFromUser(user))
             body += Html.h1String("Manage this group");
+        else {
+            response.sendRedirect("./home?error=10&g="+gpaux);
+        }
 
         try{
           form = Html.generateForm("./newGroup", Html.POST, getStringForm(user, request));

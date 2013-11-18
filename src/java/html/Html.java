@@ -112,7 +112,7 @@ public class Html {
             if(aux.getOwnerName().equals(user)){
                 html += "<tr class=\"success\">";
                 html += "<td>"+aux.getOwnerName()+"</td>";
-                html += "<td>"+aux.getGroupName()+"</td>";
+                html += "<td><a href=\"GroupHome?g="+aux.getId()+"\">"+aux.getGroupName()+"</a></td>";
                 html += "<td>"+getDateFromTimestamp(aux.getCreationDate())+"</td>";
                 html += "<td><a href=\"newGroup?g="+ aux.getId() +"\"><button type=\"button\" class=\"btn btn-default btn-xs\">\n" +
                         "  <span class=\"glyphicon glyphicon-th\"></span> Manage\n" +
@@ -120,7 +120,7 @@ public class Html {
             }else{
                 html += "<tr>";
                 html += "<td>"+aux.getOwnerName()+"</td>";
-                html += "<td>"+aux.getGroupName()+"</td>";
+                html += "<td><a href=\"GroupHome?g="+aux.getId()+"\">"+aux.getGroupName()+"</a></td>";
                 html += "<td>"+getDateFromTimestamp(aux.getCreationDate())+"</td>";
                 html += "<td></td>";
             }

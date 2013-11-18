@@ -72,6 +72,15 @@ public class Login extends HttpServlet {
         body += "<a href='newGroup' type=\"button\" class=\"btn btn-primary btn-lg\">"
                 + "Create Group"
                 + "</a>";
+        String crime = request.getParameter("error");
+        if (crime!=null&&crime.equals("10")) {
+            int gid = Integer.parseInt(request.getParameter("g"));
+            try {
+                body += Html.generateHWithColor(3, "You fucking bastard!! You're "
+                        + "not the owner of the group \""+ dbm.getGroupTitleById(gid) 
+                        +"\" \nFUCK OFF!!", "text-danger");
+            } catch (SQLException e) {}
+        }
         body += getTableGroups(user);
         body += "<a href='logout'>Logout</a></div>";
         pw.print(Html.centerInPage(body));

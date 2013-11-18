@@ -5,6 +5,7 @@ import java.io.PrintWriter;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -28,7 +29,7 @@ public class Index extends HttpServlet {
             if (username.equals("")) {
                 generateHtml(req, resp, username);
             } else {
-                resp.sendRedirect("./login");
+                resp.sendRedirect("./home");
             }
         } catch (NullPointerException | IOException e) {
             generateHtml(req, resp, username);
@@ -86,7 +87,7 @@ public class Index extends HttpServlet {
 "    <body>\n" +
 "        <div style=\"width:600px; margin:0 auto\">\n" +
 "            <h1 style=\"text-align: center;\">Login</h1>\n" +
-"            <form action=\"login\" method=\"POST\" class=\"form-horizontal\" role=\"form\">\n" +
+"            <form action=\"home\" method=\"POST\" class=\"form-horizontal\" role=\"form\">\n" +
 "                <div class=\"form-group\">\n" +
 "                    <label class=\"col-sm-2 control-label\">UserName</label>\n" +
 "                    <div class=\"col-sm-10\">\n" +

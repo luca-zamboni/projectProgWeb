@@ -59,7 +59,7 @@ public class DBManager implements Serializable {
  // transient == non viene serializzato
     public static transient Connection con;
     private static final String URL_PREFIX = "jdbc:sqlite:";
-    public static final String DB_URL = "/home/luca/projects/JavaServlet/oneProject/db.sqlite";
+    public static final String DB_URL = "/home/forna/git/projectProgWeb/db.sqlite";
 
     public DBManager(String dburl) throws SQLException {
 
@@ -160,6 +160,28 @@ public class DBManager implements Serializable {
             stm.close();
         }
         return false;
+    }
+    
+    public int getGroupOwnerById(int id) throws SQLException {
+        String sql = "SELECT ownerid FROM groups WHERE groupid = ?";
+        PreparedStatement stm = con.prepareStatement(sql);
+//        TODO make this shit work
+//        stm.setString(1, GROUP_OWNER_ID);
+//        stm.setString(2, GROUP_TABLE);
+//        stm.setString(3, GROUP_ID);
+        stm.setInt(1, id);
+        ResultSet rs;
+        rs = stm.executeQuery();
+        int userId=0;
+        try{
+            if(rs.next()){
+                userId = rs.getInt(1);
+            }
+        }finally{
+            rs.close();
+            stm.close();
+        }
+        return userId;
     }
     
     public ArrayList<String> getAllUSer() throws SQLException{
