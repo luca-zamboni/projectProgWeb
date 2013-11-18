@@ -16,6 +16,7 @@ public class NewGroup extends HttpServlet {
 
     private DBManager dbm;
     private static final String USERCHECKBOX = "users";
+    private static final String GROUP = "group";
     private static final String TITLE = "title-group";
 
     @Override
@@ -43,11 +44,21 @@ public class NewGroup extends HttpServlet {
             resp.sendRedirect("./");
         } else {
             String title = req.getParameter(TITLE);
+            String group = req.getParameter(GROUP);
             String[] users = req.getParameterValues(USERCHECKBOX);
             int check = checkParameter(title, users);
             if (check == 0) {
+                System.out.print(group);
                 try {
-                    dbm.newGroup(title, users, dbm.getIdFromUser(username));
+                    if(group.equals("-1")){
+                        //System.out.print(group);
+                        dbm.newGroup(title, users, dbm.getIdFromUser(username));
+                    }
+                    else{
+                        int aux = Integer.parseInt(group);
+                        dbm.updateGroup(aux, title, users, username);
+                    }
+                    
                     resp.sendRedirect("./login");
                 } catch (SQLException ex) {
                     Logger.getLogger(NewGroup.class.getName()).log(Level.SEVERE, null, ex);
@@ -87,45 +98,63 @@ public class NewGroup extends HttpServlet {
         String body = "";
         String form = "";
 
-        body += Html.h1String("Create a new Group");
+        String gpaux = (String) request.getParameter("g");
+        if(gpaux == null )
+            body += Html.h1String("Create a new Group");
+        else
+            body += Html.h1String("Manage this group");
 
-        form = Html.generateForm("./newGroup", Html.POST, getStringForm(user, request));
+        try{
+          form = Html.generateForm("./newGroup", Html.POST, getStringForm(user, request));
+        }catch(SQLException e){
+            form = "Something gones wrong";
+        }
         body += form;
 
         return body;
     }
 
-    public String getStringForm(String user, HttpServletRequest request) {
+    public String getStringForm(String user, HttpServletRequest request) throws SQLException {
 
         String err = (String) request.getParameter("err");
+        String gpaux = (String) request.getParameter("g");
+        
+        int gp = -1;
+        if(gpaux != null)
+            gp = Integer.parseInt(gpaux);
 
         if (err == null) {
             err = "-1";
         }
         String form = "";
 
+        form += "<input  type='hidden' style='visibility:hidden' name='group' value='"+gp+"'>";
         if (err.equals("1")) {
             form += Html.generateH(3, "Group's title")
                     + "<div class=\"form-group has-error\">"
-                    + "<input name='title-group' type=\"text\" class=\"form-control\" placeholder=\"Title\">"
+                    + "<input name='title-group'  value=\""+dbm.getGroupTitleById(gp)
+                    + "\" type=\"text\" class=\"form-control\" placeholder=\"Title\">"
                     + "</div>";
         } else {
             form += Html.generateH(3, "Group's title")
-                    + "<input name='title-group' type=\"text\" class=\"form-control\" placeholder=\"Title\">";
+                    + "<input name='title-group' value=\""+dbm.getGroupTitleById(gp)
+                    + "\" type=\"text\" class=\"form-control\" placeholder=\"Title\">";
         }
         form += Html.generateH(3, "Segli chi invitare");
         try {
             if (err.equals("2")) {
                 form += html.Html.generateHWithColor(3, "Add at least one user","text-danger");
                 for (String i : dbm.getAllUSer()) {
+                    String checked = (dbm.isInGroup(dbm.getIdFromUser(i), gp)) ? "checked" : "";
                     if (!user.equals(i)) {
-                        form += "<input type='checkbox' name=\"users\" value='" + i + "'>" + i + "<br>";
+                        form += "<input type='checkbox' name=\"users\" "+checked+" value='" + i + "'>" + i + "<br>";
                     }
                 }
             } else {
                 for (String i : dbm.getAllUSer()) {
+                    String checked = (dbm.isInGroup(dbm.getIdFromUser(i), gp)) ? "checked" : "";
                     if (!user.equals(i)) {
-                        form += "<input type='checkbox' name=\"users\" value='" + i + "'>" + i + "<br>";
+                        form += "<input type='checkbox' name=\"users\" "+checked+" value='" + i + "'>" + i + "<br>";
                     }
                 }
             }

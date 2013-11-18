@@ -74,6 +74,38 @@ public class DBManager implements Serializable {
         }
     }
     
+    public void updateGroup(int group,String newTitle,String[] users,String owner) throws SQLException{
+        String sql = "UPDATE groups SET groupname = ? WHERE groupid = ?";
+        PreparedStatement stm = con.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS);
+        stm.setString(1,newTitle);
+        stm.setInt(2, group);
+        stm.executeUpdate();
+        
+        String sql2 = "UPDATE user_groups SET status = 1 WHERE groupid = ?";
+        PreparedStatement stm2 = con.prepareStatement(sql2);
+        stm2.setInt(1, group);
+        stm2.executeUpdate();
+        stm2.close();
+        String sql3;
+        for(String mUser : users){
+            System.out.print(mUser);
+            sql3 = "UPDATE user_groups SET status = 0 WHERE groupid = ? AND userid = ?";
+            PreparedStatement stm3 = con.prepareStatement(sql3);
+            stm3.setInt(1, group);
+            stm3.setInt(2, getIdFromUser(mUser));
+            System.out.print(getIdFromUser(mUser));
+            stm3.executeUpdate();
+            stm3.close();
+        }
+        String sql4 = "UPDATE user_groups SET status = 0 WHERE groupid = ? AND userid = ?";
+        PreparedStatement stm4 = con.prepareStatement(sql4);
+        stm4.setInt(1, group);
+        stm4.setInt(2, getIdFromUser(owner));
+        stm4.executeUpdate();
+        stm4.close();
+        
+    }
+    
     public void newGroup(String title, String[] users, int owner) throws SQLException{
         
         String sql = "INSERT into GROUPS(ownerid,groupname,creationdate)"
@@ -96,20 +128,38 @@ public class DBManager implements Serializable {
         
         for(String mUser : users){
             int aux = getIdFromUser(mUser);
-            sql2 = "INSERT INTO user_groups(userid,groupid) VALUES (?,?)";
+            sql2 = "INSERT INTO user_groups(userid,groupid,status) VALUES (?,?,0)";
             PreparedStatement stm2 = con.prepareStatement(sql2);
             stm2.setInt(1, aux);
             stm2.setInt(2, groupid);
             stm2.executeUpdate();
             stm2.close();
         }
-        sql2 = "INSERT INTO user_groups(userid,groupid) VALUES (?,?)";
+        sql2 = "INSERT INTO user_groups(userid,groupid,status) VALUES (?,?,0)";
         PreparedStatement stm2 = con.prepareStatement(sql2);
         stm2.setInt(1, owner);
         stm2.setInt(2, groupid);
         stm2.executeUpdate();
         stm2.close();
         
+    }
+    
+    public boolean isInGroup(int userid,int groupid) throws SQLException{
+        String sql= "select count(*) from user_groups where userid=? AND groupid=? AND status = 0";
+        PreparedStatement stm = con.prepareStatement(sql);
+        stm.setInt(1, userid);
+        stm.setInt(2, groupid);
+        ResultSet rs;
+        rs = stm.executeQuery();
+        try{
+            if(rs.next()){
+                return rs.getInt(1)==1;
+            }
+        }finally{
+            rs.close();
+            stm.close();
+        }
+        return false;
     }
     
     public ArrayList<String> getAllUSer() throws SQLException{
@@ -179,6 +229,23 @@ public class DBManager implements Serializable {
     
     public String getUserFormId(int id) throws SQLException{
         String sql= "select username from users where userid = ?";
+        PreparedStatement stm = con.prepareStatement(sql);
+        stm.setInt(1,id);
+        ResultSet rs;
+        rs = stm.executeQuery();
+        try{
+            if(rs.next()){
+                return rs.getString(1);
+            }
+        }finally{
+            rs.close();
+            stm.close();
+        }
+        return "";
+    }
+    
+    public String getGroupTitleById(int id) throws SQLException{
+        String sql= "select groupname from groups where groupid = ? ";
         PreparedStatement stm = con.prepareStatement(sql);
         stm.setInt(1,id);
         ResultSet rs;

@@ -113,16 +113,15 @@ public class Html {
                 html += "<tr class=\"success\">";
                 html += "<td>"+aux.getOwnerName()+"</td>";
                 html += "<td>"+aux.getGroupName()+"</td>";
-                
                 html += "<td>"+getDateFromTimestamp(aux.getCreationDate())+"</td>";
-                html += "<td><button type=\"button\" class=\"btn btn-default btn-xs\">\n" +
+                html += "<td><a href=\"newGroup?g="+ aux.getId() +"\"><button type=\"button\" class=\"btn btn-default btn-xs\">\n" +
                         "  <span class=\"glyphicon glyphicon-th\"></span> Manage\n" +
-                        "</button></td>";
+                        "</button></a></td>";
             }else{
                 html += "<tr>";
                 html += "<td>"+aux.getOwnerName()+"</td>";
                 html += "<td>"+aux.getGroupName()+"</td>";
-                html += "<td>"+aux.getCreationDate()+"</td>";
+                html += "<td>"+getDateFromTimestamp(aux.getCreationDate())+"</td>";
                 html += "<td></td>";
             }
             html += "</tr>";
