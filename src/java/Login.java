@@ -37,15 +37,7 @@ public class Login extends HttpServlet {
         connectToDatabase();
         HttpSession session = request.getSession();
         String username = (String) session.getAttribute(SESSION_USER);
-        try {
-            if (username.equals("")) {
-                response.sendRedirect("./");
-            } else {
-                generateHtml(request, response, username);
-            }
-        } catch (NullPointerException e) {
-            response.sendRedirect("./");
-        }
+        generateHtml(request, response, username);
     }
 
     @Override
@@ -76,9 +68,8 @@ public class Login extends HttpServlet {
         if (crime!=null&&crime.equals("10")) {
             int gid = Integer.parseInt(request.getParameter("g"));
             try {
-                body += Html.generateHWithColor(3, "You fucking bastard!! You're "
-                        + "not the owner of the group \""+ dbm.getGroupTitleById(gid) 
-                        +"\" \nFUCK OFF!!", "text-danger");
+                body += Html.generateHWithColor(3, "You are not the owner of the group \""+ dbm.getGroupTitleById(gid) 
+                        +"\" \n!!", "text-danger");
             } catch (SQLException e) {}
         }
         body += getTableGroups(user);

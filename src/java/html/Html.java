@@ -19,7 +19,27 @@ import models.Group;
 public class Html {
     
     public static final String POST = "POST";
-    public static final String GET = "GET";     
+    public static final String GET = "GET";   
+    
+    public static String addTag(String tag,String intoTag){
+        String ret = "";
+        ret += "<" + tag + ">";
+        ret += intoTag;
+        ret = "</" + tag + ">";
+        return "";
+    }
+    
+    public static String addTag(String tag,String intoTag, Option... opt){
+        String ret = "";
+        ret += "<" + tag + " ";
+        for(Option o : opt){
+            ret += o.getName() + "=\"" + o.getValue() + "\" ";
+        }
+        ret += ">";
+        ret += intoTag;
+        ret = "</" + tag + ">";
+        return "";
+    }
     
     public static String getDateFromTimestamp(String timestamp){
         int l = Integer.parseInt(timestamp);
@@ -122,7 +142,9 @@ public class Html {
                 html += "<td>"+aux.getOwnerName()+"</td>";
                 html += "<td><a href=\"GroupHome?g="+aux.getId()+"\">"+aux.getGroupName()+"</a></td>";
                 html += "<td>"+getDateFromTimestamp(aux.getCreationDate())+"</td>";
-                html += "<td></td>";
+                html += "<td><button type=\"button\" class=\"btn btn-danger btn-xs\">\n" +
+                        "  <span class=\"glyphicon glyphicon-th\"></span> Disgruppami\n" +
+                        "</button></td>";
             }
             html += "</tr>";
         }

@@ -59,7 +59,7 @@ public class DBManager implements Serializable {
  // transient == non viene serializzato
     public static transient Connection con;
     private static final String URL_PREFIX = "jdbc:sqlite:";
-    public static final String DB_URL = "/home/forna/git/projectProgWeb/db.sqlite";
+    public static final String DB_URL = "/home/luca/projects/JavaServlet/oneProject/db.sqlite";
 
     public DBManager(String dburl) throws SQLException {
 
