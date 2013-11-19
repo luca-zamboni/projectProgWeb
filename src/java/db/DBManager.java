@@ -61,14 +61,14 @@ public class DBManager implements Serializable {
     private static final String URL_PREFIX = "jdbc:sqlite:";
     public static final String DB_URL = "/home/luca/projects/JavaServlet/oneProject/db.sqlite";
 
-    public DBManager(String dburl) throws SQLException {
+    public DBManager() throws SQLException {
 
         try {
 
             Class.forName("org.sqlite.JDBC", true,
                     getClass().getClassLoader());
-            DBManager.con = DriverManager.getConnection(URL_PREFIX+dburl);
-            System.out.print(URL_PREFIX+dburl);
+            DBManager.con = DriverManager.getConnection(URL_PREFIX+DB_URL);
+            System.out.print(URL_PREFIX+DB_URL);
         } catch (ClassNotFoundException | SQLException e) {
             throw new RuntimeException(e.toString(), e);
         }
@@ -165,10 +165,6 @@ public class DBManager implements Serializable {
     public int getGroupOwnerById(int id) throws SQLException {
         String sql = "SELECT ownerid FROM groups WHERE groupid = ?";
         PreparedStatement stm = con.prepareStatement(sql);
-//        TODO make this shit work
-//        stm.setString(1, GROUP_OWNER_ID);
-//        stm.setString(2, GROUP_TABLE);
-//        stm.setString(3, GROUP_ID);
         stm.setInt(1, id);
         ResultSet rs;
         rs = stm.executeQuery();

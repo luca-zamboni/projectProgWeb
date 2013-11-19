@@ -26,13 +26,9 @@ public class NewGroup extends HttpServlet {
             connectToDatabase();
             HttpSession session = req.getSession();
             String username = (String) session.getAttribute(Login.SESSION_USER);
-            if (username.equals("")) {
-                resp.sendRedirect("./");
-            } else {
-                generateHtml(req, resp, username);
-            }
+            generateHtml(req, resp, username);
         } catch (IOException e) {
-            resp.sendRedirect("./");
+            
         }
     }
 
@@ -41,39 +37,35 @@ public class NewGroup extends HttpServlet {
         connectToDatabase();
         HttpSession session = req.getSession();
         String username = (String) session.getAttribute(Login.SESSION_USER);
-        if (username.equals("")) {
-            resp.sendRedirect("./");
-        } else {
-            String title = req.getParameter(TITLE);
-            String group = req.getParameter(GROUP);
-            String[] users = req.getParameterValues(USERCHECKBOX);
-            int check = checkParameter(title, users);
-            if (check == 0) {
-                System.out.print(group);
-                try {
-                    if(group.equals("-1")){
-                        //System.out.print(group);
-                        dbm.newGroup(title, users, dbm.getIdFromUser(username));
-                    }
-                    else{
-                        int aux = Integer.parseInt(group);
-                        int owid = dbm.getGroupOwnerById(aux);
-                        if (owid==dbm.getIdFromUser(username)) {
-                            dbm.updateGroup(aux, title, users, username);
-                        } else {
-                            resp.sendRedirect("./home?error=10&g="+aux);
-                        }
-                    }
-                    resp.sendRedirect("./home");
-                } catch (SQLException ex) {
-                    Logger.getLogger(NewGroup.class.getName()).log(Level.SEVERE, null, ex);
+        String title = req.getParameter(TITLE);
+        String group = req.getParameter(GROUP);
+        String[] users = req.getParameterValues(USERCHECKBOX);
+        int check = checkParameter(title, users);
+        if (check == 0) {
+            System.out.print(group);
+            try {
+                if(group.equals("-1")){
+                    //System.out.print(group);
+                    dbm.newGroup(title, users, dbm.getIdFromUser(username));
                 }
-            } else {
-                if (group == null)
-                    resp.sendRedirect("./newGroup?err=" + check);
-                else 
-                    resp.sendRedirect("./newGroup?err=" + check+"&g="+group);
+                else{
+                    int aux = Integer.parseInt(group);
+                    int owid = dbm.getGroupOwnerById(aux);
+                    if (owid==dbm.getIdFromUser(username)) {
+                        dbm.updateGroup(aux, title, users, username);
+                    } else {
+                        resp.sendRedirect("./home?error=10&g="+aux);
+                    }
+                }
+                resp.sendRedirect("./home");
+            } catch (SQLException ex) {
+                Logger.getLogger(NewGroup.class.getName()).log(Level.SEVERE, null, ex);
             }
+        } else {
+            if (group == null)
+                resp.sendRedirect("./newGroup?err=" + check);
+            else 
+                resp.sendRedirect("./newGroup?err=" + check+"&g="+group);
         }
     }
 
@@ -187,7 +179,7 @@ public class NewGroup extends HttpServlet {
 
     private void connectToDatabase() {
         try {
-            dbm = new DBManager(DBManager.DB_URL);
+            dbm = new DBManager();
         } catch (SQLException ex) {
             Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
         }
