@@ -6,7 +6,6 @@
 
 import db.DBManager;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -30,7 +29,7 @@ public class AcceptInvitation extends HttpServlet {
             connectToDatabase();
             HttpSession session = req.getSession();
             String username = (String) session.getAttribute(Login.SESSION_USER);
-
+            
             String group = req.getParameter("g");
             String dec = req.getParameter("dec");
             int a = Integer.parseInt(group);

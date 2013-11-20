@@ -142,7 +142,6 @@ public class DBManager implements Serializable {
         res.close();
         stm.close();
         
-        System.err.println(groupid);
         String sql2;
         
         for(String mUser : users){
@@ -160,6 +159,14 @@ public class DBManager implements Serializable {
         stm2.setInt(2, groupid);
         stm2.executeUpdate();
         stm2.close();
+        
+        String sql3 = "INSERT INTO post(groupid,ownerid,date,content) VALUES (?,?,CURRENT_TIMESTAMP,?)";
+        PreparedStatement stm3 = con.prepareStatement(sql3);
+        stm3.setInt(1, groupid);
+        stm3.setInt(2, owner);
+        stm3.setString(3, "Creation of group " + title);
+        stm3.executeUpdate();
+        stm3.close();
         
     }
     
@@ -268,14 +275,17 @@ public class DBManager implements Serializable {
         return mUsers;
     }
     
-    public ArrayList<Group> getAllPendingsGroups(String user) throws SQLException{
-        String sql= "select groups.groupid,groupname,creationdate,ownerid "
-                + "from groups,users,user_groups "
+    private ArrayList<Group> getGrups(int status, String user) throws SQLException{
+        String sql= "select groups.groupid,groupname,creationdate,groups.ownerid "
+                + "from groups,users,user_groups,post "
                 + "WHERE groups.groupid = user_groups.groupid "
                 + "AND users.userid= user_groups.userid "
-                + "AND username = ? and user_groups.status = 2";
+                + "AND post.groupid= groups.groupid "
+                + "AND username = ? and user_groups.status = ? "
+                + "ORDER by post.date DESC";
         PreparedStatement stm = con.prepareStatement(sql);
         stm.setString(1, user);
+        stm.setInt(2, status);
         ResultSet rs;
         rs = stm.executeQuery();
         ArrayList<Group> mGroups = new ArrayList<>();
@@ -287,7 +297,8 @@ public class DBManager implements Serializable {
                 s2 = rs.getString(2);
                 s3 = rs.getString(3);
                 i4 = rs.getInt(4);
-                Group aux = new Group(i1, i4, s2, s3);
+                ///// 3 hardcoded change this shit
+                Group aux = new Group(i1, i4, 3 ,s2, s3);
                 aux.setOwnerName(getUserFormId(i4));
                 mGroups.add(aux);
             }
@@ -296,37 +307,14 @@ public class DBManager implements Serializable {
             stm.close();
         }
         return mGroups;
-        
+    }
+    
+    public ArrayList<Group> getAllPendingsGroups(String user) throws SQLException{
+        return getGrups(2, user);
     }
     
     public ArrayList<Group> getAllGroups(String user) throws SQLException{
-        String sql= "select groups.groupid,groupname,creationdate,ownerid "
-                + "from groups,users,user_groups "
-                + "WHERE groups.groupid = user_groups.groupid "
-                + "AND users.userid= user_groups.userid "
-                + "AND username = ? and user_groups.status = 0";
-        PreparedStatement stm = con.prepareStatement(sql);
-        stm.setString(1, user);
-        ResultSet rs;
-        rs = stm.executeQuery();
-        ArrayList<Group> mGroups = new ArrayList<>();
-        try{
-            while(rs.next()){
-                int i1,i4;
-                String s2,s3;
-                i1 = rs.getInt(1);
-                s2 = rs.getString(2);
-                s3 = rs.getString(3);
-                i4 = rs.getInt(4);
-                Group aux = new Group(i1, i4, s2, s3);
-                aux.setOwnerName(getUserFormId(i4));
-                mGroups.add(aux);
-            }
-        }finally{
-            rs.close();
-            stm.close();
-        }
-        return mGroups;
+        return getGrups(0, user);
         
     }
     

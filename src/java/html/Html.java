@@ -158,7 +158,7 @@ public class Html {
                 html += "<td><a href=\"GroupHome?g="+aux.getId()+"\">"+aux.getGroupName()+"</a></td>";
                 html += "<td>"+getDateFromTimestamp(aux.getCreationDate())+"</td>";
                 html += "<td><button type=\"button\" class=\"btn btn-danger btn-xs\">\n" +
-                        "  <span class=\"glyphicon glyphicon-th\"></span> Disgruppami\n" +
+                        "  <span class=\"glyphicon glyphicon-log-out\"></span> &nbsp;&nbsp;Leave&nbsp;\n" +
                         "</button></td>";
             }
             html += "</tr>";
