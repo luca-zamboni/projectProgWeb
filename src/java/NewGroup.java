@@ -107,12 +107,8 @@ public class NewGroup extends HttpServlet {
         String gpaux = (String) request.getParameter("g");
         if(gpaux == null || gpaux.equals("-1"))
             body += Html.h1String("Create a new Group");
-        else if (dbm.getGroupOwnerById(Integer.parseInt(gpaux)) == dbm
-                    .getIdFromUser(user))
+        else
             body += Html.h1String("Manage this group");
-        else {
-            response.sendRedirect("./home?error=10&g="+gpaux);
-        }
 
         try{
           form = Html.generateForm("./newGroup", Html.POST, getStringForm(user, request));

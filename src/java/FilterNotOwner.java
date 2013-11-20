@@ -1,5 +1,9 @@
 
+import db.DBManager;
 import java.io.IOException;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
@@ -13,7 +17,7 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author luca
  */
-public class FilterNotInGroup implements Filter {
+public class FilterNotOwner implements Filter {
 
     private FilterConfig filterConfig = null;
 
@@ -21,15 +25,27 @@ public class FilterNotInGroup implements Filter {
     public void doFilter(ServletRequest request, ServletResponse response,
             FilterChain chain)
             throws IOException, ServletException {
+        try {
+            String user = (String) ((HttpServletRequest) request).getSession().getAttribute(Login.SESSION_USER);
+            String gpaux = (String) ((HttpServletRequest) request).getParameter("g");
 
-        Object bean = ((HttpServletRequest) request).getSession().getAttribute(Login.SESSION_USER);
+            db.DBManager dbm = null;
+            dbm = new DBManager();
 
-        /*if (bean == null) {
-            ((HttpServletResponse) response).sendRedirect("./");
-        }else{
+            if (gpaux == null || gpaux.equals("-1")) {
+                
+            } else if (dbm.getGroupOwnerById(Integer.parseInt(gpaux)) == dbm
+                    .getIdFromUser(user)) {
+                
+            }else {
+                ((HttpServletResponse) response).sendRedirect("./home?error=10&g="+gpaux);
+            }
+
             chain.doFilter(request, response);
-        }*/
-        chain.doFilter(request, response);
+
+        } catch (Exception e) {
+
+        }
     }
 
     @Override
