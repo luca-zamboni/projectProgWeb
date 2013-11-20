@@ -25,15 +25,25 @@ public class FilterLogin implements Filter {
         Object bean = ((HttpServletRequest) request).getSession().getAttribute(Login.SESSION_USER);
 
         HttpServletRequest httpRequest = (HttpServletRequest) request;
+        String url = ((HttpServletRequest)request).getRequestURI();
+
+        //System.out.print("url " + url );
         if (httpRequest.getMethod().equalsIgnoreCase("GET")) {
             if (bean == null) {
                 ((HttpServletResponse) response).sendRedirect("./");
             }else{
                 chain.doFilter(request, response);
             }
-
         } else {
-            chain.doFilter(request, response);
+            if(url.equals("/oneProject/home")){
+                chain.doFilter(request, response);
+            }else{
+                if (bean == null) {
+                    ((HttpServletResponse) response).sendRedirect("./");
+                }else{
+                    chain.doFilter(request, response);
+                }
+            }
         }
     }
 

@@ -41,6 +41,21 @@ public class Html {
         return "";
     }
     
+    public static String generateButton(String text, String href,String classBt,String icon){
+        String bt = "";
+        bt += "<a href='" + href + "'><button type=\"button\" class=\""+classBt +"\">";
+        bt += "<span class=\"glyphicon glyphicon-"+icon+"\"></span> ";
+        bt += text + "</button></a>";
+        return bt;
+    }
+    
+    public static String generateButton(String text, String href,String classBt){
+        String bt = "";
+        bt += "<a href='" + href + "'><button type=\"button\" class=\""+classBt+"\"> ";
+        bt += text + " </button></a>";
+        return bt;
+    }
+    
     public static String getDateFromTimestamp(String timestamp){
         int l = Integer.parseInt(timestamp);
                 String dateAsText = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
@@ -118,7 +133,7 @@ public class Html {
                 "   text-align: center;   \n" +
                 "}"
                 + "</style>";
-        html += "<br><h3>Your groups</h3>";
+        html += "<br>" + generateH(3, "Your Groups");
         html += "<table class=\"table table-condensed table-hover\">";
         html += "<tr>";
         html += "<td><b>Owner</b></td>";

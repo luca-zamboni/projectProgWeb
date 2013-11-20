@@ -28,6 +28,10 @@
         <filter-name>FilterNotOwner</filter-name>
         <servlet-name>NewGroup</servlet-name>
     </filter-mapping>
+    <filter-mapping>
+        <filter-name>FilterLogin</filter-name>
+        <servlet-name>AcceptInvitation</servlet-name>
+    </filter-mapping>
     <servlet>
         <servlet-name>Login</servlet-name>
         <servlet-class>Login</servlet-class>
@@ -48,6 +52,10 @@
         <servlet-name>GroupHome</servlet-name>
         <servlet-class>GroupHome</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>AcceptInvitation</servlet-name>
+        <servlet-class>AcceptInvitation</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>Login</servlet-name>
         <url-pattern>/home</url-pattern>
@@ -67,6 +75,10 @@
     <servlet-mapping>
         <servlet-name>GroupHome</servlet-name>
         <url-pattern>/GroupHome</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AcceptInvitation</servlet-name>
+        <url-pattern>/AcceptInvitation</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

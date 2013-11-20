@@ -150,18 +150,12 @@ public class NewGroup extends HttpServlet {
         try {
             if (err.equals("2")) {
                 form += html.Html.generateHWithColor(3, "Add at least one user","text-danger");
-                for (String i : dbm.getAllUSer()) {
-                    String checked = (dbm.isInGroup(dbm.getIdFromUser(i), gp)) ? "checked" : "";
-                    if (!user.equals(i)) {
-                        form += "<input type='checkbox' name=\"users\" "+checked+" value='" + i + "'>" + i + "<br>";
-                    }
-                }
-            } else {
-                for (String i : dbm.getAllUSer()) {
-                    String checked = (dbm.isInGroup(dbm.getIdFromUser(i), gp)) ? "checked" : "";
-                    if (!user.equals(i)) {
-                        form += "<input type='checkbox' name=\"users\" "+checked+" value='" + i + "'>" + i + "<br>";
-                    }
+            }
+            for (String i : dbm.getAllUSer()) {
+                int id = dbm.getIdFromUser(i);
+                String checked = (dbm.isInGroup(id, gp) || dbm.isPending(id, gp)) ? "checked" : "";
+                if (!user.equals(i)) {
+                    form += "<input type='checkbox' name=\"users\" "+checked+" value='" + i + "'>" + i + "<br>";
                 }
             }
         } catch (SQLException ex) {

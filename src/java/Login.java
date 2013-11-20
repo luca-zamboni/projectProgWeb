@@ -1,6 +1,8 @@
 
 import db.DBManager;
 import html.Html;
+import static html.Html.generateH;
+import static html.Html.getDateFromTimestamp;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
@@ -9,6 +11,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Enumeration;
+import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
@@ -64,14 +67,11 @@ public class Login extends HttpServlet {
         body += "<a href='newGroup' type=\"button\" class=\"btn btn-primary btn-lg\">"
                 + "Create Group"
                 + "</a>";
-        String crime = request.getParameter("error");
-        if (crime!=null&&crime.equals("10")) {
-            int gid = Integer.parseInt(request.getParameter("g"));
-            try {
-                body += Html.generateHWithColor(3, "You are not the owner of the group \""+ dbm.getGroupTitleById(gid) 
-                        +"\" \n!!", "text-danger");
-            } catch (SQLException e) {}
-        }
+
+        body += controlError(request);
+
+        body += getYourPendings(user);
+
         body += getTableGroups(user);
         body += "<a href='logout'>Logout</a></div>";
         pw.print(Html.centerInPage(body));
@@ -80,17 +80,83 @@ public class Login extends HttpServlet {
 
     }
 
+    private String getYourPendings(String user) {
+        String html = "", link = "";
+        try {
+            ArrayList<Group> grp = dbm.getAllPendingsGroups(user);
+            if (grp.isEmpty()) {
+                html += Html.generateH(3, "You have no new invitation");
+            } else {
+                html += "<style> .table td {\n"
+                        + "   text-align: center;   \n"
+                        + "}"
+                        + "</style>";
+                html += "<br>" + generateH(3, "Your invitations");
+                html += "<table class=\"table table-condensed table-hover\">";
+                html += "<tr>";
+                html += "<td><b>Owner</b></td>";
+                html += "<td><b>Group Name</b></td>";
+                html += "<td><b>Creation Date</b></td>";
+                html += "<td><b>Accept/Decline</b></td>";
+                html += "</tr>";
+
+                for (Group aux : grp) {
+                    link = "./AcceptInvitation?g=" + aux.getId();
+
+                    html += "<tr>";
+                    html += "<td>" + aux.getOwnerName() + "</td>";
+                    html += "<td>" + aux.getGroupName() + "</td>";
+                    html += "<td>" + getDateFromTimestamp(aux.getCreationDate()) + "</td>";
+                    html += "<td>";
+                    html += Html.generateButton("Accept", link, "btn btn-success btn-xs","ok");
+                    html += " ";
+                    html += Html.generateButton("Decline", link + "&dec=1", "btn btn-danger btn-xs","remove");
+                    html += "</td>";
+
+                    html += "</tr>";
+                }
+            }
+        } catch (Exception e) {
+
+        }
+        return html + "</table>";
+    }
+
     private String getTableGroups(String user) {
         ArrayList<Group> mGroups;
         String ret = "";
         try {
             mGroups = dbm.getAllGroups(user);
-            ret = Html.getAllGroups(mGroups,user);
+            ret = Html.getAllGroups(mGroups, user);
 
         } catch (SQLException ex) {
             Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
         }
         return ret;
+    }
+
+    private String controlError(HttpServletRequest request) {
+        String body = "";
+        String error = request.getParameter("error");
+        if (error != null && error.equals("10")) {
+            int gid = Integer.parseInt(request.getParameter("g"));
+            try {
+                body += Html.generateHWithColor(3, "You are not the owner of the group \"" + dbm.getGroupTitleById(gid)
+                        + "\" \n!!", "text-danger");
+            } catch (SQLException e) {
+            }
+        }
+
+        String acc = request.getParameter("acc");
+        if (acc != null && acc.equals("1")) {
+            int gid = Integer.parseInt(request.getParameter("g"));
+            try {
+                body += Html.generateHWithColor(3, "Invite accepdted at group " + dbm.getGroupTitleById(gid) + "\n", "text-success");
+            } catch (SQLException e) {
+            }
+        }
+
+        return body;
     }
 
     private void connectToDatabase() {
