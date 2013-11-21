@@ -8,6 +8,10 @@
         <filter-name>FilterNotOwner</filter-name>
         <filter-class>FilterNotOwner</filter-class>
     </filter>
+    <filter>
+        <filter-name>ProtectDirectory</filter-name>
+        <filter-class>ProtectDirectory</filter-class>
+    </filter>
     <filter-mapping>
         <filter-name>FilterLogin</filter-name>
         <servlet-name>Logout</servlet-name>
@@ -56,6 +60,18 @@
         <servlet-name>AcceptInvitation</servlet-name>
         <servlet-class>AcceptInvitation</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>UploadAvatar</servlet-name>
+        <servlet-class>UploadAvatar</servlet-class>
+        <init-param>
+            <param-name>
+                uploadDir
+            </param-name>
+            <param-value>
+                /tmp
+            </param-value>
+        </init-param>
+    </servlet>
     <servlet-mapping>
         <servlet-name>Login</servlet-name>
         <url-pattern>/home</url-pattern>
@@ -79,6 +95,10 @@
     <servlet-mapping>
         <servlet-name>AcceptInvitation</servlet-name>
         <url-pattern>/AcceptInvitation</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>UploadAvatar</servlet-name>
+        <url-pattern>/uploadAvatar</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

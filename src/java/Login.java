@@ -11,7 +11,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Enumeration;
-import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
@@ -37,7 +36,7 @@ public class Login extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        connectToDatabase();
+        connectToDatabase(request);
         HttpSession session = request.getSession();
         String username = (String) session.getAttribute(SESSION_USER);
         generateHtml(request, response, username);
@@ -46,7 +45,7 @@ public class Login extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        connectToDatabase();
+        connectToDatabase(request);
         int login = loginValid(request);
         if (loginValid(request) == 0) {
             checkAndSetSession(request, user);
@@ -67,6 +66,8 @@ public class Login extends HttpServlet {
         body += "<a href='newGroup' type=\"button\" class=\"btn btn-primary btn-lg\">"
                 + "Create Group"
                 + "</a>";
+        body += " " + Html.generateButton(" Carica avatar", "./uploadAvatar" , "btn btn-primary btn-lg");
+        
 
         body += controlError(request);
 
@@ -159,10 +160,10 @@ public class Login extends HttpServlet {
         return body;
     }
 
-    private void connectToDatabase() {
+    private void connectToDatabase(HttpServletRequest request) {
         try {
             //cambiare qua cazzo
-            dbm = new DBManager();
+            dbm = new DBManager(request);
         } catch (SQLException ex) {
             Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
         }

@@ -30,7 +30,7 @@ public class FilterNotOwner implements Filter {
             String gpaux = (String) ((HttpServletRequest) request).getParameter("g");
 
             db.DBManager dbm = null;
-            dbm = new DBManager();
+            dbm = new DBManager((HttpServletRequest) request);
 
             if (gpaux == null || gpaux.equals("-1")) {
                 

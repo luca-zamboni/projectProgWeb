@@ -26,7 +26,7 @@ public class AcceptInvitation extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         try {
-            connectToDatabase();
+            connectToDatabase(req);
             HttpSession session = req.getSession();
             String username = (String) session.getAttribute(Login.SESSION_USER);
             
@@ -49,10 +49,10 @@ public class AcceptInvitation extends HttpServlet {
         }
     }
     
-    private void connectToDatabase() {
+    private void connectToDatabase(HttpServletRequest request) {
         try {
             //cambiare qua cazzo
-            dbm = new DBManager();
+            dbm = new DBManager(request);
         } catch (SQLException ex) {
             Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
         }

@@ -6,7 +6,6 @@ import java.io.PrintWriter;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -23,7 +22,7 @@ public class NewGroup extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         try {
-            connectToDatabase();
+            connectToDatabase(req);
             HttpSession session = req.getSession();
             String username = (String) session.getAttribute(Login.SESSION_USER);
             generateHtml(req, resp, username);
@@ -34,7 +33,7 @@ public class NewGroup extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        connectToDatabase();
+        connectToDatabase(req);
         HttpSession session = req.getSession();
         String username = (String) session.getAttribute(Login.SESSION_USER);
         String title = req.getParameter(TITLE);
@@ -167,9 +166,9 @@ public class NewGroup extends HttpServlet {
         return form;
     }
 
-    private void connectToDatabase() {
+    private void connectToDatabase(HttpServletRequest request) {
         try {
-            dbm = new DBManager();
+            dbm = new DBManager(request);
         } catch (SQLException ex) {
             Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
         }

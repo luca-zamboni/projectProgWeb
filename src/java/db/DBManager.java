@@ -14,6 +14,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Arrays;
+import javax.servlet.http.HttpServletRequest;
 import models.Group;
 
 /**
@@ -60,15 +61,16 @@ public class DBManager implements Serializable {
     // transient == non viene serializzato
     public static transient Connection con;
     private static final String URL_PREFIX = "jdbc:sqlite:";
-    public static final String DB_URL = "/home/luca/projects/JavaServlet/oneProject/db.sqlite";
+    public static final String DB_URL = "database/db.sqlite";
 
-    public DBManager() throws SQLException {
+    public DBManager(HttpServletRequest request) throws SQLException {
 
         try {
 
             Class.forName("org.sqlite.JDBC", true,
                     getClass().getClassLoader());
-            DBManager.con = DriverManager.getConnection(URL_PREFIX+DB_URL);
+            String path = request.getServletContext().getRealPath("/");
+            DBManager.con = DriverManager.getConnection(URL_PREFIX+path+DB_URL);
             System.out.print(URL_PREFIX+DB_URL);
         } catch (ClassNotFoundException | SQLException e) {
             throw new RuntimeException(e.toString(), e);
@@ -250,6 +252,24 @@ public class DBManager implements Serializable {
         try{
             if(rs.next()){
                 userId = rs.getInt(1);
+            }
+        }finally{
+            rs.close();
+            stm.close();
+        }
+        return userId;
+    }
+    
+    public String getAvatar(int userid) throws SQLException{
+        String sql = "SELECT avatar FROM users WHERE userid = ?";
+        PreparedStatement stm = con.prepareStatement(sql);
+        stm.setInt(1, userid);
+        ResultSet rs;
+        rs = stm.executeQuery();
+        String userId = "";
+        try{
+            if(rs.next()){
+                userId = rs.getString(1);
             }
         }finally{
             rs.close();
