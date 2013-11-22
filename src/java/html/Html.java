@@ -93,6 +93,18 @@ public class Html {
     public static String generateHWithColor(int h, String text, String cClass) {
         return "<h" + h + " class=\"" + cClass + "\">" + text + "</h" + h + ">";
     }
+    
+    public static String getNavBar(){
+        String nav = "";
+        nav +=  "<nav class=\"navbar navbar-default\" role=\"navigation\">\n" +
+                "  <div class=\"navbar-header\">\n" +
+                "    <button type=\"button\" class=\"navbar-toggle\" data-toggle=\"collapse\" data-target=\"#bs-example-navbar-collapse-1\">\n" +
+                "    </button>\n" +
+                "    <a class=\"navbar-brand\" href=\"./home\">Home</a>\n" +
+                "  </div>"+
+                "</nav>";
+        return nav;
+    }
 
     public static String includeHead() {
         String ret = "";
@@ -102,17 +114,24 @@ public class Html {
                 + "<script src=\"https://code.jquery.com/jquery.js\"></script>\n"
                 + "<script src=\"js/bootstrap.min.js\"></script>\n";
         ret += "</head>";
+        
         return ret;
 
     }
 
-    public static String centerInPage(String html) {
+    public static String addHtml(String html) {
         String ret = "";
+        ret += "<html>";
+        ret += Html.includeHead();
+        ret += "<body>";
         ret += "<div class=\"row\">"
                 + "<div class=\"col-md-2\">&nbsp.</div>"
                 + "<div class=\"col-md-8\">";
-        ret += html;
-        ret += "</div>";
+        ret += Html.getNavBar() + html;
+        ret += "<div class=\"col-md-2\">&nbsp.</div>"
+                + "</div>";
+        ret += "</body>";
+        ret += "</html>";
         return ret;
     }
 

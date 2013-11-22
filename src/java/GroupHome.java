@@ -5,7 +5,9 @@
  */
 
 import db.DBManager;
+import html.Html;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -25,7 +27,18 @@ public class GroupHome extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        
+        try {
+            connectToDatabase(req);
+            HttpSession session = req.getSession();
+            String username = (String) session.getAttribute(Login.SESSION_USER);
+            generateHtml(req, resp, username);
+        } catch (Exception e) {
+        }
+    }
+    
+    private void generateHtml(HttpServletRequest req, HttpServletResponse resp,String username) throws IOException{
+        PrintWriter pw = resp.getWriter();
+        pw.print(Html.addHtml("yoooohohohooh"));
     }
     
     private void connectToDatabase(HttpServletRequest req) {

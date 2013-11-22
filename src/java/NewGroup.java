@@ -85,18 +85,12 @@ public class NewGroup extends HttpServlet {
 
     private void generateHtml(HttpServletRequest request, HttpServletResponse response, String user) throws IOException {
         PrintWriter pw = response.getWriter();
-        pw.println("<html>");
-        pw.print(Html.includeHead());
-        pw.print("<body>");
-        int i;        
-        try {
-            pw.print(Html.centerInPage(generateStringBody(request, response, user)));
+        try{
+            pw.print(Html.addHtml(generateStringBody(request, response, user)));
         } catch (Exception e){
             e.printStackTrace();
             pw.println("\t"+e.getClass());
         }
-        pw.println("</body>");
-        pw.println("</html>");
     }
 
     private String generateStringBody(HttpServletRequest request, HttpServletResponse response, String user) throws Exception {

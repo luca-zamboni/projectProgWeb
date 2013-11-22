@@ -68,9 +68,6 @@ public class UploadAvatar extends HttpServlet {
         try {
             String body = "", inform = "", avatar, submit = "Submit";
             PrintWriter pw = response.getWriter();
-            pw.println("<html>");
-            pw.print(Html.includeHead());
-            pw.print("<body>");
 
             body += Html.generateH(1, "Upload your AVATAR");
 
@@ -94,9 +91,7 @@ public class UploadAvatar extends HttpServlet {
                     + inform
                     + "</form>";
 
-            pw.print(Html.centerInPage(body));
-            pw.println("</body>");
-            pw.println("</html>");
+            pw.print(Html.addHtml(body));
         } catch (Exception e) {
         }
     }

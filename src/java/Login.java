@@ -64,9 +64,6 @@ public class Login extends HttpServlet {
     private void generateHtml(HttpServletRequest request, HttpServletResponse response, String user) throws IOException, SQLException {
 
         PrintWriter pw = response.getWriter();
-        pw.println("<html>");
-        pw.print(Html.includeHead());
-        pw.print("<body>");
         String body = "";
         body += constructStringLogin(setDateCookie(request, response, user), user);
         body += "<a href='newGroup' type=\"button\" class=\"btn btn-primary btn-lg\">"
@@ -80,9 +77,8 @@ public class Login extends HttpServlet {
 
         body += getTableGroups(user);
         body += "<a href='logout'>Logout</a></div>";
-        pw.print(Html.centerInPage(body));
-        pw.println("</body>");
-        pw.println("</html>");
+        
+        pw.print(Html.addHtml(body));
 
     }
 
@@ -230,7 +226,7 @@ public class Login extends HttpServlet {
             aux += Html.getImageAvatarSmall(avatar);
         }
         if (date.equals("")) {
-            ret += "<br><h3>Primo accesso eseguito su questo pc</h3><h1>\n";
+            ret += "<h3>Primo accesso eseguito su questo pc</h3><h1>\n";
             ret += aux;
             ret += " Welcome " + user + "</h1>";
         } else {
@@ -238,7 +234,7 @@ public class Login extends HttpServlet {
             data.setTime(Long.parseLong(date));
             DateFormat formatter = new SimpleDateFormat("HH:mm:ss");
             String dateFormatted = formatter.format(data);
-            ret += "<br><h3>Ultimo accesso eseguito il " + data.toString() + "</h3><h1>";
+            ret += "<h3>Ultimo accesso eseguito il " + data.toString() + "</h3><h1>";
             ret += aux;
             ret += " Re-Welcome " + user + "</h1>\n";
         }
