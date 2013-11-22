@@ -6,7 +6,6 @@
 
 import com.oreilly.servlet.MultipartRequest;
 import com.oreilly.servlet.multipart.DefaultFileRenamePolicy;
-import static java.nio.file.StandardCopyOption.*;
 import db.DBManager;
 import html.Html;
 import java.io.BufferedInputStream;
@@ -18,8 +17,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.sql.SQLException;
 import java.util.Enumeration;
 import java.util.logging.Level;
@@ -54,7 +51,7 @@ public class UploadAvatar extends HttpServlet {
         HttpSession session = request.getSession();
         String user = (String) session.getAttribute(Login.SESSION_USER);
         PrintWriter pw = response.getWriter();
-        pw.print(getFiles(request, user));
+        pw.print(getFiles(request,response, user));
     }
 
     public void init(ServletConfig config) throws ServletException {
@@ -80,11 +77,11 @@ public class UploadAvatar extends HttpServlet {
             avatar = dbm.getAvatar(dbm.getIdFromUser(user));
             if (avatar != null && (!avatar.equals(""))) {
                 submit = "Change";
-                body += "<img src=\"img/" + avatar + "\" style='width:150px;heigth:200px;' alt=\"This is you? You are so ugly...\" class=\"img-thumbnail\">";
             } else {
-                body += "<img src=\"img/img.jpg\"style='width:150px;heigth:200px;' alt=\"Why? tell me why?\" class=\"img-thumbnail\">";
+                avatar = "img.jpg";
             }
-
+            body += Html.getImageAvatar(avatar);
+            
             inform += "<div class=\"form-group\">\n"
                     + "    <label for=\"avatar\">Avatar</label>\n"
                     + "    <input type=\"file\" name='avatar' id=\"avatar\">\n"
@@ -104,7 +101,7 @@ public class UploadAvatar extends HttpServlet {
         }
     }
 
-    private String getFiles(HttpServletRequest request, String user) {
+    private String getFiles(HttpServletRequest request,HttpServletResponse response, String user) {
         String r = "";
         try {
 
@@ -116,26 +113,37 @@ public class UploadAvatar extends HttpServlet {
                 String filename = multi.getFilesystemName(name);
                 String type = multi.getContentType(name);
                 
-                File inputFile = multi.getFile(name);
-                //"/home/luca/projects/JavaServlet/oneProject/web";
-                String path = request.getServletContext().getRealPath("/");
-                System.out.println(path);
-                File outputFile = new File(path+"/img/"+user+".png");
-                if(!outputFile.exists()) {
-                    outputFile.createNewFile();
-                } 
-                
-                InputStream finput = new BufferedInputStream(new FileInputStream(inputFile));
-                OutputStream foutput = new BufferedOutputStream(new FileOutputStream(outputFile));
-                
-                byte[] buffer = new byte[1024 * 500];
-                int bytes_letti = 0;
-                while ((bytes_letti = finput.read(buffer)) > 0) {
-                    foutput.write(buffer, 0, bytes_letti);
-                }
-                finput.close();
-                foutput.close();
+                String extension = "";
 
+                int i = filename.lastIndexOf(".");
+                if (i > 0) {
+                    extension = filename.substring(i+1);
+                }
+                if(!extension.equals("png") && !extension.equals("jpg") &&  !extension.equals("jpeg")){
+                    response.sendRedirect("./uploadAvatar");
+                }else{
+                
+                    dbm.setAvatar(user, extension);
+
+                    File inputFile = multi.getFile(name);
+                    String path = request.getServletContext().getRealPath("/");
+                    File outputFile = new File(path+"/img/"+user+"."+extension);
+                    if(!outputFile.exists()) {
+                        outputFile.createNewFile();
+                    } 
+
+                    InputStream finput = new BufferedInputStream(new FileInputStream(inputFile));
+                    OutputStream foutput = new BufferedOutputStream(new FileOutputStream(outputFile));
+
+                    byte[] buffer = new byte[1024 * 500];
+                    int bytes_letti = 0;
+                    while ((bytes_letti = finput.read(buffer)) > 0) {
+                        foutput.write(buffer, 0, bytes_letti);
+                    }
+                    finput.close();
+                    foutput.close();
+                    response.sendRedirect("./uploadAvatar");
+                }
             }
 
         } catch (Exception ex) {

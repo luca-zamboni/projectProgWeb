@@ -39,6 +39,18 @@ public class Html {
         ret = "</" + tag + ">";
         return "";
     }
+    
+    public static String getImageAvatarSmall(String avatar){
+        String ret = "<img src=\"img/" + avatar + "\" style='width:80px;heigth:100px;' "
+                + "alt=\"This is you? You are so ugly...\" class=\"img-thumbnail\">";
+        return ret;
+    }
+    
+    public static String getImageAvatar(String avatar){
+        String ret = "<img src=\"img/" + avatar + "\" style='width:150px;heigth:200px;' "
+                + "alt=\"This is you? You are so ugly...\" class=\"img-thumbnail\">";
+        return ret;
+    }
 
     public static String generateButton(String text, String href, String classBt, String icon) {
         String bt = "";

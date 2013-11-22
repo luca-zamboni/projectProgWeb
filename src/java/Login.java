@@ -36,26 +36,32 @@ public class Login extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        connectToDatabase(request);
-        HttpSession session = request.getSession();
-        String username = (String) session.getAttribute(SESSION_USER);
-        generateHtml(request, response, username);
+        try {
+            connectToDatabase(request);
+            HttpSession session = request.getSession();
+            String username = (String) session.getAttribute(SESSION_USER);
+            generateHtml(request, response, username);
+        } catch (Exception e) {
+        }
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        connectToDatabase(request);
-        int login = loginValid(request);
-        if (loginValid(request) == 0) {
-            checkAndSetSession(request, user);
-            generateHtml(request, response, user);
-        } else {
-            response.sendRedirect("./?error=" + login);
+        try {
+            connectToDatabase(request);
+            int login = loginValid(request);
+            if (loginValid(request) == 0) {
+                checkAndSetSession(request, user);
+                generateHtml(request, response, user);
+            } else {
+                response.sendRedirect("./?error=" + login);
+            }
+        } catch (Exception e) {
         }
     }
 
-    private void generateHtml(HttpServletRequest request, HttpServletResponse response, String user) throws IOException {
+    private void generateHtml(HttpServletRequest request, HttpServletResponse response, String user) throws IOException, SQLException {
 
         PrintWriter pw = response.getWriter();
         pw.println("<html>");
@@ -66,8 +72,7 @@ public class Login extends HttpServlet {
         body += "<a href='newGroup' type=\"button\" class=\"btn btn-primary btn-lg\">"
                 + "Create Group"
                 + "</a>";
-        body += " " + Html.generateButton(" Carica avatar", "./uploadAvatar" , "btn btn-primary btn-lg");
-        
+        body += " " + Html.generateButton(" Carica avatar", "./uploadAvatar", "btn btn-primary btn-lg");
 
         body += controlError(request);
 
@@ -109,9 +114,9 @@ public class Login extends HttpServlet {
                     html += "<td>" + aux.getGroupName() + "</td>";
                     html += "<td>" + getDateFromTimestamp(aux.getCreationDate()) + "</td>";
                     html += "<td>";
-                    html += Html.generateButton("Accept", link, "btn btn-success btn-xs","ok");
+                    html += Html.generateButton("Accept", link, "btn btn-success btn-xs", "ok");
                     html += " ";
-                    html += Html.generateButton("Decline", link + "&dec=1", "btn btn-danger btn-xs","remove");
+                    html += Html.generateButton("Decline", link + "&dec=1", "btn btn-danger btn-xs", "remove");
                     html += "</td>";
 
                     html += "</tr>";
@@ -218,18 +223,24 @@ public class Login extends HttpServlet {
 
     }
 
-    private String constructStringLogin(String date, String user) {
-        String ret = "";
+    private String constructStringLogin(String date, String user) throws SQLException {
+        String ret = "",aux="";
+        String avatar = dbm.getAvatar(dbm.getIdFromUser(user));
+        if (avatar != null && (!avatar.equals(""))) {
+            aux += Html.getImageAvatarSmall(avatar);
+        }
         if (date.equals("")) {
-            ret += "<br><h3>Primo accesso eseguito su questo pc</h3>";
-            ret += "<h1> Welcome " + user + "</h1>";
+            ret += "<br><h3>Primo accesso eseguito su questo pc</h3><h1>\n";
+            ret += aux;
+            ret += " Welcome " + user + "</h1>";
         } else {
             Date data = new Date();
             data.setTime(Long.parseLong(date));
             DateFormat formatter = new SimpleDateFormat("HH:mm:ss");
             String dateFormatted = formatter.format(data);
-            ret += "<br><h3>Ultimo accesso eseguito il " + data.toString() + "</h3>";
-            ret += "<h1> Re-Welcome " + user + "</h1>";
+            ret += "<br><h3>Ultimo accesso eseguito il " + data.toString() + "</h3><h1>";
+            ret += aux;
+            ret += " Re-Welcome " + user + "</h1>\n";
         }
         return ret;
     }

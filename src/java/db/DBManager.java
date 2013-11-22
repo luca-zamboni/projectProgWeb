@@ -278,6 +278,14 @@ public class DBManager implements Serializable {
         return userId;
     }
     
+    public void setAvatar(String user,String extension) throws SQLException{
+        String sql = "UPDATE users SET avatar = ? WHERE userid = ?";
+        PreparedStatement stm = con.prepareStatement(sql);
+        stm.setString(1, user+"."+extension);
+        stm.setInt(2, getIdFromUser(user));
+        stm.executeUpdate();
+    }
+    
     public ArrayList<String> getAllUSer() throws SQLException{
         String sql = "SELECT username FROM users";
         PreparedStatement stm = con.prepareStatement(sql);
