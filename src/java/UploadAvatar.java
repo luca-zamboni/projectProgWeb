@@ -96,7 +96,7 @@ public class UploadAvatar extends HttpServlet {
         }
     }
 
-    private String getFiles(HttpServletRequest request,HttpServletResponse response, String user) {
+    private String getFiles(HttpServletRequest request,HttpServletResponse response, String user) throws IOException {
         String r = "";
         try {
 
@@ -115,7 +115,7 @@ public class UploadAvatar extends HttpServlet {
                     extension = filename.substring(i+1);
                 }
                 if(!extension.equals("png") && !extension.equals("jpg") &&  !extension.equals("jpeg")){
-                    response.sendRedirect("./uploadAvatar");
+                    //response.sendRedirect("./uploadAvatar");
                 }else{
                 
                     dbm.setAvatar(user, extension);
@@ -137,13 +137,14 @@ public class UploadAvatar extends HttpServlet {
                     }
                     finput.close();
                     foutput.close();
-                    response.sendRedirect("./uploadAvatar");
+                    //response.sendRedirect("./uploadAvatar");
                 }
             }
 
         } catch (Exception ex) {
             Logger.getLogger(UploadAvatar.class.getName()).log(Level.SEVERE, null, ex);
         }
+        response.sendRedirect("./uploadAvatar");
         return r;
     }
 
