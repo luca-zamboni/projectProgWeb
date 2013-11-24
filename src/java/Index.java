@@ -1,5 +1,6 @@
 
 import db.DBManager;
+import html.Html;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
@@ -38,6 +39,10 @@ public class Index extends HttpServlet {
 
     private void generateHtml(HttpServletRequest req, HttpServletResponse resp, String username) throws IOException {
         PrintWriter pw = resp.getWriter();
+        String error ="";
+        String gpaux = (String) req.getParameter("err");
+        if(gpaux == null || gpaux.equals("1"))
+            error += Html.generateHWithColor(3, "Login invalid!!", "text-danger");
         pw.print("<!DOCTYPE html>\n" +
 "<!--\n" +
 "To change this license header, choose License Headers in Project Properties.\n" +
@@ -87,6 +92,7 @@ public class Index extends HttpServlet {
 "    <body>\n" +
 "        <div style=\"width:600px; margin:0 auto\">\n" +
 "            <h1 style=\"text-align: center;\">Login</h1>\n" +
+                error +
 "            <form action=\"home\" method=\"POST\" class=\"form-horizontal\" role=\"form\">\n" +
 "                <div class=\"form-group\">\n" +
 "                    <label class=\"col-sm-2 control-label\">UserName</label>\n" +
@@ -115,7 +121,6 @@ public class Index extends HttpServlet {
     
     private void connectToDatabase(HttpServletRequest request) {
         try {
-            //cambiare qua cazzo
             dbm = new DBManager(request);
         } catch (SQLException ex) {
             Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);

@@ -43,7 +43,6 @@ public class GroupHome extends HttpServlet {
     
     private void connectToDatabase(HttpServletRequest req) {
         try {
-            //cambiare qua cazzo
             dbm = new DBManager(req);
         } catch (SQLException ex) {
             Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);

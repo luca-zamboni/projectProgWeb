@@ -150,7 +150,6 @@ public class UploadAvatar extends HttpServlet {
 
     private void connectToDatabase(HttpServletRequest request) {
         try {
-            //cambiare qua cazzo
             dbm = new DBManager(request);
         } catch (SQLException ex) {
             Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
