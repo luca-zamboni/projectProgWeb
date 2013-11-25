@@ -25,10 +25,6 @@
         <servlet-name>NewGroup</servlet-name>
     </filter-mapping>
     <filter-mapping>
-        <filter-name>FilterLogin</filter-name>
-        <servlet-name>GroupHome</servlet-name>
-    </filter-mapping>
-    <filter-mapping>
         <filter-name>FilterNotOwner</filter-name>
         <servlet-name>NewGroup</servlet-name>
     </filter-mapping>
@@ -72,6 +68,10 @@
             </param-value>
         </init-param>
     </servlet>
+    <servlet>
+        <servlet-name>addPost</servlet-name>
+        <servlet-class>AddPost</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>Login</servlet-name>
         <url-pattern>/home</url-pattern>
@@ -90,7 +90,7 @@
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>GroupHome</servlet-name>
-        <url-pattern>/GroupHome</url-pattern>
+        <url-pattern>/groupHome</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>AcceptInvitation</servlet-name>
@@ -99,6 +99,10 @@
     <servlet-mapping>
         <servlet-name>UploadAvatar</servlet-name>
         <url-pattern>/uploadAvatar</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>addPost</servlet-name>
+        <url-pattern>/addPost</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

@@ -127,7 +127,7 @@ public class DBManager implements Serializable {
         
     }
     
-    public void newGroup(String title, String[] users, int owner) throws SQLException{
+    public int newGroup(String title, String[] users, int owner) throws SQLException{
         
         String sql = "INSERT into GROUPS(ownerid,groupname,creationdate)"
                 + "VALUES (?,?,strftime('%s', 'now'))";
@@ -169,6 +169,8 @@ public class DBManager implements Serializable {
         stm3.setString(3, "Creation of group " + title);
         stm3.executeUpdate();
         stm3.close();
+        
+        return groupid;
         
     }
     

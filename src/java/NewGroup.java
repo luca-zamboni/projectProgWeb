@@ -1,6 +1,7 @@
 
 import db.DBManager;
 import html.Html;
+import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
@@ -43,9 +44,11 @@ public class NewGroup extends HttpServlet {
         if (check == 0) {
             System.out.print(group);
             try {
-                if(group.equals("-1")){
-                    //System.out.print(group);
-                    dbm.newGroup(title, users, dbm.getIdFromUser(username));
+                if(group.equals("-1")){ 
+                    String path = req.getServletContext().getRealPath("/");
+                    int groupid = dbm.newGroup(title, users, dbm.getIdFromUser(username));
+                    File a = new File(path+"/files/"+groupid+"/");
+                    a.mkdir();
                 }
                 else{
                     int aux = Integer.parseInt(group);

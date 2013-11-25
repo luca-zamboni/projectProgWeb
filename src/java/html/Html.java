@@ -59,6 +59,21 @@ public class Html {
         bt += text + "</button></a>";
         return bt;
     }
+    
+    public static String generateButtonSubmit(String text, String classBt, String icon) {
+        String bt = "";
+        bt += "<button type=\"submit\" class=\"" + classBt + "\">";
+        bt += "<span class=\"glyphicon glyphicon-" + icon + "\"></span> ";
+        bt += text + "</button>";
+        return bt;
+    }
+    
+    public static String generateButtonSubmit(String text, String classBt) {
+        String bt = "";
+        bt += "<button type=\"submit\" class=\"" + classBt + "\">";
+        bt += text + "</button>";
+        return bt;
+    }
 
     public static String generateButton(String text, String href, String classBt) {
         String bt = "";
@@ -177,7 +192,7 @@ public class Html {
             if (aux.getOwnerName().equals(user)) {
                 html += "<tr class=\"success\">";
                 html += "<td>" + aux.getOwnerName() + "</td>";
-                html += "<td><a href=\"GroupHome?g=" + aux.getId() + "\">" + aux.getGroupName() + "</a></td>";
+                html += "<td><a href=\"groupHome?g=" + aux.getId() + "\">" + aux.getGroupName() + "</a></td>";
                 html += "<td>" + getDateFromTimestamp(aux.getCreationDate()) + "</td>";
                 html += "<td><a href=\"newGroup?g=" + aux.getId() + "\"><button type=\"button\" class=\"btn btn-default btn-xs\">\n"
                         + "  <span class=\"glyphicon glyphicon-th\"></span> Manage\n"
@@ -185,7 +200,7 @@ public class Html {
             } else {
                 html += "<tr>";
                 html += "<td>" + aux.getOwnerName() + "</td>";
-                html += "<td><a href=\"GroupHome?g=" + aux.getId() + "\">" + aux.getGroupName() + "</a></td>";
+                html += "<td><a href=\"groupHome?g=" + aux.getId() + "\">" + aux.getGroupName() + "</a></td>";
                 html += "<td>" + getDateFromTimestamp(aux.getCreationDate()) + "</td>";
                 html += "<td><button type=\"button\" class=\"btn btn-danger btn-xs\">\n"
                         + "  <span class=\"glyphicon glyphicon-log-out\"></span> &nbsp;&nbsp;Leave&nbsp;\n"

@@ -40,8 +40,8 @@ public class Index extends HttpServlet {
     private void generateHtml(HttpServletRequest req, HttpServletResponse resp, String username) throws IOException {
         PrintWriter pw = resp.getWriter();
         String error ="";
-        String gpaux = (String) req.getParameter("err");
-        if(gpaux == null || gpaux.equals("1"))
+        String gpaux = (String) req.getParameter("error");
+        if(gpaux != null && gpaux.equals("1"))
             error += Html.generateHWithColor(3, "Login invalid!!", "text-danger");
         pw.print("<!DOCTYPE html>\n" +
 "<!--\n" +
