@@ -91,7 +91,7 @@ public class UploadAvatar extends HttpServlet {
                     + inform
                     + "</form>";
 
-            pw.print(Html.addHtml(body));
+            pw.print(Html.addHtml(body,user));
         } catch (Exception e) {
         }
     }

@@ -39,14 +39,14 @@ public class Html {
         ret = "</" + tag + ">";
         return "";
     }
-    
-    public static String getImageAvatarSmall(String avatar){
+
+    public static String getImageAvatarSmall(String avatar) {
         String ret = "<img src=\"img/" + avatar + "\" style='width:80px;heigth:100px;' "
                 + "alt=\"This is you? You are so ugly...\" class=\"img-thumbnail\">";
         return ret;
     }
-    
-    public static String getImageAvatar(String avatar){
+
+    public static String getImageAvatar(String avatar) {
         String ret = "<img src=\"img/" + avatar + "\" style='width:150px;heigth:200px;' "
                 + "alt=\"This is you? You are so ugly...\" class=\"img-thumbnail\">";
         return ret;
@@ -59,7 +59,7 @@ public class Html {
         bt += text + "</button></a>";
         return bt;
     }
-    
+
     public static String generateButtonSubmit(String text, String classBt, String icon) {
         String bt = "";
         bt += "<button type=\"submit\" class=\"" + classBt + "\">";
@@ -67,7 +67,7 @@ public class Html {
         bt += text + "</button>";
         return bt;
     }
-    
+
     public static String generateButtonSubmit(String text, String classBt) {
         String bt = "";
         bt += "<button type=\"submit\" class=\"" + classBt + "\">";
@@ -108,16 +108,19 @@ public class Html {
     public static String generateHWithColor(int h, String text, String cClass) {
         return "<h" + h + " class=\"" + cClass + "\">" + text + "</h" + h + ">";
     }
-    
-    public static String getNavBar(){
+
+    public static String getNavBar(String user) {
         String nav = "";
-        nav +=  "<nav class=\"navbar navbar-default\" role=\"navigation\">\n" +
-                "  <div class=\"navbar-header\">\n" +
-                "    <button type=\"button\" class=\"navbar-toggle\" data-toggle=\"collapse\" data-target=\"#bs-example-navbar-collapse-1\">\n" +
-                "    </button>\n" +
-                "    <a class=\"navbar-brand\" href=\"./home\">Home</a>\n" +
-                "  </div>"+
-                "</nav>";
+        nav += "<nav class=\"navbar navbar-default\" role=\"navigation\">\n"
+                + "  <div class=\"navbar-header\">\n"
+                + "    <button type=\"button\" class=\"navbar-toggle\" data-toggle=\"collapse\" data-target=\"#bs-example-navbar-collapse-1\">\n"
+                + "    </button>\n"
+                + "    <a class=\"navbar-brand\" href=\"./home\">Home</a>\n"
+                + "  </div>";
+        nav += "<ul class=\"nav navbar-nav navbar-right\">\n"
+                + "      <li><a>" + user + "</a></li>"
+                + "</ul>"
+                + "</nav>";
         return nav;
     }
 
@@ -129,12 +132,12 @@ public class Html {
                 + "<script src=\"js/jquery.js\"></script>\n"
                 + "<script src=\"js/bootstrap.min.js\"></script>\n";
         ret += "</head>";
-        
+
         return ret;
 
     }
 
-    public static String addHtml(String html) {
+    public static String addHtml(String html, String user) {
         String ret = "";
         ret += "<html>";
         ret += Html.includeHead();
@@ -142,7 +145,7 @@ public class Html {
         ret += "<div class=\"row\">"
                 + "<div class=\"col-md-2\">&nbsp.</div>"
                 + "<div class=\"col-md-8\">";
-        ret += Html.getNavBar() + html;
+        ret += Html.getNavBar(user) + html;
         ret += "<div class=\"col-md-2\">&nbsp.</div>"
                 + "</div>";
         ret += "</body>";

@@ -89,7 +89,7 @@ public class NewGroup extends HttpServlet {
     private void generateHtml(HttpServletRequest request, HttpServletResponse response, String user) throws IOException {
         PrintWriter pw = response.getWriter();
         try{
-            pw.print(Html.addHtml(generateStringBody(request, response, user)));
+            pw.print(Html.addHtml(generateStringBody(request, response, user),user));
         } catch (Exception e){
             e.printStackTrace();
             pw.println("\t"+e.getClass());

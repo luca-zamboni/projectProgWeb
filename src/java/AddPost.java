@@ -23,7 +23,7 @@ import javax.servlet.http.HttpSession;
  * @author luca
  */
 public class AddPost extends HttpServlet {
-    
+
     private DBManager dbm;
     private int groupid;
     private String user;
@@ -32,7 +32,7 @@ public class AddPost extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        try{
+        try {
             mReq = req;
             mResp = resp;
             connectToDatabase();
@@ -43,47 +43,58 @@ public class AddPost extends HttpServlet {
 
             PrintWriter pw = resp.getWriter();
             String post = req.getParameter("post");
-            if(post==null || post.equals("")){
-                String referer = req.getHeader("Referer"); 
+            if (post == null || post.equals("")) {
+                String referer = req.getHeader("Referer");
                 resp.sendRedirect(referer);
+            } else {
+                String aux = post.replace(" ", "");
+                if (aux.equals("")) {
+                    String referer = req.getHeader("Referer");
+                    resp.sendRedirect(referer);
+                } else {
+                    dbm.insertPost(dbm.getIdFromUser(user), groupid, post);
+                    
+
+                    for (String t : getAllLinkedFile(post)) {
+                        pw.print(t);
+                    }
+                    pw.print(post);
+                }
             }
 
-            dbm.insertPost(dbm.getIdFromUser(user),groupid,post);
-
-            for(String t : getAllLinkedFile(post)){
-                pw.print(t);
-            }
-            
             // queste due istruzioni rimandano alla pagina precedente
-            String referer = req.getHeader("Referer"); 
+            String referer = req.getHeader("Referer");
             resp.sendRedirect(referer);
-            
-        }catch(Exception e){
-             PrintWriter pw = resp.getWriter();
-             pw.print("Error -- Something goes wrong -- Tips: Format your PC\n");
-             pw.print(e.toString());
+
+        } catch (Exception e) {
+            PrintWriter pw = resp.getWriter();
+            pw.print("Error -- Something goes wrong -- Tips: Format your PC\n");
+            pw.print(e.toString());
         }
-        
+
     }
-    
-    private ArrayList<String> getAllLinkedFile(String parsethis){
+
+    private ArrayList<String> getAllLinkedFile(String parsethis) {
         ArrayList<String> ret = new ArrayList();
         String[] a = parsethis.split("[$][$]");
-        for(String h : a)
-            if(isInGroupFiles(h))
+        for (String h : a) {
+            if (isInGroupFiles(h)) {
                 ret.add(h);
+            }
+        }
         return ret;
     }
-    
-    private boolean isInGroupFiles( String file){
+
+    private boolean isInGroupFiles(String file) {
         file = file.replace(" ", "");
-        for(String f : GroupHome.getAllFileGroup(mReq,groupid)){
-            if(f.equals(file))
+        for (String f : GroupHome.getAllFileGroup(mReq, groupid)) {
+            if (f.equals(file)) {
                 return true;
+            }
         }
         return false;
     }
-    
+
     private void connectToDatabase() {
         try {
             dbm = new DBManager(mReq);

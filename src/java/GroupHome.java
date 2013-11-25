@@ -57,7 +57,7 @@ public class GroupHome extends HttpServlet {
         if(group!=null)
             body += Html.generateForm("addPost?g="+group, "POST", generateNewPostForm());
         
-        pw.print(Html.addHtml(body));
+        pw.print(Html.addHtml(body,username));
         
     }
     
@@ -74,9 +74,11 @@ public class GroupHome extends HttpServlet {
         String thread = "";
         ArrayList<Post> p = dbm.getAllPost(groupid);
         for(Post h : p){
-            thread += "<div>" + h.getCreationdate() + " - <b>" + dbm.getUserFormId(h.getOwner()) + "</b></div>";
-            thread += "<div>" +h.getText()+ "</div>";
-            thread += "<br>";
+            thread += "<div class=\"well\">\n";
+            thread += "<div style=\"font-size:16px;\"><b>" + dbm.getUserFormId(h.getOwner()) + "</b></div><br>\n";
+            thread += h.getText();
+            thread += "<br><br><div style=\"font-size:12px;\">Posted on "+ h.getCreationdate() + "</div>";
+            thread += "</div>";
         }
         return thread;
     }

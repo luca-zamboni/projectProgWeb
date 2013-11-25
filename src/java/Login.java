@@ -78,7 +78,7 @@ public class Login extends HttpServlet {
         body += getTableGroups();
         body += "<a href='logout'>Logout</a></div>";
         
-        pw.print(Html.addHtml(body));
+        pw.print(Html.addHtml(body,user));
 
     }
 
