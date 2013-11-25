@@ -12,6 +12,18 @@
         <filter-name>ProtectDirectory</filter-name>
         <filter-class>ProtectDirectory</filter-class>
     </filter>
+    <filter>
+        <filter-name>FilterNotInGroup</filter-name>
+        <filter-class>FilterNotInGroup</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>FilterNotInGroup</filter-name>
+        <servlet-name>AddPost</servlet-name>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>FilterNotInGroup</filter-name>
+        <servlet-name>GroupHome</servlet-name>
+    </filter-mapping>
     <filter-mapping>
         <filter-name>FilterLogin</filter-name>
         <servlet-name>Logout</servlet-name>
@@ -31,6 +43,14 @@
     <filter-mapping>
         <filter-name>FilterLogin</filter-name>
         <servlet-name>AcceptInvitation</servlet-name>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>FilterLogin</filter-name>
+        <servlet-name>UploadAvatar</servlet-name>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>FilterLogin</filter-name>
+        <servlet-name>AddPost</servlet-name>
     </filter-mapping>
     <servlet>
         <servlet-name>Login</servlet-name>
@@ -69,7 +89,7 @@
         </init-param>
     </servlet>
     <servlet>
-        <servlet-name>addPost</servlet-name>
+        <servlet-name>AddPost</servlet-name>
         <servlet-class>AddPost</servlet-class>
     </servlet>
     <servlet-mapping>
@@ -101,7 +121,7 @@
         <url-pattern>/uploadAvatar</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>addPost</servlet-name>
+        <servlet-name>AddPost</servlet-name>
         <url-pattern>/addPost</url-pattern>
     </servlet-mapping>
     <session-config>

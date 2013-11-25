@@ -39,8 +39,8 @@ public class Login extends HttpServlet {
         try {
             connectToDatabase(request);
             HttpSession session = request.getSession();
-            String username = (String) session.getAttribute(SESSION_USER);
-            generateHtml(request, response, username);
+            user = (String) session.getAttribute(SESSION_USER);
+            generateHtml(request, response);
         } catch (Exception e) {
         }
     }
@@ -51,9 +51,9 @@ public class Login extends HttpServlet {
         try {
             connectToDatabase(request);
             int login = loginValid(request);
-            if (loginValid(request) == 0) {
-                checkAndSetSession(request, user);
-                generateHtml(request, response, user);
+            if (login == 0) {
+                checkAndSetSession(request);
+                generateHtml(request, response);
             } else {
                 response.sendRedirect("./?error=" + login);
             }
@@ -61,11 +61,11 @@ public class Login extends HttpServlet {
         }
     }
 
-    private void generateHtml(HttpServletRequest request, HttpServletResponse response, String user) throws IOException, SQLException {
+    private void generateHtml(HttpServletRequest request, HttpServletResponse response) throws IOException, SQLException {
 
         PrintWriter pw = response.getWriter();
         String body = "";
-        body += constructStringLogin(setDateCookie(request, response, user), user);
+        body += constructStringLogin(setDateCookie(request, response));
         body += "<a href='newGroup' type=\"button\" class=\"btn btn-primary btn-lg\">"
                 + "Create Group"
                 + "</a>";
@@ -73,16 +73,16 @@ public class Login extends HttpServlet {
 
         body += controlError(request);
 
-        body += getYourPendings(user);
+        body += getYourPendings();
 
-        body += getTableGroups(user);
+        body += getTableGroups();
         body += "<a href='logout'>Logout</a></div>";
         
         pw.print(Html.addHtml(body));
 
     }
 
-    private String getYourPendings(String user) {
+    private String getYourPendings() {
         String html = "", link = "";
         try {
             ArrayList<Group> grp = dbm.getAllPendingsGroups(user);
@@ -124,7 +124,7 @@ public class Login extends HttpServlet {
         return html + "</table>";
     }
 
-    private String getTableGroups(String user) {
+    private String getTableGroups() {
         ArrayList<Group> mGroups;
         String ret = "";
         try {
@@ -141,11 +141,20 @@ public class Login extends HttpServlet {
         String body = "";
         String error = request.getParameter("error");
         if (error != null && error.equals("10")) {
-            int gid = Integer.parseInt(request.getParameter("g"));
             try {
+                int gid = Integer.parseInt(request.getParameter("g"));
                 body += Html.generateHWithColor(3, "You are not the owner of the group \"" + dbm.getGroupTitleById(gid)
                         + "\" \n!!", "text-danger");
-            } catch (SQLException e) {
+            } catch (Exception e) {
+            }
+        }
+        if (error != null && error.equals("11")) {
+            try {
+                int gid = Integer.parseInt(request.getParameter("g"));
+                if(!dbm.isInGroup(dbm.getIdFromUser(user), gid))
+                    body += Html.generateHWithColor(3, "You are not inveited group \"" + dbm.getGroupTitleById(gid)
+                        + "\" \n!!", "text-danger");
+            } catch (Exception e) {
             }
         }
 
@@ -169,7 +178,7 @@ public class Login extends HttpServlet {
         }
     }
 
-    private String checkAndSetSession(HttpServletRequest request, String user) {
+    private String checkAndSetSession(HttpServletRequest request) {
         HttpSession session = request.getSession();
         String usersession = (String) session.getAttribute(SESSION_USER);
         if (usersession == null) {
@@ -218,7 +227,7 @@ public class Login extends HttpServlet {
 
     }
 
-    private String constructStringLogin(String date, String user) throws SQLException {
+    private String constructStringLogin(String date) throws SQLException {
         String ret = "",aux="";
         String avatar = dbm.getAvatar(dbm.getIdFromUser(user));
         if (avatar != null && (!avatar.equals(""))) {
@@ -241,7 +250,7 @@ public class Login extends HttpServlet {
     }
 
     private String setDateCookie(HttpServletRequest request,
-            HttpServletResponse response, String user) {
+            HttpServletResponse response) {
 
         String ret = "";
         Date a = new Date();

@@ -26,52 +26,63 @@ public class AddPost extends HttpServlet {
     
     private DBManager dbm;
     private int groupid;
-    private String username;
+    private String user;
+    private HttpServletRequest mReq;
+    private HttpServletResponse mResp;
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        connectToDatabase(req);
-        HttpSession session = req.getSession();
-        username = (String) session.getAttribute(Login.SESSION_USER);
-        
-        PrintWriter pw = resp.getWriter();
-        String post = req.getParameter("post");
-        if(post==null)
-            resp.sendRedirect("./");
-        
-        String group = req.getParameter("g");
-        if(group==null)
-            resp.sendRedirect("./");
-        
-        groupid = Integer.parseInt(group);
-        
-        for(String t : getAllLinkedFile(req, post)){
-            pw.print(t);
+        try{
+            mReq = req;
+            mResp = resp;
+            connectToDatabase();
+            HttpSession session = req.getSession();
+            user = (String) session.getAttribute(Login.SESSION_USER);
+            String group = req.getParameter("g");
+            groupid = Integer.parseInt(group);
+
+            PrintWriter pw = resp.getWriter();
+            String post = req.getParameter("post");
+            if(post==null || post.equals("")){
+                String referer = req.getHeader("Referer"); 
+                resp.sendRedirect(referer);
+            }
+
+            dbm.insertPost(dbm.getIdFromUser(user),groupid,post);
+
+            for(String t : getAllLinkedFile(post)){
+                pw.print(t);
+            }
+            
+        }catch(Exception e){
+             PrintWriter pw = resp.getWriter();
+             pw.print("Error -- Something goes wrong -- Tips: Format your PC\n");
+             pw.print(e.toString());
         }
         
     }
     
-    private ArrayList<String> getAllLinkedFile(HttpServletRequest req, String parsethis){
+    private ArrayList<String> getAllLinkedFile(String parsethis){
         ArrayList<String> ret = new ArrayList();
         String[] a = parsethis.split("[$][$]");
         for(String h : a)
-            if(isInGroupFiles(req, h))
+            if(isInGroupFiles(h))
                 ret.add(h);
         return ret;
     }
     
-    private boolean isInGroupFiles(HttpServletRequest req, String file){
+    private boolean isInGroupFiles( String file){
         file = file.replace(" ", "");
-        for(String f : GroupHome.getAllFileGroup(req,groupid)){
+        for(String f : GroupHome.getAllFileGroup(mReq,groupid)){
             if(f.equals(file))
                 return true;
         }
         return false;
     }
     
-    private void connectToDatabase(HttpServletRequest req) {
+    private void connectToDatabase() {
         try {
-            dbm = new DBManager(req);
+            dbm = new DBManager(mReq);
         } catch (SQLException ex) {
             Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
         }

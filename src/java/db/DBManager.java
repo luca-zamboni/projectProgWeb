@@ -162,16 +162,20 @@ public class DBManager implements Serializable {
         stm2.executeUpdate();
         stm2.close();
         
-        String sql3 = "INSERT INTO post(groupid,ownerid,date,content) VALUES (?,?,CURRENT_TIMESTAMP,?)";
-        PreparedStatement stm3 = con.prepareStatement(sql3);
-        stm3.setInt(1, groupid);
-        stm3.setInt(2, owner);
-        stm3.setString(3, "Creation of group " + title);
-        stm3.executeUpdate();
-        stm3.close();
+        insertPost(owner, groupid,  "Creation of group " + title);
         
         return groupid;
         
+    }
+    
+    public void insertPost(int userid,int groupid,String post) throws SQLException{
+        String sql = "INSERT INTO post(groupid,ownerid,date,content) VALUES (?,?,CURRENT_TIMESTAMP,?)";
+        PreparedStatement stm = con.prepareStatement(sql);
+        stm.setInt(1, groupid);
+        stm.setInt(2, userid);
+        stm.setString(3, post);
+        stm.executeUpdate();
+        stm.close();
     }
     
     public boolean isKicked(int userid,int groupid) throws SQLException{

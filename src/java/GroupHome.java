@@ -35,10 +35,7 @@ public class GroupHome extends HttpServlet {
             connectToDatabase(req);
             HttpSession session = req.getSession();
             username = (String) session.getAttribute(Login.SESSION_USER);
-            String group = req.getParameter("g");
-            if(group==null)
-                resp.sendRedirect("./");
-            groupid = Integer.parseInt(group);
+            groupid = Integer.parseInt(req.getParameter("g"));
             
             generateHtml(req, resp);
         } catch (Exception e) {
