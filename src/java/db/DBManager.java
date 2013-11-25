@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import javax.servlet.http.HttpServletRequest;
 import models.Group;
+import models.Post;
 
 /**
  *
@@ -168,6 +169,27 @@ public class DBManager implements Serializable {
         
     }
     
+    public ArrayList<Post> getAllPost(int group) throws SQLException{
+        ArrayList<Post> p = new ArrayList();
+        String sql = "SELECT ownerid,date,content FROM post WHERE groupid = ?";
+        PreparedStatement stm = con.prepareStatement(sql);
+        stm.setInt(1, group);
+        ResultSet rs;
+        rs = stm.executeQuery();
+        try{
+            while(rs.next()){
+                int own = rs.getInt(1);
+                String date = rs.getString(2);
+                String content = rs.getString(3);
+                p.add(new Post(own, date, content));
+            }
+        }finally{
+            rs.close();
+            stm.close();
+        }
+        return p;
+    }
+    
     public void insertPost(int userid,int groupid,String post) throws SQLException{
         String sql = "INSERT INTO post(groupid,ownerid,date,content) VALUES (?,?,CURRENT_TIMESTAMP,?)";
         PreparedStatement stm = con.prepareStatement(sql);
@@ -316,7 +338,8 @@ public class DBManager implements Serializable {
                 + "AND users.userid= user_groups.userid "
                 + "AND post.groupid= groups.groupid "
                 + "AND username = ? and user_groups.status = ? "
-                + "ORDER by post.date DESC";
+                + "GROUP BY groups.groupid "
+                + "ORDER by post.date DESC ";
         PreparedStatement stm = con.prepareStatement(sql);
         stm.setString(1, user);
         stm.setInt(2, status);

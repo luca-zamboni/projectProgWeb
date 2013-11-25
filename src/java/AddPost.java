@@ -54,6 +54,10 @@ public class AddPost extends HttpServlet {
                 pw.print(t);
             }
             
+            // queste due istruzioni rimandano alla pagina precedente
+            String referer = req.getHeader("Referer"); 
+            resp.sendRedirect(referer);
+            
         }catch(Exception e){
              PrintWriter pw = resp.getWriter();
              pw.print("Error -- Something goes wrong -- Tips: Format your PC\n");

@@ -18,6 +18,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import models.Post;
 
 /**
  *
@@ -28,27 +29,31 @@ public class GroupHome extends HttpServlet {
     private DBManager dbm;
     private int groupid;
     private String username;
+    private HttpServletRequest mReq;
+    private HttpServletResponse mResp;
     
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         try {
+            mReq = req;
+            mResp = resp;
             connectToDatabase(req);
             HttpSession session = req.getSession();
             username = (String) session.getAttribute(Login.SESSION_USER);
             groupid = Integer.parseInt(req.getParameter("g"));
             
-            generateHtml(req, resp);
+            generateHtml();
         } catch (Exception e) {
         }
     }
     
-    private void generateHtml(HttpServletRequest req, HttpServletResponse resp) throws IOException{
-        PrintWriter pw = resp.getWriter();
+    private void generateHtml() throws IOException, SQLException{
+        PrintWriter pw = mResp.getWriter();
         String body = "";
         
-        body += generateThread(req,resp,username);
+        body += generateThread(username);
         
-        String group = req.getParameter("g");
+        String group = mReq.getParameter("g");
         if(group!=null)
             body += Html.generateForm("addPost?g="+group, "POST", generateNewPostForm());
         
@@ -65,9 +70,15 @@ public class GroupHome extends HttpServlet {
         return form;
     }
     
-    private String generateThread(HttpServletRequest req, HttpServletResponse resp,String username){
-        ////// request all post :)
-        return "All post !!!";
+    private String generateThread(String username) throws SQLException{
+        String thread = "";
+        ArrayList<Post> p = dbm.getAllPost(groupid);
+        for(Post h : p){
+            thread += "<div>" + h.getCreationdate() + " - <b>" + dbm.getUserFormId(h.getOwner()) + "</b></div>";
+            thread += "<div>" +h.getText()+ "</div>";
+            thread += "<br>";
+        }
+        return thread;
     }
     
     public static ArrayList<String> getAllFileGroup(HttpServletRequest req,int groupid){

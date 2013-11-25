@@ -54,7 +54,7 @@ public class Index extends HttpServlet {
 "        <title>TODO supply a title</title>\n" +
 "        <meta charset=\"UTF-8\">\n" +
 "        <link href=\"./css/bootstrap.min.css\" rel=\"stylesheet\">\n" +
-"        <script src=\"https://code.jquery.com/jquery.js\"></script>\n" +
+"        <script src=\"js/jquery.js\"></script>\n" +
 "        <script src=\"http://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.js\"></script>\n" +
 "        <script src=\"./js/bootstrap.min.js\"></script>\n" +
 "        <script type=\"text/javascript\">\n" +
