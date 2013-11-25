@@ -50,12 +50,11 @@ public class GroupHome extends HttpServlet {
     private void generateHtml() throws IOException, SQLException{
         PrintWriter pw = mResp.getWriter();
         String body = "";
-        
+        body += "<style>h2{text-align:center}</style>";
+        body += Html.generateH(2, dbm.getGroupTitleById(groupid)) + "<br>";
         body += generateThread(username);
         
-        String group = mReq.getParameter("g");
-        if(group!=null)
-            body += Html.generateForm("addPost?g="+group, "POST", generateNewPostForm());
+        body += Html.generateForm("addPost?g="+groupid, "POST", generateNewPostForm());
         
         pw.print(Html.addHtml(body,username));
         
@@ -65,7 +64,7 @@ public class GroupHome extends HttpServlet {
         String form = "";
         
         form+="<textarea name=\"post\" class=\"form-control\" rows=\"6\"></textarea><br>";
-        form+=Html.generateButtonSubmit("Submit", "btn btn-success");
+        form+=Html.generateButtonSubmit("Submit", "btn btn-success btn-lg pull-right");
         
         return form;
     }
@@ -75,7 +74,9 @@ public class GroupHome extends HttpServlet {
         ArrayList<Post> p = dbm.getAllPost(groupid);
         for(Post h : p){
             thread += "<div class=\"well\">\n";
-            thread += "<div style=\"font-size:16px;\"><b>" + dbm.getUserFormId(h.getOwner()) + "</b></div><br>\n";
+            thread += "<div style=\"font-size:16px;\"><b>" + dbm.getUserFormId(h.getOwner())
+                    + "</b> <span style=\"font-size:12px;\">says:</span>"
+                    + "</div> <br>\n";
             thread += h.getText();
             thread += "<br><br><div style=\"font-size:12px;\">Posted on "+ h.getCreationdate() + "</div>";
             thread += "</div>";
