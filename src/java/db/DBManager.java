@@ -294,16 +294,19 @@ public class DBManager implements Serializable {
         stm.setInt(1, userid);
         ResultSet rs;
         rs = stm.executeQuery();
-        String userId = "";
+        String avatarStr = "";
         try{
             if(rs.next()){
-                userId = rs.getString(1);
+                avatarStr = rs.getString(1);
+                if (avatarStr == null || avatarStr.equals("")) {
+                    avatarStr="img.jpg";
+                }
             }
         }finally{
             rs.close();
             stm.close();
         }
-        return userId;
+        return avatarStr;
     }
     
     public void setAvatar(String user,String extension) throws SQLException{

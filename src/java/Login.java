@@ -152,7 +152,7 @@ public class Login extends HttpServlet {
             try {
                 int gid = Integer.parseInt(request.getParameter("g"));
                 if(!dbm.isInGroup(dbm.getIdFromUser(user), gid))
-                    body += Html.generateHWithColor(3, "You are not inveited group \"" + dbm.getGroupTitleById(gid)
+                    body += Html.generateHWithColor(3, "You are not invited in the group \"" + dbm.getGroupTitleById(gid)
                         + "\" \n!!", "text-danger");
             } catch (Exception e) {
             }
@@ -162,7 +162,7 @@ public class Login extends HttpServlet {
         if (acc != null && acc.equals("1")) {
             int gid = Integer.parseInt(request.getParameter("g"));
             try {
-                body += Html.generateHWithColor(3, "Invite accepdted at group " + dbm.getGroupTitleById(gid) + "\n", "text-success");
+                body += Html.generateHWithColor(3, "Invite accepted at group \"" + dbm.getGroupTitleById(gid) + "\"\n", "text-success");
             } catch (SQLException e) {
             }
         }

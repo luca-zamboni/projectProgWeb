@@ -35,7 +35,8 @@ public class FilterLogin implements Filter {
                 chain.doFilter(request, response);
             }
         } else {
-            if(url.equals("/oneProject/home")){
+            String path = request.getServletContext().getContextPath();
+            if(url.equals(path+"/home")){
                 chain.doFilter(request, response);
             }else{
                 if (bean == null) {

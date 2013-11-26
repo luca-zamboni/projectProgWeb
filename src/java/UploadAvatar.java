@@ -8,6 +8,7 @@ import com.oreilly.servlet.MultipartRequest;
 import com.oreilly.servlet.multipart.DefaultFileRenamePolicy;
 import db.DBManager;
 import html.Html;
+import java.awt.Image;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -17,6 +18,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.sql.SQLException;
 import java.util.Enumeration;
 import java.util.logging.Level;
@@ -51,7 +54,7 @@ public class UploadAvatar extends HttpServlet {
         HttpSession session = request.getSession();
         String user = (String) session.getAttribute(Login.SESSION_USER);
         PrintWriter pw = response.getWriter();
-        pw.print(getFiles(request,response, user));
+        pw.print(getFiles(request, response, user));
     }
 
     public void init(ServletConfig config) throws ServletException {
@@ -79,10 +82,12 @@ public class UploadAvatar extends HttpServlet {
             }
             body += Html.getImageAvatar(avatar);
             
+            String erru = getErrString(request);
+
             inform += "<div class=\"form-group\">\n"
                     + "    <label for=\"avatar\">Avatar</label>\n"
                     + "    <input type=\"file\" name='avatar' id=\"avatar\">\n"
-                    + "    <p class=\"help-block\">Hai mai visto Avatar?</p>\n"
+                    + (erru.equals("") ? "    <p class=\"help-block\">Scegli una immagine dal tuo pc!</p>\n" : erru)
                     + "  </div>\n"
                     + "<button type=\"submit\" class=\"btn btn-default\">Submit</button>\n";
 
@@ -90,13 +95,38 @@ public class UploadAvatar extends HttpServlet {
                     + " method='POST' action='./uploadAvatar'>"
                     + inform
                     + "</form>";
-
-            pw.print(Html.addHtml(body,user));
+            
+            pw.print(Html.addHtml(body, user));
         } catch (Exception e) {
         }
     }
+    
+    private String getErrString(HttpServletRequest req) {
+        String str = "";
+        String err = req.getParameter("err");
+        int e;
+        
+        if (err != null) {
+            e = Integer.parseInt(err);
+            switch (e) {
+                case 1:
+                    str = "This is not an image!";
+                    break;
+                case 2:
+                    str = "File too big!";
+                    break;
+                default:
+                    str = "";
+                    break;
+            }
+            if (str.equals("")) return str;
+            str = Html.generateHWithColor(4, str, "text-danger");
+        }
+         
+        return str;
+    }
 
-    private String getFiles(HttpServletRequest request,HttpServletResponse response, String user) throws IOException {
+    private String getFiles(HttpServletRequest request, HttpServletResponse response, String user) throws IOException {
         String r = "";
         try {
 
@@ -107,25 +137,31 @@ public class UploadAvatar extends HttpServlet {
                 String name = (String) files.nextElement();
                 String filename = multi.getFilesystemName(name);
                 String type = multi.getContentType(name);
-                
+                File inputFile = multi.getFile(name);
+
+                System.err.println(type+"\t"+inputFile.length());
+
                 String extension = "";
 
                 int i = filename.lastIndexOf(".");
                 if (i > 0) {
-                    extension = filename.substring(i+1);
+                    extension = filename.substring(i + 1);
                 }
-                if(!extension.equals("png") && !extension.equals("jpg") &&  !extension.equals("jpeg")){
-                    //response.sendRedirect("./uploadAvatar");
-                }else{
-                
+                if (!type.contains("image")) {
+                    response.sendRedirect("./uploadAvatar?err=1");
+                } else if(inputFile.length()>3*1024*1024) {
+                    response.sendRedirect("./uploadAvatar?err=2");
+                }else {
+                    
+                    //inputFile
+                    
                     dbm.setAvatar(user, extension);
 
-                    File inputFile = multi.getFile(name);
                     String path = request.getServletContext().getRealPath("/");
-                    File outputFile = new File(path+"/img/"+user+"."+extension);
-                    if(!outputFile.exists()) {
+                    File outputFile = new File(path + "/img/" + user + "." + extension);
+                    if (!outputFile.exists()) {
                         outputFile.createNewFile();
-                    } 
+                    }
 
                     InputStream finput = new BufferedInputStream(new FileInputStream(inputFile));
                     OutputStream foutput = new BufferedOutputStream(new FileOutputStream(outputFile));
@@ -137,14 +173,14 @@ public class UploadAvatar extends HttpServlet {
                     }
                     finput.close();
                     foutput.close();
-                    //response.sendRedirect("./uploadAvatar");
+                    response.sendRedirect("./uploadAvatar");
                 }
             }
 
         } catch (Exception ex) {
             Logger.getLogger(UploadAvatar.class.getName()).log(Level.SEVERE, null, ex);
         }
-        response.sendRedirect("./uploadAvatar");
+        //response.sendRedirect("./uploadAvatar");
         return r;
     }
 
