@@ -80,7 +80,7 @@ public class GroupHome extends HttpServlet {
         ArrayList<Post> p = dbm.getAllPost(groupid);
         for(Post h : p){
             thread += "<div class=\"well\">\n";
-            thread += "<div style=\"font-size:16px;\"><b>" + dbm.getUserFormId(h.getOwner())
+            thread += "<div style=\"font-size:16px;\">"+Html.getImageAvatarSmall(dbm.getAvatar(dbm.getIdFromUser(username)))+" <b>" + dbm.getUserFormId(h.getOwner())
                     + "</b> <span style=\"font-size:12px;\">says:</span>"
                     + "</div> <br>\n";
             thread += h.getText();

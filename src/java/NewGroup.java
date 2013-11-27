@@ -45,12 +45,14 @@ public class NewGroup extends HttpServlet {
             System.out.print(group);
             try {
                 if(group.equals("-1")){ 
+                    title = cleanString(title);
                     String path = req.getServletContext().getRealPath("/");
                     int groupid = dbm.newGroup(title, users, dbm.getIdFromUser(username));
                     File a = new File(path+"/files/"+groupid+"/");
                     a.mkdir();
                 }
                 else{
+                    title = cleanString(title);
                     int aux = Integer.parseInt(group);
                     int owid = dbm.getGroupOwnerById(aux);
                     if (owid==dbm.getIdFromUser(username)) {
@@ -161,6 +163,12 @@ public class NewGroup extends HttpServlet {
         form += "<br><button type=\"submit\" class=\"btn btn-default\">Submit</button>";
 
         return form;
+    }
+    
+    private String cleanString(String post){
+        post = post.replaceAll("<", "&lt;");
+        post = post.replaceAll(">", "&gt;");
+        return post;
     }
 
     private void connectToDatabase(HttpServletRequest request) {

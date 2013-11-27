@@ -48,7 +48,6 @@ public class AddPost extends HttpServlet {
     private String user;
     private HttpServletRequest mReq;
     private HttpServletResponse mResp;
-    private String dirName;
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -70,8 +69,8 @@ public class AddPost extends HttpServlet {
                 String aux = post.replace(" ", "");
                 if (aux.equals("")) {
                     String referer = req.getHeader("Referer");
-                    resp.sendRedirect(referer);
-                } else {
+                    resp.sendRedirect(referer); 
+               } else {
                     
                     post = cleanString(post);
                     post = getStringWithLink(post);
@@ -179,16 +178,6 @@ public class AddPost extends HttpServlet {
         }
         return false;
     }
-    
-    /*public void init(ServletConfig config) throws ServletException {
-        super.init(config);
-        // read the uploadDir from the servlet parameters
-        dirName = config.getInitParameter("uploadDir");
-        if (dirName == null) {
-            throw new ServletException("Please supply uploadDir parameter");
-        }
-
-    }*/
 
     private void connectToDatabase() {
         try {
