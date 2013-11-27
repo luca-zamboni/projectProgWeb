@@ -32,6 +32,7 @@ CREATE TABLE post(
 CREATE TABLE post_file(
     fileid INTEGER PRIMARY KEY AUTOINCREMENT,
     postid INTEGER,
-    filepath TEXT
+    filepath TEXT,
+    FOREIGN KEY(postid) REFERENCES post(postid)
 );
 
