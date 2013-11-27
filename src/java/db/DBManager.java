@@ -387,10 +387,9 @@ public class DBManager implements Serializable {
                 ArrayList<Object> aux = new ArrayList();
                 
                 aux.add(0, postNum);
-                aux.add(1,userName);
+                aux.add(1, userName);
                 aux.add(2, avatarPath);
                 aux.add(3, getDateOfLastPostInGroupByUser(groupId, userId));
-
                 ret.add(aux);
             }
         } finally {
