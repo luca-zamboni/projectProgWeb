@@ -169,6 +169,27 @@ public class DBManager implements Serializable {
         return groupid;
 
     }
+    
+    public String getOwnerPostAvatar(int owner) throws SQLException{
+        String ownerA = "";
+        String sql = "SELECT avatar FROM users WHERE userid = ?";
+        PreparedStatement stm = con.prepareStatement(sql);
+        stm.setInt(1, owner);
+        ResultSet rs;
+        rs = stm.executeQuery();
+        try {
+            if(rs.next()) {
+                ownerA = rs.getString(1);
+            }
+        } finally {
+            rs.close();
+            stm.close();
+        }
+        if(ownerA == null || ownerA.equals("")){
+            ownerA = "img.jpg";
+        }
+        return ownerA;
+    }
 
     public ArrayList<Post> getAllPost(int group) throws SQLException {
         ArrayList<Post> p = new ArrayList();
