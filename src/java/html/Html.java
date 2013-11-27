@@ -146,7 +146,7 @@ public class Html {
                 + "<div class=\"col-md-2\">&nbsp.</div>"
                 + "<div class=\"col-md-8\">";
         ret += Html.getNavBar(user) + html;
-        ret += "<div class=\"col-md-2\">&nbsp.</div>"
+        ret += "<div class=\"col-md-2\">&nbsp</div>"
                 + "</div>";
         ret += "</body>";
         ret += "</html>";

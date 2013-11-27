@@ -53,8 +53,9 @@ public class GroupHome extends HttpServlet {
         body += "<style>h2{text-align:center}</style>";
         body += Html.generateH(2, dbm.getGroupTitleById(groupid)) + "<br>";
         body += generateThread(username);
-        
-        body += Html.generateForm("addPost?g="+groupid, "POST", generateNewPostForm());
+        body += "<form method='POST' action='addPost?g="+groupid+"' enctype='multipart/form-data'>"
+                    + generateNewPostForm()
+                    + "</form>";
         
         pw.print(Html.addHtml(body,username));
         
@@ -63,6 +64,11 @@ public class GroupHome extends HttpServlet {
     private String generateNewPostForm(){
         String form = "";
         
+        form += "<div class=\"form-group\">\n" +
+                "<label for=\"exampleInputFile\">File input</label>\n" +
+                "<input type=\"file\" name=\"files\" multiple/>\n" +
+                "<p class=\"help-block\">Insert your files</p>\n" +
+                "</div>\n";
         form+="<textarea name=\"post\" class=\"form-control\" rows=\"6\"></textarea><br>";
         form+=Html.generateButtonSubmit("Submit", "btn btn-success btn-lg pull-right");
         
@@ -88,9 +94,11 @@ public class GroupHome extends HttpServlet {
         ArrayList<String> ret = new ArrayList();
         String path = req.getServletContext().getRealPath("/");
         File f = new File(path+"/files/"+groupid+"/");
-        for (final File fileEntry : f.listFiles()) {
-            if (!fileEntry.isDirectory()) {
-                ret.add(fileEntry.getName());
+        if(f.listFiles() != null){
+            for (final File fileEntry : f.listFiles()) {
+                if (!fileEntry.isDirectory()) {
+                    ret.add(fileEntry.getName());
+                }
             }
         }
         return ret;
