@@ -85,7 +85,7 @@ public class DBManager implements Serializable {
         stm.setInt(2, group);
         stm.executeUpdate();
         
-        ArrayList<String> usersInDb = getAllUSer();
+        ArrayList<String> usersInDb = getAllUser();
         PreparedStatement stm2;
         
         String sql2;
@@ -317,7 +317,7 @@ public class DBManager implements Serializable {
         stm.executeUpdate();
     }
     
-    public ArrayList<String> getAllUSer() throws SQLException{
+    public ArrayList<String> getAllUser() throws SQLException{
         String sql = "SELECT username FROM users";
         PreparedStatement stm = con.prepareStatement(sql);
         ResultSet rs;
@@ -334,7 +334,12 @@ public class DBManager implements Serializable {
         return mUsers;
     }
     
-    private ArrayList<Group> getGrups(int status, String user) throws SQLException{
+    public ArrayList<Post> getOrderedPostsByGroup(int groupId, int userId, ) {
+       
+        return null;
+    }
+    
+    private ArrayList<Group> getGroups(int status, String user) throws SQLException{
         String sql= "select groups.groupid,groupname,creationdate,groups.ownerid "
                 + "from groups,users,user_groups,post "
                 + "WHERE groups.groupid = user_groups.groupid "
@@ -370,11 +375,11 @@ public class DBManager implements Serializable {
     }
     
     public ArrayList<Group> getAllPendingsGroups(String user) throws SQLException{
-        return getGrups(2, user);
+        return getGroups(2, user);
     }
     
     public ArrayList<Group> getAllGroups(String user) throws SQLException{
-        return getGrups(0, user);
+        return getGroups(0, user);
         
     }
     

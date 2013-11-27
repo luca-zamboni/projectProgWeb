@@ -28,7 +28,7 @@ public class NewGroup extends HttpServlet {
             String username = (String) session.getAttribute(Login.SESSION_USER);
             generateHtml(req, resp, username);
         } catch (IOException e) {
-            
+
         }
     }
 
@@ -44,19 +44,18 @@ public class NewGroup extends HttpServlet {
         if (check == 0) {
             System.out.print(group);
             try {
-                if(group.equals("-1")){ 
+                if (group.equals("-1")) {
                     String path = req.getServletContext().getRealPath("/");
                     int groupid = dbm.newGroup(title, users, dbm.getIdFromUser(username));
-                    File a = new File(path+"/files/"+groupid+"/");
+                    File a = new File(path + "/files/" + groupid + "/");
                     a.mkdir();
-                }
-                else{
+                } else {
                     int aux = Integer.parseInt(group);
                     int owid = dbm.getGroupOwnerById(aux);
-                    if (owid==dbm.getIdFromUser(username)) {
+                    if (owid == dbm.getIdFromUser(username)) {
                         dbm.updateGroup(aux, title, users, username);
                     } else {
-                        resp.sendRedirect("./home?error=10&g="+aux);
+                        resp.sendRedirect("./home?error=10&g=" + aux);
                     }
                 }
                 resp.sendRedirect("./home");
@@ -64,10 +63,11 @@ public class NewGroup extends HttpServlet {
                 Logger.getLogger(NewGroup.class.getName()).log(Level.SEVERE, null, ex);
             }
         } else {
-            if (group == null)
+            if (group == null) {
                 resp.sendRedirect("./newGroup?err=" + check);
-            else 
-                resp.sendRedirect("./newGroup?err=" + check+"&g="+group);
+            } else {
+                resp.sendRedirect("./newGroup?err=" + check + "&g=" + group);
+            }
         }
     }
 
@@ -88,11 +88,11 @@ public class NewGroup extends HttpServlet {
 
     private void generateHtml(HttpServletRequest request, HttpServletResponse response, String user) throws IOException {
         PrintWriter pw = response.getWriter();
-        try{
-            pw.print(Html.addHtml(generateStringBody(request, response, user),user));
-        } catch (Exception e){
+        try {
+            pw.print(Html.addHtml(generateStringBody(request, response, user), user));
+        } catch (Exception e) {
             e.printStackTrace();
-            pw.println("\t"+e.getClass());
+            pw.println("\t" + e.getClass());
         }
     }
 
@@ -101,14 +101,16 @@ public class NewGroup extends HttpServlet {
         String form = "";
 
         String gpaux = (String) request.getParameter("g");
-        if(gpaux == null || gpaux.equals("-1"))
+        if (gpaux == null || gpaux.equals("-1")) {
             body += Html.h1String("Create a new Group");
-        else
+            //body += ;
+        } else {
             body += Html.h1String("Manage this group");
+        }
 
-        try{
-          form = Html.generateForm("./newGroup", Html.POST, getStringForm(user, request));
-        }catch(SQLException e){
+        try {
+            form = Html.generateForm("./newGroup", Html.POST, getStringForm(user, request));
+        } catch (SQLException e) {
             form = "Something gones wrong";
         }
         body += form;
@@ -120,38 +122,39 @@ public class NewGroup extends HttpServlet {
 
         String err = (String) request.getParameter("err");
         String gpaux = (String) request.getParameter("g");
-        
+
         int gp = -1;
-        if(gpaux != null)
+        if (gpaux != null) {
             gp = Integer.parseInt(gpaux);
+        }
 
         if (err == null) {
             err = "-1";
         }
         String form = "";
 
-        form += "<input  type='hidden' style='visibility:hidden' name='group' value='"+gp+"'>";
+        form += "<input  type='hidden' style='visibility:hidden' name='group' value='" + gp + "'>";
         if (err.equals("1")) {
             form += Html.generateH(3, "Group's title")
                     + "<div class=\"form-group has-error\">"
-                    + "<input name='title-group'  value=\""+dbm.getGroupTitleById(gp)
+                    + "<input name='title-group'  value=\"" + dbm.getGroupTitleById(gp)
                     + "\" type=\"text\" class=\"form-control\" placeholder=\"Title\">"
                     + "</div>";
         } else {
             form += Html.generateH(3, "Group's title")
-                    + "<input name='title-group' value=\""+dbm.getGroupTitleById(gp)
+                    + "<input name='title-group' value=\"" + dbm.getGroupTitleById(gp)
                     + "\" type=\"text\" class=\"form-control\" placeholder=\"Title\">";
         }
         form += Html.generateH(3, "Segli chi invitare");
         try {
             if (err.equals("2")) {
-                form += html.Html.generateHWithColor(3, "Add at least one user","text-danger");
+                form += html.Html.generateHWithColor(3, "Add at least one user", "text-danger");
             }
-            for (String i : dbm.getAllUSer()) {
+            for (String i : dbm.getAllUser()) {
                 int id = dbm.getIdFromUser(i);
                 String checked = (dbm.isInGroup(id, gp) || dbm.isPending(id, gp)) ? "checked" : "";
                 if (!user.equals(i)) {
-                    form += "<input type='checkbox' name=\"users\" "+checked+" value='" + i + "'>" + i + "<br>";
+                    form += "<input type='checkbox' name=\"users\" " + checked + " value='" + i + "'>" + i + "<br>";
                 }
             }
         } catch (SQLException ex) {
