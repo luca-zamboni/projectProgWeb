@@ -44,6 +44,7 @@ public class GroupHome extends HttpServlet {
             
             generateHtml();
         } catch (Exception e) {
+            Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, e);
         }
     }
     
@@ -52,6 +53,7 @@ public class GroupHome extends HttpServlet {
         String body = "";
         body += "<style>h2{text-align:center}</style>";
         body += Html.generateH(2, dbm.getGroupTitleById(groupid)) + "<br>";
+        body += generateHtmlAllFile();
         body += generateThread(username);
         body += "<form method='POST' action='addPost?g="+groupid+"' enctype='multipart/form-data'>"
                     + generateNewPostForm()
@@ -59,6 +61,17 @@ public class GroupHome extends HttpServlet {
         
         pw.print(Html.addHtml(body,username));
         
+    }
+    
+    private String generateHtmlAllFile(){
+        ArrayList<String> a = getAllFileGroup(mReq, groupid);
+        String ret = "";
+        ret += "<div class=\"list-group\">\n";
+        for(String aux : a){
+            ret += "<a class=\"list-group-item\" href='files/"+groupid+"/"+aux+"'>" +aux + "</a>\n" ;
+        }
+        ret += "\n</div>";
+        return ret;
     }
     
     private String generateNewPostForm(){
@@ -80,7 +93,7 @@ public class GroupHome extends HttpServlet {
         ArrayList<Post> p = dbm.getAllPost(groupid);
         for(Post h : p){
             thread += "<div class=\"well\">\n";
-            thread += "<div style=\"font-size:16px;\">"+Html.getImageAvatarSmall(dbm.getAvatar(dbm.getIdFromUser(username)))+" <b>" + dbm.getUserFormId(h.getOwner())
+            thread += "<div style=\"font-size:16px;\">"+Html.getImageAvatarSmall(dbm.getOwnerPostAvatar(h.getOwner()))+" <b>" + dbm.getUserFormId(h.getOwner())
                     + "</b> <span style=\"font-size:12px;\">says:</span>"
                     + "</div> <br>\n";
             thread += h.getText();
