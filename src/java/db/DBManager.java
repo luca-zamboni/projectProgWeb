@@ -6,6 +6,7 @@
 package db;
 
 import java.io.Serializable;
+import java.lang.reflect.Array;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -17,13 +18,14 @@ import java.util.Arrays;
 import javax.servlet.http.HttpServletRequest;
 import models.Group;
 import models.Post;
+import org.omg.CORBA.NameValuePair;
 
 /**
  *
  * @author jibbo
  */
 public class DBManager implements Serializable {
-    
+
     public static final String USER_TABLE = "users";
     public static final String USERID = "userid";
     public static final String USERNAME = "username";
@@ -34,7 +36,7 @@ public class DBManager implements Serializable {
     public static final String GROUP_ID = "groupid";
     public static final String GROUP_NAME = "groupname";
     public static final String GROUP_OWNER_ID = "ownerid";
-    public static final String GROUP_CREATION_DATE =  "groupcreation";
+    public static final String GROUP_CREATION_DATE = "groupcreation";
 
     public static final String RELATION_USER_GROUP = "user_groups";
     public static final String RELATION_USER_GROUP_ID = "id";
@@ -45,20 +47,19 @@ public class DBManager implements Serializable {
     public static final String POST_TABLE = "post";
     public static final String POST_ID = "postid";
     public static final String POST_DATE = "date";
-    public static final String POST_GROUP_ID = "groupid"; 
+    public static final String POST_GROUP_ID = "groupid";
     public static final String POST_CONTENT = "content";
     public static final String POST_OWNER = "ownerid";
 
     public static final String FILE_TABLE = "post_file";
     public static final String FILE_ID = "fileid";
-    public static final String FILE_CONTENT =  "filepath";
+    public static final String FILE_CONTENT = "filepath";
     public static final String FILE_POST_ID = "postid";
     //facultative (id_gruppo)
     //facultative (id_scrivente)
 
     //  invites relational between group and users, we can also add a field in 
     //  the group members table with a value as "accepted", "pending", "declined", etc.
-
     // transient == non viene serializzato
     public static transient Connection con;
     private static final String URL_PREFIX = "jdbc:sqlite:";
@@ -71,69 +72,69 @@ public class DBManager implements Serializable {
             Class.forName("org.sqlite.JDBC", true,
                     getClass().getClassLoader());
             String path = request.getServletContext().getRealPath("/");
-            DBManager.con = DriverManager.getConnection(URL_PREFIX+path+DB_URL);
-            System.out.print(URL_PREFIX+DB_URL);
+            DBManager.con = DriverManager.getConnection(URL_PREFIX + path + DB_URL);
+            System.out.print(URL_PREFIX + DB_URL);
         } catch (ClassNotFoundException | SQLException e) {
             throw new RuntimeException(e.toString(), e);
         }
     }
-    
-    public void updateGroup(int group,String newTitle,String[] users,String owner) throws SQLException{
+
+    public void updateGroup(int group, String newTitle, String[] users, String owner) throws SQLException {
         String sql = "UPDATE groups SET groupname = ? WHERE groupid = ?";
-        PreparedStatement stm = con.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS);
-        stm.setString(1,newTitle);
+        PreparedStatement stm = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+        stm.setString(1, newTitle);
         stm.setInt(2, group);
         stm.executeUpdate();
-        
-        ArrayList<String> usersInDb = getAllUSer();
+
+        ArrayList<String> usersInDb = getAllUser();
         PreparedStatement stm2;
-        
+
         String sql2;
-        for(String user : users){
+        for (String user : users) {
             int id = getIdFromUser(user);
-            if(!isPending(id,group) && !isKicked(id,group) && !isInGroup(id, group)){
+            if (!isPending(id, group) && !isKicked(id, group) && !isInGroup(id, group)) {
                 sql2 = "INSERT INTO user_groups(userid,groupid,status) VALUES (?,?,2)";
                 stm2 = con.prepareStatement(sql2);
-                stm2.setInt(1,id);
-                stm2.setInt(2,group);
+                stm2.setInt(1, id);
+                stm2.setInt(2, group);
                 stm2.executeUpdate();
                 stm2.close();
-            }else if(isKicked(id,group)){
+            } else if (isKicked(id, group)) {
                 sql2 = "UPDATE user_groups SET status = 2 WHERE groupid = ? AND userid = ?";
                 stm2 = con.prepareStatement(sql2);
-                stm2.setInt(1,group);
-                stm2.setInt(2,id);
+                stm2.setInt(1, group);
+                stm2.setInt(2, id);
                 stm2.executeUpdate();
                 stm2.close();
             }
         }
-        
+
         usersInDb.removeAll(Arrays.asList(users));
-        for(String user : usersInDb){
+        for (String user : usersInDb) {
             int id = getIdFromUser(user);
             sql2 = "UPDATE user_groups SET status = 1 WHERE groupid = ? AND userid = ?";
             stm2 = con.prepareStatement(sql2);
-            stm2.setInt(1,group);
-            stm2.setInt(2,id);
+            stm2.setInt(1, group);
+            stm2.setInt(2, id);
             stm2.executeUpdate();
             stm2.close();
         }
-        
+
         String sql4 = "UPDATE user_groups SET status = 0 WHERE groupid = ? AND userid = ?";
         PreparedStatement stm4 = con.prepareStatement(sql4);
         stm4.setInt(1, group);
         stm4.setInt(2, getIdFromUser(owner));
         stm4.executeUpdate();
         stm4.close();
-        
+
     }
-    
-    public int newGroup(String title, String[] users, int owner) throws SQLException{
-        
+
+    public int newGroup(String title, String[] users, int owner) throws SQLException {
+
         String sql = "INSERT into GROUPS(ownerid,groupname,creationdate)"
                 + "VALUES (?,?,strftime('%s', 'now'))";
-        PreparedStatement stm = con.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS);
-        stm.setInt(1,owner);
+        PreparedStatement stm = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+        stm.setInt(1, owner);
         stm.setString(2, title);
         stm.executeUpdate();
         PreparedStatement stmaux = con.prepareStatement("SELECT last_insert_rowid()");
@@ -144,10 +145,10 @@ public class DBManager implements Serializable {
         }
         res.close();
         stm.close();
-        
+
         String sql2;
-        
-        for(String mUser : users){
+
+        for (String mUser : users) {
             int aux = getIdFromUser(mUser);
             sql2 = "INSERT INTO user_groups(userid,groupid,status) VALUES (?,?,2)";
             PreparedStatement stm2 = con.prepareStatement(sql2);
@@ -162,35 +163,35 @@ public class DBManager implements Serializable {
         stm2.setInt(2, groupid);
         stm2.executeUpdate();
         stm2.close();
-        
-        insertPost(owner, groupid,  "Creation of group " + title);
-        
+
+        insertPost(owner, groupid, "Creation of group " + title);
+
         return groupid;
-        
+
     }
-    
-    public ArrayList<Post> getAllPost(int group) throws SQLException{
+
+    public ArrayList<Post> getAllPost(int group) throws SQLException {
         ArrayList<Post> p = new ArrayList();
         String sql = "SELECT ownerid,date,content FROM post WHERE groupid = ?";
         PreparedStatement stm = con.prepareStatement(sql);
         stm.setInt(1, group);
         ResultSet rs;
         rs = stm.executeQuery();
-        try{
-            while(rs.next()){
+        try {
+            while (rs.next()) {
                 int own = rs.getInt(1);
                 String date = rs.getString(2);
                 String content = rs.getString(3);
                 p.add(new Post(own, date, content));
             }
-        }finally{
+        } finally {
             rs.close();
             stm.close();
         }
         return p;
     }
-    
-    public void insertPost(int userid,int groupid,String post) throws SQLException{
+
+    public void insertPost(int userid, int groupid, String post) throws SQLException {
         String sql = "INSERT INTO post(groupid,ownerid,date,content) VALUES (?,?,CURRENT_TIMESTAMP,?)";
         PreparedStatement stm = con.prepareStatement(sql);
         stm.setInt(1, groupid);
@@ -199,143 +200,209 @@ public class DBManager implements Serializable {
         stm.executeUpdate();
         stm.close();
     }
-    
-    public boolean isKicked(int userid,int groupid) throws SQLException{
-        String sql= "select count(*) from user_groups where userid=? AND groupid=? AND status = 1";
+
+    public boolean isKicked(int userid, int groupid) throws SQLException {
+        String sql = "select count(*) from user_groups where userid=? AND groupid=? AND status = 1";
         PreparedStatement stm = con.prepareStatement(sql);
         stm.setInt(1, userid);
         stm.setInt(2, groupid);
         ResultSet rs;
         rs = stm.executeQuery();
-        try{
-            if(rs.next()){
-                return rs.getInt(1)==1;
+        try {
+            if (rs.next()) {
+                return rs.getInt(1) == 1;
             }
-        }finally{
+        } finally {
             rs.close();
             stm.close();
         }
         return false;
     }
-    
-    public void acceptPending(int groupid, int userid) throws SQLException{
+
+    public void acceptPending(int groupid, int userid) throws SQLException {
         String sql = "UPDATE user_groups SET status = 0 WHERE groupid = ? and userid = ?";
         PreparedStatement stm = con.prepareStatement(sql);
-        stm.setInt(1,groupid);
+        stm.setInt(1, groupid);
         stm.setInt(2, userid);
         stm.executeUpdate();
     }
-    
-    public void declinePending(int groupid, int userid) throws SQLException{
+
+    public void declinePending(int groupid, int userid) throws SQLException {
         String sql = "UPDATE user_groups SET status = 1 WHERE groupid = ? and userid = ?";
         PreparedStatement stm = con.prepareStatement(sql);
-        stm.setInt(1,groupid);
+        stm.setInt(1, groupid);
         stm.setInt(2, userid);
         stm.executeUpdate();
     }
-    
-    public boolean isPending(int userid,int groupid) throws SQLException{
-        String sql= "select count(*) from user_groups where userid=? AND groupid=? AND status = 2";
+
+    public boolean isPending(int userid, int groupid) throws SQLException {
+        String sql = "select count(*) from user_groups where userid=? AND groupid=? AND status = 2";
         PreparedStatement stm = con.prepareStatement(sql);
         stm.setInt(1, userid);
         stm.setInt(2, groupid);
         ResultSet rs;
         rs = stm.executeQuery();
-        try{
-            if(rs.next()){
-                return rs.getInt(1)==1;
+        try {
+            if (rs.next()) {
+                return rs.getInt(1) == 1;
             }
-        }finally{
+        } finally {
             rs.close();
             stm.close();
         }
         return false;
     }
-    
-    public boolean isInGroup(int userid,int groupid) throws SQLException{
-        String sql= "select count(*) from user_groups where userid=? AND groupid=? AND status = 0";
+
+    public boolean isInGroup(int userid, int groupid) throws SQLException {
+        String sql = "select count(*) from user_groups where userid=? AND groupid=? AND status = 0";
         PreparedStatement stm = con.prepareStatement(sql);
         stm.setInt(1, userid);
         stm.setInt(2, groupid);
         ResultSet rs;
         rs = stm.executeQuery();
-        try{
-            if(rs.next()){
-                return rs.getInt(1)==1;
+        try {
+            if (rs.next()) {
+                return rs.getInt(1) == 1;
             }
-        }finally{
+        } finally {
             rs.close();
             stm.close();
         }
         return false;
     }
-    
+
     public int getGroupOwnerById(int id) throws SQLException {
         String sql = "SELECT ownerid FROM groups WHERE groupid = ?";
         PreparedStatement stm = con.prepareStatement(sql);
         stm.setInt(1, id);
         ResultSet rs;
         rs = stm.executeQuery();
-        int userId=0;
-        try{
-            if(rs.next()){
+        int userId = 0;
+        try {
+            if (rs.next()) {
                 userId = rs.getInt(1);
             }
-        }finally{
+        } finally {
             rs.close();
             stm.close();
         }
         return userId;
     }
-    
-    public String getAvatar(int userid) throws SQLException{
+
+    public String getAvatar(int userid) throws SQLException {
         String sql = "SELECT avatar FROM users WHERE userid = ?";
         PreparedStatement stm = con.prepareStatement(sql);
         stm.setInt(1, userid);
         ResultSet rs;
         rs = stm.executeQuery();
         String avatarStr = "";
-        try{
-            if(rs.next()){
+        try {
+            if (rs.next()) {
                 avatarStr = rs.getString(1);
                 if (avatarStr == null || avatarStr.equals("")) {
-                    avatarStr="img.jpg";
+                    avatarStr = "img.jpg";
                 }
             }
-        }finally{
+        } finally {
             rs.close();
             stm.close();
         }
         return avatarStr;
     }
-    
-    public void setAvatar(String user,String extension) throws SQLException{
+
+    public void setAvatar(String user, String extension) throws SQLException {
         String sql = "UPDATE users SET avatar = ? WHERE userid = ?";
         PreparedStatement stm = con.prepareStatement(sql);
-        stm.setString(1, user+"."+extension);
+        stm.setString(1, user + "." + extension);
         stm.setInt(2, getIdFromUser(user));
         stm.executeUpdate();
     }
-    
-    public ArrayList<String> getAllUSer() throws SQLException{
+
+    public ArrayList<String> getAllUser() throws SQLException {
         String sql = "SELECT username FROM users";
         PreparedStatement stm = con.prepareStatement(sql);
         ResultSet rs;
         rs = stm.executeQuery();
         ArrayList<String> mUsers = new ArrayList<>();
-        try{
-            while(rs.next()){
+        try {
+            while (rs.next()) {
                 mUsers.add(rs.getString(1));
             }
-        }finally{
+        } finally {
             rs.close();
             stm.close();
         }
         return mUsers;
     }
-    
-    private ArrayList<Group> getGrups(int status, String user) throws SQLException{
-        String sql= "select groups.groupid,groupname,creationdate,groups.ownerid "
+
+    private String getDateOfLastPostInGroupByUser(int groupId, int userId) throws SQLException {
+        String sql = "SELECT date FROM post WHERE ownerid = ?  "
+                + "AND groupid = ?;";
+        
+        PreparedStatement stm = con.prepareStatement(sql);
+        stm.setInt(1, groupId);
+        stm.setInt(2, userId);
+        
+        ResultSet rs;
+        rs = stm.executeQuery();
+        
+        String date = null;
+        
+        try {
+            if(rs.next()) {
+                date = rs.getString(1);
+            }
+        } finally {
+            rs.close();
+            stm.close();
+        }
+        
+        return date;
+    }
+
+    public ArrayList<ArrayList<Object>> getDataForReport(int groupId) throws SQLException {
+        String sql1 = "SELECT count(*), username, avatar, userid "
+                + "FROM users, post "
+                + "WHERE post.ownerid = users.userid "
+                + "AND groups.groupid = ? "
+                + "GROUP BY users.userid;";
+
+        PreparedStatement stm = con.prepareStatement(sql1);
+        stm.setInt(1, groupId);
+
+        ResultSet rs;
+        rs = stm.executeQuery();
+
+        ArrayList<ArrayList<Object>> ret = new ArrayList();
+
+        try {
+            while (rs.next()) {
+                int postNum, userId;
+                String userName, avatarPath;
+                postNum = rs.getInt(1);
+                userName = rs.getString(2);
+                avatarPath = rs.getString(3);
+                userId = rs.getInt(4);
+                ///// 3 hardcoded change this shit
+                ArrayList<Object> aux = new ArrayList();
+                
+                aux.add(0, postNum);
+                aux.add(1,userName);
+                aux.add(2, avatarPath);
+                aux.add(3, getDateOfLastPostInGroupByUser(groupId, userId));
+
+                ret.add(aux);
+            }
+        } finally {
+            rs.close();
+            stm.close();
+        }
+
+        return ret;
+    }
+
+    private ArrayList<Group> getGroups(int status, String user) throws SQLException {
+        String sql = "select groups.groupid,groupname,creationdate,groups.ownerid "
                 + "from groups,users,user_groups,post "
                 + "WHERE groups.groupid = user_groups.groupid "
                 + "AND users.userid= user_groups.userid "
@@ -349,98 +416,98 @@ public class DBManager implements Serializable {
         ResultSet rs;
         rs = stm.executeQuery();
         ArrayList<Group> mGroups = new ArrayList<>();
-        try{
-            while(rs.next()){
-                int i1,i4;
-                String s2,s3;
+        try {
+            while (rs.next()) {
+                int i1, i4;
+                String s2, s3;
                 i1 = rs.getInt(1);
                 s2 = rs.getString(2);
                 s3 = rs.getString(3);
                 i4 = rs.getInt(4);
                 ///// 3 hardcoded change this shit
-                Group aux = new Group(i1, i4, 3 ,s2, s3);
+                Group aux = new Group(i1, i4, 3, s2, s3);
                 aux.setOwnerName(getUserFormId(i4));
                 mGroups.add(aux);
             }
-        }finally{
+        } finally {
             rs.close();
             stm.close();
         }
         return mGroups;
     }
-    
-    public ArrayList<Group> getAllPendingsGroups(String user) throws SQLException{
-        return getGrups(2, user);
+
+    public ArrayList<Group> getAllPendingsGroups(String user) throws SQLException {
+        return getGroups(2, user);
     }
-    
-    public ArrayList<Group> getAllGroups(String user) throws SQLException{
-        return getGrups(0, user);
-        
+
+    public ArrayList<Group> getAllGroups(String user) throws SQLException {
+        return getGroups(0, user);
+
     }
-    
-    public int getIdFromUser(String user) throws SQLException{
-        String sql= "select userid from users where username = ?";
+
+    public int getIdFromUser(String user) throws SQLException {
+        String sql = "select userid from users where username = ?";
         PreparedStatement stm = con.prepareStatement(sql);
         stm.setString(1, user);
         ResultSet rs;
         rs = stm.executeQuery();
-        try{
-            if(rs.next()){
+        try {
+            if (rs.next()) {
                 return rs.getInt(1);
             }
-        }finally{
+        } finally {
             rs.close();
             stm.close();
         }
         return -1;
     }
-    
-    public String getUserFormId(int id) throws SQLException{
-        String sql= "select username from users where userid = ?";
+
+    public String getUserFormId(int id) throws SQLException {
+        String sql = "select username from users where userid = ?";
         PreparedStatement stm = con.prepareStatement(sql);
-        stm.setInt(1,id);
+        stm.setInt(1, id);
         ResultSet rs;
         rs = stm.executeQuery();
-        try{
-            if(rs.next()){
+        try {
+            if (rs.next()) {
                 return rs.getString(1);
             }
-        }finally{
+        } finally {
             rs.close();
             stm.close();
         }
         return "";
     }
-    
-    public String getGroupTitleById(int id) throws SQLException{
-        String sql= "select groupname from groups where groupid = ? ";
+
+    public String getGroupTitleById(int id) throws SQLException {
+        String sql = "select groupname from groups where groupid = ? ";
         PreparedStatement stm = con.prepareStatement(sql);
-        stm.setInt(1,id);
+        stm.setInt(1, id);
         ResultSet rs;
         rs = stm.executeQuery();
-        try{
-            if(rs.next()){
+        try {
+            if (rs.next()) {
                 return rs.getString(1);
             }
-        }finally{
+        } finally {
             rs.close();
             stm.close();
         }
         return "";
     }
-    
-    public boolean login(String user, String passwd) throws SQLException{
-        String sql= "select count(*) from users where username=? AND password=?";
+
+    public boolean login(String user, String passwd) throws SQLException {
+        String sql = "select count(*) from users where username=? AND password=?";
         PreparedStatement stm = con.prepareStatement(sql);
         stm.setString(1, user);
         stm.setString(2, passwd);
         ResultSet rs;
         rs = stm.executeQuery();
-        try{
-            if(rs.next()){
-                return rs.getInt(1)==1;
+        try {
+            if (rs.next()) {
+                return rs.getInt(1) == 1;
             }
-        }finally{
+        } finally {
             rs.close();
             stm.close();
         }
