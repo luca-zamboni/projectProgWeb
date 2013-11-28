@@ -4,14 +4,11 @@
  * and open the template in the editor.
  */
 
-import com.oreilly.servlet.MultipartRequest;
-import com.oreilly.servlet.multipart.DefaultFileRenamePolicy;
 import db.DBManager;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -23,13 +20,8 @@ import java.net.URL;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Enumeration;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -61,7 +53,7 @@ public class AddPost extends HttpServlet {
             groupid = Integer.parseInt(group);
 
             PrintWriter pw = mResp.getWriter();
-            String post = getPostAndFiles();
+            String post = getPostString();
             if (post == null || post.equals("")) {
                 String referer = req.getHeader("Referer");
                 resp.sendRedirect(referer);
@@ -71,7 +63,7 @@ public class AddPost extends HttpServlet {
                     String referer = req.getHeader("Referer");
                     resp.sendRedirect(referer); 
                } else {
-                    
+                    getFiles();
                     post = cleanString(post);
                     post = getStringWithLink(post);
                     dbm.insertPost(dbm.getIdFromUser(user), groupid, post);
@@ -97,8 +89,8 @@ public class AddPost extends HttpServlet {
         post = post.replaceAll(">", "&gt;");
         return post;
     }
-    
-    private String getPostAndFiles() throws IOException, ServletException{
+
+    private String getPostString() throws IOException, ServletException{
         String textPost = "";
         Collection<Part> p = mReq.getParts();
         for(Part part : p){
@@ -110,9 +102,28 @@ public class AddPost extends HttpServlet {
                     value.append(buffer, 0, length);
                 }
                 textPost = value.toString();
+            }
+        }
+        return textPost;
+    }
+    
+    private void getFiles() throws IOException, ServletException, SQLException{
+        Collection<Part> p = mReq.getParts();
+        for(Part part : p){
+            if(part.getName().equals("post")){
+                //
             }else{
                 String path = mReq.getServletContext().getRealPath("/");
-                File outputFile = new File(path + "/files/" +groupid +"/"+ part.getSubmittedFileName());
+                String name = part.getSubmittedFileName();
+                int i;
+                if(isInGroupFiles(name)){
+                    for(i = 1; isInGroupFiles( name + "(" + i + ")" ) ; i++) ;
+                    name = name + "(" + i + ")";
+                }
+                
+                dbm.newFile(dbm.getIdFromUser(user), groupid, name);
+                
+                File outputFile = new File(path + "/files/" +groupid +"/"+ name);
                 if (!outputFile.exists()) {
                     outputFile.createNewFile();
                 }
@@ -130,7 +141,6 @@ public class AddPost extends HttpServlet {
             }
             
         }
-        return textPost;
     }
     
     private String getStringWithLink(String post){

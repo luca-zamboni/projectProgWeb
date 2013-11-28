@@ -170,6 +170,16 @@ public class DBManager implements Serializable {
 
     }
     
+    public void newFile(int ownerid,int groupid,String nomeFile) throws SQLException{
+        String sql = "INSERT INTO post_file(ownerid,groupid,filename) VALUES (?,?,?)";
+        PreparedStatement stm = con.prepareStatement(sql);
+        stm.setInt(1, ownerid);
+        stm.setInt(2, groupid);
+        stm.setString(3, nomeFile);
+        stm.executeUpdate();
+        stm.close();
+    }
+    
     public String getOwnerPostAvatar(int owner) throws SQLException{
         String ownerA = "";
         String sql = "SELECT avatar FROM users WHERE userid = ?";

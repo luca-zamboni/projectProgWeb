@@ -52,10 +52,6 @@
         <filter-name>FilterLogin</filter-name>
         <servlet-name>AddPost</servlet-name>
     </filter-mapping>
-    <filter-mapping>
-        <filter-name>FilterLogin</filter-name>
-        <url-pattern>./files/*</url-pattern>
-    </filter-mapping>
     <servlet>
         <servlet-name>Login</servlet-name>
         <servlet-class>Login</servlet-class>
