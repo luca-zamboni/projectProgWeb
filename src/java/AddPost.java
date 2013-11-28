@@ -125,7 +125,19 @@ public class AddPost extends HttpServlet {
                         for (i = 1; isInGroupFiles("(" + i + ")" + name); i++) ;
                         name = "(" + i + ")" + name;
                     }
-
+                    
+                    //Hotfixies for absoluth paths
+                    
+                    //IE
+                    if(name.contains("\\")){
+                        name = name.substring(name.lastIndexOf("\\"));
+                    }
+                    
+                    //somthing else, never encountered
+                    if(name.contains("/")){
+                        name = name.substring(name.lastIndexOf("/"));
+                    }
+                    
                     dbm.newFile(dbm.getIdFromUser(user), groupid, name);
 
                     File outputFile = new File(path + "/files/" + groupid + "/" + name);
