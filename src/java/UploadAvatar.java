@@ -39,18 +39,17 @@ public class UploadAvatar extends HttpServlet {
 
     private DBManager dbm;
     private String dirName;
-    
-    /*
-    BufferedImage resizedImage = new BufferedImage(IMG_WIDTH, IMG_HEIGHT, type);
-    Graphics2D g = resizedImage.createGraphics();
-    g.drawImage(originalImage, 0, 0, IMG_WIDTH, IMG_HEIGHT, null);
-    g.dispose();
-    g.setComposite(AlphaComposite.Src);
-    g.setRenderingHint(RenderingHints.KEY_INTERPOLATION,RenderingHints.VALUE_INTERPOLATION_BILINEAR);
-    g.setRenderingHint(RenderingHints.KEY_RENDERING,RenderingHints.VALUE_RENDER_QUALITY);
-    g.setRenderingHint(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_ON);
-    */
 
+    /*
+     BufferedImage resizedImage = new BufferedImage(IMG_WIDTH, IMG_HEIGHT, type);
+     Graphics2D g = resizedImage.createGraphics();
+     g.drawImage(originalImage, 0, 0, IMG_WIDTH, IMG_HEIGHT, null);
+     g.dispose();
+     g.setComposite(AlphaComposite.Src);
+     g.setRenderingHint(RenderingHints.KEY_INTERPOLATION,RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+     g.setRenderingHint(RenderingHints.KEY_RENDERING,RenderingHints.VALUE_RENDER_QUALITY);
+     g.setRenderingHint(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_ON);
+     */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         connectToDatabase(request);
@@ -92,7 +91,7 @@ public class UploadAvatar extends HttpServlet {
                 avatar = "img.jpg";
             }
             body += Html.getImageAvatar(avatar);
-            
+
             String erru = getErrString(request);
 
             inform += "<div class=\"form-group\">\n"
@@ -106,17 +105,17 @@ public class UploadAvatar extends HttpServlet {
                     + " method='POST' action='./uploadAvatar'>"
                     + inform
                     + "</form>";
-            
+
             pw.print(Html.addHtml(body, user));
         } catch (Exception e) {
         }
     }
-    
+
     private String getErrString(HttpServletRequest req) {
         String str = "";
         String err = req.getParameter("err");
         int e;
-        
+
         if (err != null) {
             e = Integer.parseInt(err);
             switch (e) {
@@ -130,10 +129,12 @@ public class UploadAvatar extends HttpServlet {
                     str = "";
                     break;
             }
-            if (str.equals("")) return str;
+            if (str.equals("")) {
+                return str;
+            }
             str = Html.generateHWithColor(4, str, "text-danger");
         }
-         
+
         return str;
     }
 
@@ -150,7 +151,7 @@ public class UploadAvatar extends HttpServlet {
                 String type = multi.getContentType(name);
                 File inputFile = multi.getFile(name);
 
-                System.err.println(type+"\t"+inputFile.length());
+                System.err.println(type + "\t" + inputFile.length());
 
                 String extension = "";
 
@@ -160,12 +161,11 @@ public class UploadAvatar extends HttpServlet {
                 }
                 if (!type.contains("image")) {
                     response.sendRedirect("./uploadAvatar?err=1");
-                } else if(inputFile.length()>3*1024*1024) {
+                } else if (inputFile.length() > 3 * 1024 * 1024) {
                     response.sendRedirect("./uploadAvatar?err=2");
-                }else {
-                    
+                } else {
+
                     //inputFile
-                    
                     dbm.setAvatar(user, extension);
 
                     String path = request.getServletContext().getRealPath("/");
