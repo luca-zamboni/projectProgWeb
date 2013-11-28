@@ -90,13 +90,17 @@
     </servlet>
     <servlet>
         <servlet-name>AddPost</servlet-name>
-        <servlet-class>AddPost</servlet-class>	
-		<multipart-config>
-	    	  <location>/tmp</location>
-	    	  <max-file-size>20848820</max-file-size>
-	    	  <max-request-size>418018841</max-request-size>
-	    	  <file-size-threshold>1048576</file-size-threshold>
-		</multipart-config>
+        <servlet-class>AddPost</servlet-class>
+        <multipart-config>
+            <location>/tmp</location>
+            <max-file-size>20848820</max-file-size>
+            <max-request-size>418018841</max-request-size>
+            <file-size-threshold>1048576</file-size-threshold>
+        </multipart-config>
+    </servlet>
+    <servlet>
+        <servlet-name>GeneratePdf</servlet-name>
+        <servlet-class>GeneratePdf</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>Login</servlet-name>
@@ -129,6 +133,10 @@
     <servlet-mapping>
         <servlet-name>AddPost</servlet-name>
         <url-pattern>/addPost</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>GeneratePdf</servlet-name>
+        <url-pattern>/GeneratePdf</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
