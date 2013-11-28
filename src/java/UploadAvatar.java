@@ -8,7 +8,11 @@ import com.oreilly.servlet.MultipartRequest;
 import com.oreilly.servlet.multipart.DefaultFileRenamePolicy;
 import db.DBManager;
 import html.Html;
+import java.awt.AlphaComposite;
+import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.RenderingHints;
+import java.awt.image.BufferedImage;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -24,6 +28,7 @@ import java.sql.SQLException;
 import java.util.Enumeration;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.imageio.ImageIO;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -39,18 +44,17 @@ public class UploadAvatar extends HttpServlet {
 
     private DBManager dbm;
     private String dirName;
-    
-    /*
-    BufferedImage resizedImage = new BufferedImage(IMG_WIDTH, IMG_HEIGHT, type);
-    Graphics2D g = resizedImage.createGraphics();
-    g.drawImage(originalImage, 0, 0, IMG_WIDTH, IMG_HEIGHT, null);
-    g.dispose();
-    g.setComposite(AlphaComposite.Src);
-    g.setRenderingHint(RenderingHints.KEY_INTERPOLATION,RenderingHints.VALUE_INTERPOLATION_BILINEAR);
-    g.setRenderingHint(RenderingHints.KEY_RENDERING,RenderingHints.VALUE_RENDER_QUALITY);
-    g.setRenderingHint(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_ON);
-    */
 
+    /*
+     BufferedImage resizedImage = new BufferedImage(IMG_WIDTH, IMG_HEIGHT, type);
+     Graphics2D g = resizedImage.createGraphics();
+     g.drawImage(originalImage, 0, 0, IMG_WIDTH, IMG_HEIGHT, null);
+     g.dispose();
+     g.setComposite(AlphaComposite.Src);
+     g.setRenderingHint(RenderingHints.KEY_INTERPOLATION,RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+     g.setRenderingHint(RenderingHints.KEY_RENDERING,RenderingHints.VALUE_RENDER_QUALITY);
+     g.setRenderingHint(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_ON);
+     */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         connectToDatabase(request);
@@ -92,7 +96,7 @@ public class UploadAvatar extends HttpServlet {
                 avatar = "img.jpg";
             }
             body += Html.getImageAvatar(avatar);
-            
+
             String erru = getErrString(request);
 
             inform += "<div class=\"form-group\">\n"
@@ -106,17 +110,17 @@ public class UploadAvatar extends HttpServlet {
                     + " method='POST' action='./uploadAvatar'>"
                     + inform
                     + "</form>";
-            
+
             pw.print(Html.addHtml(body, user));
         } catch (Exception e) {
         }
     }
-    
+
     private String getErrString(HttpServletRequest req) {
         String str = "";
         String err = req.getParameter("err");
         int e;
-        
+
         if (err != null) {
             e = Integer.parseInt(err);
             switch (e) {
@@ -130,10 +134,12 @@ public class UploadAvatar extends HttpServlet {
                     str = "";
                     break;
             }
-            if (str.equals("")) return str;
+            if (str.equals("")) {
+                return str;
+            }
             str = Html.generateHWithColor(4, str, "text-danger");
         }
-         
+
         return str;
     }
 
@@ -150,7 +156,7 @@ public class UploadAvatar extends HttpServlet {
                 String type = multi.getContentType(name);
                 File inputFile = multi.getFile(name);
 
-                System.err.println(type+"\t"+inputFile.length());
+                System.err.println(type + "\t" + inputFile.length());
 
                 String extension = "";
 
@@ -160,12 +166,11 @@ public class UploadAvatar extends HttpServlet {
                 }
                 if (!type.contains("image")) {
                     response.sendRedirect("./uploadAvatar?err=1");
-                } else if(inputFile.length()>3*1024*1024) {
+                } else if (inputFile.length() > 3 * 1024 * 1024) {
                     response.sendRedirect("./uploadAvatar?err=2");
-                }else {
-                    
+                } else {
+
                     //inputFile
-                    
                     dbm.setAvatar(user, extension);
 
                     String path = request.getServletContext().getRealPath("/");
@@ -176,12 +181,31 @@ public class UploadAvatar extends HttpServlet {
 
                     InputStream finput = new BufferedInputStream(new FileInputStream(inputFile));
                     OutputStream foutput = new BufferedOutputStream(new FileOutputStream(outputFile));
+                    
+                    Image img = ImageIO.read(finput);
+                    int x = img.getWidth(null);
+                    int y = img.getHeight(null);
+                    float k = ((float) x)/((float) y);
+                    if (k<=1) {
+                        y=200;
+                        x=(int) (((float) y)*k);
+                    } else {
+                        x=200;
+                        y=(int) (((float) x)/k);
+                    }
 
+                    BufferedImage resizedImage = new BufferedImage(x, y, BufferedImage.TYPE_USHORT_565_RGB);
+                    Graphics2D g = resizedImage.createGraphics();
+                    g.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+                    g.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+                    g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+                    g.drawImage(img, 0, 0, x, y, null);
+                    g.dispose();
+                    g.setComposite(AlphaComposite.Src);
+                    
                     byte[] buffer = new byte[1024 * 500];
                     int bytes_letti = 0;
-                    while ((bytes_letti = finput.read(buffer)) > 0) {
-                        foutput.write(buffer, 0, bytes_letti);
-                    }
+                    ImageIO.write(resizedImage, extension, outputFile);
                     finput.close();
                     foutput.close();
                     response.sendRedirect("./uploadAvatar");
