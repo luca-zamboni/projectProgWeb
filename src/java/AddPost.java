@@ -40,6 +40,7 @@ public class AddPost extends HttpServlet {
     private String user;
     private HttpServletRequest mReq;
     private HttpServletResponse mResp;
+    private int error = 0;
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -61,8 +62,8 @@ public class AddPost extends HttpServlet {
                 String aux = post.replace(" ", "");
                 if (aux.equals("")) {
                     String referer = req.getHeader("Referer");
-                    resp.sendRedirect(referer); 
-               } else {
+                    resp.sendRedirect(referer);
+                } else {
                     getFiles();
                     post = cleanString(post);
                     post = getStringWithLink(post);
@@ -72,9 +73,10 @@ public class AddPost extends HttpServlet {
                 }
             }
 
-            // queste due istruzioni rimandano alla pagina precedente
-            String referer = req.getHeader("Referer");
-            resp.sendRedirect(referer);
+            if(error == 0) 
+                resp.sendRedirect("./groupHome?g=" + groupid);
+            else
+                resp.sendRedirect("./groupHome?g=" + groupid +"&err=" + error);
 
         } catch (IOException | NumberFormatException | SQLException | ServletException e) {
             PrintWriter pw = resp.getWriter();
@@ -83,18 +85,18 @@ public class AddPost extends HttpServlet {
         }
 
     }
-    
-    private String cleanString(String post){
+
+    private String cleanString(String post) {
         post = post.replaceAll("<", "&lt;");
         post = post.replaceAll(">", "&gt;");
         return post;
     }
 
-    private String getPostString() throws IOException, ServletException{
+    private String getPostString() throws IOException, ServletException {
         String textPost = "";
         Collection<Part> p = mReq.getParts();
-        for(Part part : p){
-            if(part.getName().equals("post")){
+        for (Part part : p) {
+            if (part.getName().equals("post")) {
                 BufferedReader reader = new BufferedReader(new InputStreamReader(part.getInputStream(), "UTF-8"));
                 StringBuilder value = new StringBuilder();
                 char[] buffer = new char[1024];
@@ -106,63 +108,69 @@ public class AddPost extends HttpServlet {
         }
         return textPost;
     }
-    
-    private void getFiles() throws IOException, ServletException, SQLException{
-        Collection<Part> p = mReq.getParts();
-        for(Part part : p){
-            if(part.getName().equals("post")){
-                //
-            }else{
-                String path = mReq.getServletContext().getRealPath("/");
-                String name = part.getSubmittedFileName();
-                int i;
-                if(isInGroupFiles(name)){
-                    for(i = 1; isInGroupFiles( name + "(" + i + ")" ) ; i++) ;
-                    name = name + "(" + i + ")";
-                }
-                
-                dbm.newFile(dbm.getIdFromUser(user), groupid, name);
-                
-                File outputFile = new File(path + "/files/" +groupid +"/"+ name);
-                if (!outputFile.exists()) {
-                    outputFile.createNewFile();
-                }
-                if(!outputFile.isDirectory()){
-                InputStream finput = new BufferedInputStream(part.getInputStream());
-                OutputStream foutput = new BufferedOutputStream(new FileOutputStream(outputFile));
 
-                byte[] buffer = new byte[1024 * 500];
-                int bytes_letti = 0;
-                while ((bytes_letti = finput.read(buffer)) > 0) {
-                    foutput.write(buffer, 0, bytes_letti);
+    private void getFiles() throws IOException, ServletException, SQLException {
+        Collection<Part> p = mReq.getParts();
+        for (Part part : p) {
+            if (part.getName().equals("post")) {
+                //
+            } else {
+                if (part.getSize() >  1024 * 1024 * 10) {
+                    error++;
+                } else {
+                    String path = mReq.getServletContext().getRealPath("/");
+                    String name = part.getSubmittedFileName();
+                    int i;
+                    if (isInGroupFiles(name)) {
+                        for (i = 1; isInGroupFiles("(" + i + ")" + name); i++) ;
+                        name = "(" + i + ")" + name;
+                    }
+
+                    dbm.newFile(dbm.getIdFromUser(user), groupid, name);
+
+                    File outputFile = new File(path + "/files/" + groupid + "/" + name);
+                    if (!outputFile.exists()) {
+                        outputFile.createNewFile();
+                    }
+                    if (!outputFile.isDirectory()) {
+                        InputStream finput = new BufferedInputStream(part.getInputStream());
+                        OutputStream foutput = new BufferedOutputStream(new FileOutputStream(outputFile));
+
+                        byte[] buffer = new byte[1024 * 500];
+                        int bytes_letti = 0;
+                        while ((bytes_letti = finput.read(buffer)) > 0) {
+                            foutput.write(buffer, 0, bytes_letti);
+                        }
+                        finput.close();
+                        foutput.close();
+                    }
                 }
-                finput.close();
-                foutput.close();}
             }
-            
+
         }
+        
     }
-    
-    private String getStringWithLink(String post){
+
+    private String getStringWithLink(String post) {
         String ret = "";
         String path = mReq.getServletContext().getRealPath("/");
-        path+= "/files/"+groupid+"/";
+        path += "/files/" + groupid + "/";
         String[] a = post.split("[$][$]");
         for (String h : a) {
             if (isInGroupFiles(h)) {
-                ret+="<a href='./files/"+groupid+"/"+h+"'>"+h+"</a>";
-            }else{
+                ret += "<a href='./files/" + groupid + "/" + h + "'>" + h + "</a>";
+            } else {
                 String[] split = h.split("\\s");
                 String ris = "";
-                for(String s : split){
-                    try{
+                for (String s : split) {
+                    try {
                         URL url = new URL(s);
-                        ris += "<a href='"+url+"'>" + url +"</a>";
-                    }catch(MalformedURLException e){
-                        ris += s+" ";
+                        ris += "<a href='" + url + "'>" + url + "</a>";
+                    } catch (MalformedURLException e) {
+                        ris += s + " ";
                     }
                 }
-                ret+=ris;
+                ret += ris;
             }
         }
         return ret;
