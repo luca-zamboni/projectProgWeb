@@ -53,6 +53,7 @@ public class GroupHome extends HttpServlet {
         String body = "";
         body += "<style>h2{text-align:center}</style>";
         body += Html.generateH(2, dbm.getGroupTitleById(groupid)) + "<br>";
+        body += getStringError();
         body += generateHtmlAllFile();
         body += generateThread(username);
         body += "<form method='POST' action='addPost?g="+groupid+"' enctype='multipart/form-data'>"
@@ -115,6 +116,24 @@ public class GroupHome extends HttpServlet {
             }
         }
         return ret;
+    }
+    
+    private String getStringError(){
+        String err = "";
+        String nFile = mReq.getParameter("err");
+        if (nFile != null) {
+            int nf = Integer.parseInt(nFile);
+            if(nf == 1){
+                err += "<div class=\"alert alert-danger\">\n" +
+                        nFile + " file has not been saved because too big!!\n" +
+                        "</div>";
+            }else{
+                err += "<div class=\"alert alert-danger\">\n" +
+                        nFile + " files have not been saved because are too big!!\n" +
+                        "</div>";
+            }
+        }
+        return err;
     }
     
     private void connectToDatabase(HttpServletRequest req) {
