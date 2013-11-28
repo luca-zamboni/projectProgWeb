@@ -143,7 +143,7 @@ public class Html {
         ret += Html.includeHead();
         ret += "<body>";
         ret += "<div class=\"row\">"
-                + "<div class=\"col-md-2\">&nbsp.</div>"
+                + "<div class=\"col-md-2\">&nbsp;</div>"
                 + "<div class=\"col-md-8\">";
         ret += Html.getNavBar(user) + html;
         ret += "<div class=\"col-md-2\">&nbsp</div>"
