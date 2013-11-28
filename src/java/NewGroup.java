@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
@@ -49,7 +50,10 @@ public class NewGroup extends HttpServlet {
                     String path = req.getServletContext().getRealPath("/");
                     int groupid = dbm.newGroup(title, users, dbm.getIdFromUser(username));
                     File a = new File(path + "/files/" + groupid + "/");
+                    File b = new File(path + "/pdf/" + groupid + "/");
                     a.mkdir();
+                    b.mkdir();
+                    
                 }
                 else{
                     title = cleanString(title);
@@ -104,11 +108,15 @@ public class NewGroup extends HttpServlet {
         String form = "";
 
         String gpaux = (String) request.getParameter("g");
+        
         if (gpaux == null || gpaux.equals("-1")) {
             body += Html.h1String("Create a new Group");
             //body += ;
         } else {
+            int gp = Integer.parseInt(gpaux);
             body += Html.h1String("Manage this group");
+            ArrayList<ArrayList<Object>> alalo = dbm.getDataForReport(gp);
+            GeneratePdf.generatePdf(alalo, gp, dbm);
         }
 
         try {

@@ -358,11 +358,11 @@ public class DBManager implements Serializable {
 
     private String getDateOfLastPostInGroupByUser(int groupId, int userId) throws SQLException {
         String sql = "SELECT date FROM post WHERE ownerid = ?  "
-                + "AND groupid = ?;";
+                + "AND groupid = ? ORDER BY date DESC LIMIT 1;";
         
         PreparedStatement stm = con.prepareStatement(sql);
-        stm.setInt(1, groupId);
-        stm.setInt(2, userId);
+        stm.setInt(2, groupId);
+        stm.setInt(1, userId);
         
         ResultSet rs;
         rs = stm.executeQuery();
@@ -382,12 +382,13 @@ public class DBManager implements Serializable {
     }
 
     public ArrayList<ArrayList<Object>> getDataForReport(int groupId) throws SQLException {
-        String sql1 = "SELECT count(*), username, avatar, userid "
-                + "FROM users, post "
+        String sql1 = "SELECT count(*), username, avatar, users.userid "
+                + "FROM users, post , groups, user_groups "
                 + "WHERE post.ownerid = users.userid "
-                + "AND groups.groupid = ? "
-                + "GROUP BY users.userid;";
-
+                + "AND users.userid = user_groups.userid "
+                + "AND user_groups.groupid = groups.groupid "
+                + "AND groups.groupid = ? GROUP BY users.userid";
+        
         PreparedStatement stm = con.prepareStatement(sql1);
         stm.setInt(1, groupId);
 

@@ -1,23 +1,19 @@
 
-import com.itextpdf.text.BadElementException;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Font;
 import com.itextpdf.text.Image;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.pdf.PdfWriter;
-import com.sun.org.apache.bcel.internal.generic.GOTO;
 import db.DBManager;
-import java.awt.Graphics2D;
-import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.servlet.http.HttpServlet;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -28,10 +24,15 @@ import javax.servlet.http.HttpServlet;
  *
  * @author forna
  */
-public class GeneratePdf extends HttpServlet {
+public class GeneratePdf {
 
-    public static void generatePdf(Collection<Collection<Object>> c) {
-        String outPath = "";
+    public static void generatePdf(ArrayList<ArrayList<Object>> c, int groupId, DBManager dbm) {
+
+        String path = "/home/forna/git/projectProgWeb/build/web";
+        File b = new File(path + "/pdf/" + groupId + "/");
+        b.mkdirs();
+        
+        String outPath = path+"/pdf/" + groupId + "/report.pdf";
         Document doc = new Document();
         PdfWriter pdf;
 
@@ -43,12 +44,24 @@ public class GeneratePdf extends HttpServlet {
 
         if (pdf != null) {
             doc.open();
-            doc.addTitle("report_group");
-            for (Iterator<Collection<Object>> it = c.iterator(); it.hasNext();) {
-                Object object = it.next();
+            doc.addTitle("report_group_"+groupId);
+            String tit = "Group Report of group ";
+            try {
+                tit += "\""+dbm.getGroupTitleById(groupId)+"\"";
+            } catch (SQLException ex) {
+                tit = "";
+            }
+            Paragraph title = new Paragraph(tit);
+            title.setFont(new Font(Font.FontFamily.HELVETICA, 40, Font.ITALIC));
+            try {
+                doc.add(title);
+            } catch (DocumentException ex) {
+                Logger.getLogger(GeneratePdf.class.getName()).log(Level.SEVERE, null, ex);
+            }
 
-                ArrayList<Object> data = (ArrayList<Object>) it.next();
-
+            for (ArrayList<Object> data : c) {
+                
+                System.err.println("ano1");
                 int postNum = (int) data.get(0);
                 String username = (String) data.get(1);
                 String avatarPath = (String) data.get(2);
@@ -56,17 +69,19 @@ public class GeneratePdf extends HttpServlet {
                 avatarPath = avatarPath == null || avatarPath.equals("")
                         ? "img.jpg" : avatarPath;
                 Image avatar;
-
+                System.err.println("ano2");
                 try {
-                    avatar = Image.getInstance("img/" + avatarPath);
+                    avatar = Image.getInstance(path+"/img/" + avatarPath); 
                     doc.add(avatar);
-                    doc.add(new Paragraph("Username: "+username));
-                    doc.add(new Paragraph("Last post: "+date));
-                    doc.add(new Paragraph("Post in group: "+postNum+"\n\n"));
+                    doc.add(new Paragraph("Username: " + username));
+                    doc.add(new Paragraph("Last post: " + date));
+                    doc.add(new Paragraph("Post in group: " + postNum + "\n\n"));
                 } catch (Exception ex) {
+                    System.err.println("ano3");
                 }
 
             }
+            doc.close();
         }
 
     }
