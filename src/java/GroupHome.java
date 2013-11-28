@@ -67,9 +67,9 @@ public class GroupHome extends HttpServlet {
     private String generateHtmlAllFile(){
         ArrayList<String> a = getAllFileGroup(mReq, groupid);
         String ret = "";
-        ret += "<div class=\"list-group\">\n";
+        ret += "\n<div class=\"list-group\">\n";
         for(String aux : a){
-            ret += "<a class=\"list-group-item\" href='files/"+groupid+"/"+aux+"'>" +aux + "</a>\n" ;
+            ret += "<a class=\"list-group-item\"href='files/"+groupid+"/"+aux+"'>" +aux + "</a>\n" ;
         }
         ret += "\n</div>";
         return ret;

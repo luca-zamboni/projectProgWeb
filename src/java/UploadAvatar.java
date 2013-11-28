@@ -203,9 +203,7 @@ public class UploadAvatar extends HttpServlet {
                     g.dispose();
                     g.setComposite(AlphaComposite.Src);
                     
-                    byte[] buffer = new byte[1024 * 500];
-                    int bytes_letti = 0;
-                    ImageIO.write(resizedImage, extension, outputFile);
+                    ImageIO.write(resizedImage, extension, foutput);
                     finput.close();
                     foutput.close();
                     response.sendRedirect("./uploadAvatar");

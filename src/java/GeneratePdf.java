@@ -4,6 +4,8 @@ import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Font;
 import com.itextpdf.text.Image;
 import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import db.DBManager;
 import java.io.File;
@@ -14,6 +16,7 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.BorderFactory;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -51,8 +54,9 @@ public class GeneratePdf {
             } catch (SQLException ex) {
                 tit = "";
             }
-            Paragraph title = new Paragraph(tit);
-            title.setFont(new Font(Font.FontFamily.HELVETICA, 40, Font.ITALIC));
+            Font font = new Font(Font.FontFamily.HELVETICA  , 25, Font.BOLDITALIC);
+            Paragraph title = new Paragraph(tit, font);
+            title.setSpacingAfter(5f);
             try {
                 doc.add(title);
             } catch (DocumentException ex) {
@@ -69,14 +73,29 @@ public class GeneratePdf {
                         ? "img.jpg" : avatarPath;
                 Image avatar;
                 try {
+                    PdfPTable tbl = new PdfPTable(2);
                     Paragraph p = new Paragraph();
+                    
+                    float[] widths = {1f,3f};
+                    tbl.setWidths(widths);
+                    
                     avatar = Image.getInstance(path+"/img/" + avatarPath); 
                     System.err.println(""+avatar.getWidth()+" "+avatar.getHeight());
-                    p.add(avatar);
+                    PdfPCell pc1 = new PdfPCell(avatar);
                     p.add(new Paragraph("Username: " + username));
                     p.add(new Paragraph("Last post: " + date));
                     p.add(new Paragraph("Post in group: " + postNum + "\n\n"));
-                    doc.add(p);
+                    PdfPCell pc2 = new PdfPCell();
+                    pc2.addElement(p);
+                    
+                    pc1.setBorder(PdfPCell.NO_BORDER);
+                    pc2.setBorder(PdfPCell.NO_BORDER);
+                    
+                    tbl.addCell(pc1);
+                    tbl.addCell(pc2);
+                    tbl.setSpacingBefore(10f);
+                    
+                    doc.add(tbl);
                 } catch (Exception ex) {
                     System.err.println("ano3");
                 }

@@ -111,7 +111,6 @@ public class NewGroup extends HttpServlet {
         
         if (gpaux == null || gpaux.equals("-1")) {
             body += Html.h1String("Create a new Group");
-            //body += ;
         } else {
             int gp = Integer.parseInt(gpaux);
             body += Html.h1String("Manage this group");
@@ -155,6 +154,9 @@ public class NewGroup extends HttpServlet {
             form += Html.generateH(3, "Group's title")
                     + "<input name='title-group' value=\"" + dbm.getGroupTitleById(gp)
                     + "\" type=\"text\" class=\"form-control\" placeholder=\"Title\">";
+        }
+        if (gp>=0) {
+            form += "<a href='pdf/"+gp+"/report.pdf'>\nDownload report!</a>\n";
         }
         form += Html.generateH(3, "Segli chi invitare");
         try {
