@@ -8,7 +8,11 @@ import com.oreilly.servlet.MultipartRequest;
 import com.oreilly.servlet.multipart.DefaultFileRenamePolicy;
 import db.DBManager;
 import html.Html;
+import java.awt.AlphaComposite;
+import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.RenderingHints;
+import java.awt.image.BufferedImage;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -24,6 +28,7 @@ import java.sql.SQLException;
 import java.util.Enumeration;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.imageio.ImageIO;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -176,12 +181,31 @@ public class UploadAvatar extends HttpServlet {
 
                     InputStream finput = new BufferedInputStream(new FileInputStream(inputFile));
                     OutputStream foutput = new BufferedOutputStream(new FileOutputStream(outputFile));
+                    
+                    Image img = ImageIO.read(finput);
+                    int x = img.getWidth(null);
+                    int y = img.getHeight(null);
+                    float k = ((float) x)/((float) y);
+                    if (k<=1) {
+                        y=200;
+                        x=(int) (((float) y)*k);
+                    } else {
+                        x=200;
+                        y=(int) (((float) x)/k);
+                    }
 
+                    BufferedImage resizedImage = new BufferedImage(x, y, BufferedImage.TYPE_USHORT_565_RGB);
+                    Graphics2D g = resizedImage.createGraphics();
+                    g.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+                    g.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+                    g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+                    g.drawImage(img, 0, 0, x, y, null);
+                    g.dispose();
+                    g.setComposite(AlphaComposite.Src);
+                    
                     byte[] buffer = new byte[1024 * 500];
                     int bytes_letti = 0;
-                    while ((bytes_letti = finput.read(buffer)) > 0) {
-                        foutput.write(buffer, 0, bytes_letti);
-                    }
+                    ImageIO.write(resizedImage, extension, outputFile);
                     finput.close();
                     foutput.close();
                     response.sendRedirect("./uploadAvatar");

@@ -61,7 +61,6 @@ public class GeneratePdf {
 
             for (ArrayList<Object> data : c) {
                 
-                System.err.println("ano1");
                 int postNum = (int) data.get(0);
                 String username = (String) data.get(1);
                 String avatarPath = (String) data.get(2);
@@ -69,13 +68,15 @@ public class GeneratePdf {
                 avatarPath = avatarPath == null || avatarPath.equals("")
                         ? "img.jpg" : avatarPath;
                 Image avatar;
-                System.err.println("ano2");
                 try {
+                    Paragraph p = new Paragraph();
                     avatar = Image.getInstance(path+"/img/" + avatarPath); 
-                    doc.add(avatar);
-                    doc.add(new Paragraph("Username: " + username));
-                    doc.add(new Paragraph("Last post: " + date));
-                    doc.add(new Paragraph("Post in group: " + postNum + "\n\n"));
+                    System.err.println(""+avatar.getWidth()+" "+avatar.getHeight());
+                    p.add(avatar);
+                    p.add(new Paragraph("Username: " + username));
+                    p.add(new Paragraph("Last post: " + date));
+                    p.add(new Paragraph("Post in group: " + postNum + "\n\n"));
+                    doc.add(p);
                 } catch (Exception ex) {
                     System.err.println("ano3");
                 }
