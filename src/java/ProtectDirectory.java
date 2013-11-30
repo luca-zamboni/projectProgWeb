@@ -21,7 +21,7 @@ public class ProtectDirectory implements Filter {
             FilterChain chain)
             throws IOException, ServletException {
 
-        ((HttpServletResponse) response).sendRedirect("./home");
+        ((HttpServletResponse) response).sendRedirect("../home");
         
     }
 
