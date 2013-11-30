@@ -68,6 +68,14 @@
         <filter-name>ProtectDirectory</filter-name>
         <url-pattern>/database/*</url-pattern>
     </filter-mapping>
+    <filter-mapping>
+        <filter-name>FilterLogin</filter-name>
+        <url-pattern>/files/*</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>FilterLogin</filter-name>
+        <url-pattern>/pdf/*</url-pattern>
+    </filter-mapping>
     <servlet>
         <servlet-name>Login</servlet-name>
         <servlet-class>Login</servlet-class>

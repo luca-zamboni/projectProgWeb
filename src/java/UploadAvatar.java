@@ -7,7 +7,7 @@
 import com.oreilly.servlet.MultipartRequest;
 import com.oreilly.servlet.multipart.DefaultFileRenamePolicy;
 import db.DBManager;
-import html.Html;
+import html.HtmlH;
 import java.awt.AlphaComposite;
 import java.awt.Graphics2D;
 import java.awt.Image;
@@ -87,7 +87,7 @@ public class UploadAvatar extends HttpServlet {
             String body = "", inform = "", avatar, submit = "Submit";
             PrintWriter pw = response.getWriter();
 
-            body += Html.generateH(1, "Upload your AVATAR");
+            body += HtmlH.generateH(1, "Upload your AVATAR");
 
             avatar = dbm.getAvatar(dbm.getIdFromUser(user));
             if (avatar != null && (!avatar.equals(""))) {
@@ -95,7 +95,7 @@ public class UploadAvatar extends HttpServlet {
             } else {
                 avatar = "img.jpg";
             }
-            body += Html.getImageAvatar(avatar);
+            body += HtmlH.getImageAvatar(avatar);
 
             String erru = getErrString(request);
 
@@ -111,7 +111,7 @@ public class UploadAvatar extends HttpServlet {
                     + inform
                     + "</form>";
 
-            pw.print(Html.addHtml(body, user));
+            pw.print(HtmlH.addHtml(body, user,dbm.getAvatar(dbm.getIdFromUser(user))));
         } catch (Exception e) {
         }
     }
@@ -137,7 +137,7 @@ public class UploadAvatar extends HttpServlet {
             if (str.equals("")) {
                 return str;
             }
-            str = Html.generateHWithColor(4, str, "text-danger");
+            str = HtmlH.generateHWithColor(4, str, "text-danger");
         }
 
         return str;
@@ -209,11 +209,10 @@ public class UploadAvatar extends HttpServlet {
                     response.sendRedirect("./uploadAvatar");
                 }
             }
-
         } catch (Exception ex) {
             Logger.getLogger(UploadAvatar.class.getName()).log(Level.SEVERE, null, ex);
+            response.sendRedirect("./uploadAvatar");
         }
-        //response.sendRedirect("./uploadAvatar");
         return r;
     }
 

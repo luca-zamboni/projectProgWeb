@@ -15,7 +15,7 @@ import models.Group;
  *
  * @author luca
  */
-public class Html {
+public class HtmlH {
 
     public static final String POST = "POST";
     public static final String GET = "GET";
@@ -41,7 +41,13 @@ public class Html {
     }
 
     public static String getImageAvatarSmall(String avatar) {
-        String ret = "<img src=\"img/" + avatar + "\" style='width:80px;heigth:100px;' "
+        String ret = "<img src=\"img/" + avatar + "\" style='width:50px;heigth:100px;' "
+                + "alt=\"This is you? You are so ugly...\" class=\"img-rounded\">";
+        return ret;
+    }
+    
+    public static String getImageAvatarSmallTumb(String avatar){
+        String ret = "<img src=\"img/" + avatar + "\" style='width:60px;heigth:100px;' "
                 + "alt=\"This is you? You are so ugly...\" class=\"img-thumbnail\">";
         return ret;
     }
@@ -84,7 +90,7 @@ public class Html {
 
     public static String getDateFromTimestamp(String timestamp) {
         int l = Integer.parseInt(timestamp);
-        String dateAsText = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
+        String dateAsText = new SimpleDateFormat("dd-MM-yyy HH:mm:ss")
                 .format(new Date(l * 1000L));
         return dateAsText;
     }
@@ -109,16 +115,29 @@ public class Html {
         return "<h" + h + " class=\"" + cClass + "\">" + text + "</h" + h + ">";
     }
 
-    public static String getNavBar(String user) {
+    public static String getNavBar(String user,String avatar) {
         String nav = "";
-        nav += "<nav class=\"navbar navbar-default\" role=\"navigation\">\n"
+        nav += "<nav class=\"navbar navbar-inverse\" role=\"navigation\">\n"
                 + "  <div class=\"navbar-header\">\n"
                 + "    <button type=\"button\" class=\"navbar-toggle\" data-toggle=\"collapse\" data-target=\"#bs-example-navbar-collapse-1\">\n"
                 + "    </button>\n"
                 + "    <a class=\"navbar-brand\" href=\"./home\">Home</a>\n"
                 + "  </div>";
-        nav += "<ul class=\"nav navbar-nav navbar-right\">\n"
-                + "      <li><a>" + user + "</a></li>"
+        nav +="<ul class=\"nav navbar-nav\">\n" +
+            "      <li><a href=\"newGroup\">Create Group</a></li>\n" +
+            "    </ul>";
+        nav += "<ul class=\"nav navbar-nav navbar-right\">\n"+
+                "<li><a href='./uploadAvatar'></a></li>"+
+                "<li class=\"dropdown\">\n" +
+                "        <a href=\"#\" style='padding-top:5px; padding-bottom:5px;' class=\"dropdown-toggle\" data-toggle=\"dropdown\">"+
+                getImageAvatarSmall(avatar)+" " + user + " <b class=\"caret\"></b></a>\n" +
+                "        <ul class=\"dropdown-menu\">\n" +
+                "          <li><a href=\"./uploadAvatar\">Change Avatar</a></li>\n" +
+                "          <li></li>\n" +
+                "           <li class=\"divider\"></li>"+
+                "          <li><a href='logout'>Logout</a></li>\n" +
+                "        </ul>\n" +
+                "      </li>"
                 + "</ul>"
                 + "</nav>";
         return nav;
@@ -137,15 +156,15 @@ public class Html {
 
     }
 
-    public static String addHtml(String html, String user) {
+    public static String addHtml(String html, String user, String avatar) {
         String ret = "";
         ret += "<html>";
-        ret += Html.includeHead();
+        ret += HtmlH.includeHead();
         ret += "<body>";
         ret += "<div class=\"row\">"
                 + "<div class=\"col-md-2\">&nbsp;</div>"
                 + "<div class=\"col-md-8\">";
-        ret += Html.getNavBar(user) + html;
+        ret += HtmlH.getNavBar(user,avatar) + html;
         ret += "<div class=\"col-md-2\">&nbsp</div>"
                 + "</div>";
         ret += "</body>";
@@ -175,43 +194,5 @@ public class Html {
         return html + "<br>";
     }
 
-    public static String getAllGroups(ArrayList<Group> groups, String user) {
-        String html = "";
-        html += "<style> .table td {\n"
-                + "   text-align: center;   \n"
-                + "}"
-                + "</style>";
-        html += "<br>" + generateH(3, "Your Groups");
-        html += "<table class=\"table table-condensed table-hover\">";
-        html += "<tr>";
-        html += "<td><b>Owner</b></td>";
-        html += "<td><b>Group Name</b></td>";
-        html += "<td><b>Creation Date</b></td>";
-        html += "<td><b>Admin</b></td>";
-        html += "</tr>";
-        Iterator<Group> i = groups.iterator();
-        while (i.hasNext()) {
-            Group aux = i.next();
-            if (aux.getOwnerName().equals(user)) {
-                html += "<tr class=\"success\">";
-                html += "<td>" + aux.getOwnerName() + "</td>";
-                html += "<td><a href=\"groupHome?g=" + aux.getId() + "\">" + aux.getGroupName() + "</a></td>";
-                html += "<td>" + getDateFromTimestamp(aux.getCreationDate()) + "</td>";
-                html += "<td><a href=\"newGroup?g=" + aux.getId() + "\"><button type=\"button\" class=\"btn btn-default btn-xs\">\n"
-                        + "  <span class=\"glyphicon glyphicon-th\"></span> Manage\n"
-                        + "</button></a></td>";
-            } else {
-                html += "<tr>";
-                html += "<td>" + aux.getOwnerName() + "</td>";
-                html += "<td><a href=\"groupHome?g=" + aux.getId() + "\">" + aux.getGroupName() + "</a></td>";
-                html += "<td>" + getDateFromTimestamp(aux.getCreationDate()) + "</td>";
-                html += "<td><button type=\"button\" class=\"btn btn-danger btn-xs\">\n"
-                        + "  <span class=\"glyphicon glyphicon-log-out\"></span> &nbsp;&nbsp;Leave&nbsp;\n"
-                        + "</button></td>";
-            }
-            html += "</tr>";
-        }
-        return html + "</table>";
-    }
 
 }

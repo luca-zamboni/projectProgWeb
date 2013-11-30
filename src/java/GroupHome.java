@@ -5,7 +5,7 @@
  */
 
 import db.DBManager;
-import html.Html;
+import html.HtmlH;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -52,15 +52,15 @@ public class GroupHome extends HttpServlet {
         PrintWriter pw = mResp.getWriter();
         String body = "";
         body += "<style>h2{text-align:center}</style>";
-        body += Html.generateH(2, dbm.getGroupTitleById(groupid)) + "<br>";
+        body += HtmlH.generateH(2, dbm.getGroupTitleById(groupid)) + "<br>";
         body += getStringError();
         body += generateHtmlAllFile();
-        body += generateThread(username);
+        body += generateThread();
         body += "<form method='POST' action='addPost?g="+groupid+"' enctype='multipart/form-data'>"
                     + generateNewPostForm()
                     + "</form>";
         
-        pw.print(Html.addHtml(body,username));
+        pw.print(HtmlH.addHtml(body,username,dbm.getAvatar(dbm.getIdFromUser(username))));
         
     }
     
@@ -84,17 +84,17 @@ public class GroupHome extends HttpServlet {
                 "<p class=\"help-block\">Insert your files</p>\n" +
                 "</div>\n";
         form+="<textarea name=\"post\" class=\"form-control\" rows=\"6\"></textarea><br>";
-        form+=Html.generateButtonSubmit("Submit", "btn btn-success btn-lg pull-right");
+        form+=HtmlH.generateButtonSubmit("Submit", "btn btn-success btn-lg pull-right");
         
         return form;
     }
     
-    private String generateThread(String username) throws SQLException{
+    private String generateThread() throws SQLException{
         String thread = "";
         ArrayList<Post> p = dbm.getAllPost(groupid);
         for(Post h : p){
             thread += "<div class=\"well\">\n";
-            thread += "<div style=\"font-size:16px;\">"+Html.getImageAvatarSmall(dbm.getOwnerPostAvatar(h.getOwner()))+" <b>" + dbm.getUserFormId(h.getOwner())
+            thread += "<div style=\"font-size:16px;\">"+HtmlH.getImageAvatarSmallTumb(dbm.getOwnerPostAvatar(h.getOwner()))+" <b>" + dbm.getUserFormId(h.getOwner())
                     + "</b> <span style=\"font-size:12px;\">says:</span>"
                     + "</div> <br>\n";
             thread += h.getText();

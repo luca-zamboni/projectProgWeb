@@ -13,8 +13,11 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import javax.servlet.http.HttpServletRequest;
 import models.Group;
 import models.Post;
@@ -223,11 +226,14 @@ public class DBManager implements Serializable {
     }
 
     public void insertPost(int userid, int groupid, String post) throws SQLException {
-        String sql = "INSERT INTO post(groupid,ownerid,date,content) VALUES (?,?,CURRENT_TIMESTAMP,?)";
+        Date d = new Date();
+        String aux = "" + d.getTime();
+        String sql = "INSERT INTO post(groupid,ownerid,date,content) VALUES (?,?,?,?)";
         PreparedStatement stm = con.prepareStatement(sql);
         stm.setInt(1, groupid);
         stm.setInt(2, userid);
-        stm.setString(3, post);
+        stm.setString(3, aux);
+        stm.setString(4, post);
         stm.executeUpdate();
         stm.close();
     }
@@ -431,9 +437,8 @@ public class DBManager implements Serializable {
 
         return ret;
     }
-
-    private ArrayList<Group> getGroups(int status, String user) throws SQLException {
-        String sql = "select groups.groupid,groupname,creationdate,groups.ownerid "
+    private ArrayList<Group> getGroups(int status, String user) throws SQLException, ParseException {
+        String sql = "select groups.groupid,groupname,creationdate,groups.ownerid,post.date "
                 + "from groups,users,user_groups,post "
                 + "WHERE groups.groupid = user_groups.groupid "
                 + "AND users.userid= user_groups.userid "
@@ -450,13 +455,15 @@ public class DBManager implements Serializable {
         try {
             while (rs.next()) {
                 int i1, i4;
-                String s2, s3;
+                long l5;
+                String s2, s3, s5;
                 i1 = rs.getInt(1);
                 s2 = rs.getString(2);
                 s3 = rs.getString(3);
                 i4 = rs.getInt(4);
-                ///// 3 hardcoded change this shit
-                Group aux = new Group(i1, i4, 3, s2, s3);
+                s5 = rs.getString(5);
+                l5 = Long.parseLong(s5);
+                Group aux = new Group(i1, i4, l5, s2, s3);
                 aux.setOwnerName(getUserFormId(i4));
                 mGroups.add(aux);
             }
@@ -467,11 +474,11 @@ public class DBManager implements Serializable {
         return mGroups;
     }
 
-    public ArrayList<Group> getAllPendingsGroups(String user) throws SQLException {
+    public ArrayList<Group> getAllPendingsGroups(String user) throws SQLException, ParseException {
         return getGroups(2, user);
     }
 
-    public ArrayList<Group> getAllGroups(String user) throws SQLException {
+    public ArrayList<Group> getAllGroups(String user) throws SQLException, ParseException {
         return getGroups(0, user);
 
     }

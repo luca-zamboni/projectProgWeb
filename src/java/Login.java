@@ -1,16 +1,18 @@
 
 import db.DBManager;
-import html.Html;
-import static html.Html.generateH;
-import static html.Html.getDateFromTimestamp;
+import html.HtmlH;
+import static html.HtmlH.generateH;
+import static html.HtmlH.getDateFromTimestamp;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Enumeration;
+import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
@@ -33,6 +35,7 @@ public class Login extends HttpServlet {
     private String user;
     private String password;
     private DBManager dbm;
+    private String lastLogin = "";
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -41,7 +44,8 @@ public class Login extends HttpServlet {
             HttpSession session = request.getSession();
             user = (String) session.getAttribute(SESSION_USER);
             generateHtml(request, response);
-        } catch (Exception e) {
+        } catch (IOException | SQLException e) {
+            Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, e);
         }
     }
 
@@ -52,12 +56,14 @@ public class Login extends HttpServlet {
             connectToDatabase(request);
             int login = loginValid(request);
             if (login == 0) {
+                setDateCookie(request, response);
                 checkAndSetSession(request);
                 generateHtml(request, response);
             } else {
                 response.sendRedirect("./?error=" + login);
             }
-        } catch (Exception e) {
+        } catch (IOException | SQLException e) {
+            Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, e);
         }
     }
 
@@ -65,20 +71,19 @@ public class Login extends HttpServlet {
 
         PrintWriter pw = response.getWriter();
         String body = "";
-        body += constructStringLogin(setDateCookie(request, response));
-        body += "<a href='newGroup' type=\"button\" class=\"btn btn-primary btn-lg\">"
-                + "Create Group"
-                + "</a>";
-        body += " " + Html.generateButton(" Carica avatar", "./uploadAvatar", "btn btn-primary btn-lg");
+
+        lastLogin = getDateCookie(request, response);
+
+        body += constructStringLogin();
 
         body += controlError(request);
 
         body += getYourPendings();
 
         body += getTableGroups();
-        body += "<a href='logout'>Logout</a></div>";
-        
-        pw.print(Html.addHtml(body,user));
+        body += "</div>";
+
+        pw.print(HtmlH.addHtml(body, user, dbm.getAvatar(dbm.getIdFromUser(user))));
 
     }
 
@@ -87,7 +92,7 @@ public class Login extends HttpServlet {
         try {
             ArrayList<Group> grp = dbm.getAllPendingsGroups(user);
             if (grp.isEmpty()) {
-                html += Html.generateH(3, "You have no new invitation");
+                //html += Html.generateH(3, "You have no new invitation");
             } else {
                 html += "<style> .table td {\n"
                         + "   text-align: center;   \n"
@@ -110,16 +115,64 @@ public class Login extends HttpServlet {
                     html += "<td>" + aux.getGroupName() + "</td>";
                     html += "<td>" + getDateFromTimestamp(aux.getCreationDate()) + "</td>";
                     html += "<td>";
-                    html += Html.generateButton("Accept", link, "btn btn-success btn-xs", "ok");
+                    html += HtmlH.generateButton("Accept", link, "btn btn-success btn-xs", "ok");
                     html += " ";
-                    html += Html.generateButton("Decline", link + "&dec=1", "btn btn-danger btn-xs", "remove");
+                    html += HtmlH.generateButton("Decline", link + "&dec=1", "btn btn-danger btn-xs", "remove");
                     html += "</td>";
 
                     html += "</tr>";
                 }
             }
-        } catch (Exception e) {
+        } catch (SQLException | ParseException e) {
 
+        }
+        return html + "</table>";
+    }
+
+    public String getAllGroups(ArrayList<Group> groups, String user) {
+        String html = "";
+        boolean ctrl = true;
+        html += "<style> .table td {\n"
+                + "   text-align: center;   \n"
+                + "}"
+                + "</style>";
+        html += "" + generateH(3, "Your Groups");
+        html += "<table class=\"table table-condensed table-hover\">";
+        html += "<tr>";
+        html += "<td><b>Owner</b></td>";
+        html += "<td><b>Group Name</b></td>";
+        html += "<td><b>Creation Date</b></td>";
+        html += "<td><b>Admin</b></td>";
+        html += "</tr>";
+        html += "<tr><td colspan=\"4\"><b>Groups changed after your last login</b></td></tr>";
+        for (Group aux : groups) {
+            long l = Long.parseLong(lastLogin);
+            System.err.println(lastLogin);
+            System.err.println(aux.getLastChange());
+            System.err.println(" - ");
+            if(aux.getLastChange() < l && ctrl) {
+                html += "<tr><td colspan=\"4\">&nbsp</td></tr>"
+                        + "<tr><td colspan=\"4\"><b>Other Groups</b></td></tr>";
+                ctrl = false;
+            }
+            if (aux.getOwnerName().equals(user)) {
+                html += "<tr class=\"success\">";
+                html += "<td>" + aux.getOwnerName() + "</td>";
+                html += "<td><a href=\"groupHome?g=" + aux.getId() + "\">" + aux.getGroupName() + "</a></td>";
+                html += "<td>" + getDateFromTimestamp(aux.getCreationDate()) + "</td>";
+                html += "<td><a href=\"newGroup?g=" + aux.getId() + "\"><button type=\"button\" class=\"btn btn-default btn-xs\">\n"
+                        + "  <span class=\"glyphicon glyphicon-th\"></span> Manage\n"
+                        + "</button></a></td>";
+            } else {
+                html += "<tr>";
+                html += "<td>" + aux.getOwnerName() + "</td>";
+                html += "<td><a href=\"groupHome?g=" + aux.getId() + "\">" + aux.getGroupName() + "</a></td>";
+                html += "<td>" + getDateFromTimestamp(aux.getCreationDate()) + "</td>";
+                html += "<td><button type=\"button\" class=\"btn btn-danger btn-xs\">\n"
+                        + "  <span class=\"glyphicon glyphicon-log-out\"></span> &nbsp;&nbsp;Leave&nbsp;\n"
+                        + "</button></td>";
+            }
+            html += "</tr>";
         }
         return html + "</table>";
     }
@@ -129,9 +182,8 @@ public class Login extends HttpServlet {
         String ret = "";
         try {
             mGroups = dbm.getAllGroups(user);
-            ret = Html.getAllGroups(mGroups, user);
-
-        } catch (SQLException ex) {
+            ret = getAllGroups(mGroups, user);
+        } catch (SQLException | ParseException ex) {
             Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
         }
         return ret;
@@ -143,7 +195,7 @@ public class Login extends HttpServlet {
         if (error != null && error.equals("10")) {
             try {
                 int gid = Integer.parseInt(request.getParameter("g"));
-                body += Html.generateHWithColor(3, "You are not the owner of the group \"" + dbm.getGroupTitleById(gid)
+                body += HtmlH.generateHWithColor(3, "You are not the owner of the group \"" + dbm.getGroupTitleById(gid)
                         + "\" \n!!", "text-danger");
             } catch (Exception e) {
             }
@@ -151,10 +203,12 @@ public class Login extends HttpServlet {
         if (error != null && error.equals("11")) {
             try {
                 int gid = Integer.parseInt(request.getParameter("g"));
-                if(!dbm.isInGroup(dbm.getIdFromUser(user), gid))
-                    body += Html.generateHWithColor(3, "You are not invited in the group \"" + dbm.getGroupTitleById(gid)
-                        + "\" \n!!", "text-danger");
-            } catch (Exception e) {
+                if (!dbm.isInGroup(dbm.getIdFromUser(user), gid)) {
+                    body += HtmlH.generateHWithColor(3, "You are not invited in the group \"" + dbm.getGroupTitleById(gid)
+                            + "\" \n!!", "text-danger");
+                }
+            } catch (NumberFormatException | SQLException e) {
+                
             }
         }
 
@@ -162,7 +216,7 @@ public class Login extends HttpServlet {
         if (acc != null && acc.equals("1")) {
             int gid = Integer.parseInt(request.getParameter("g"));
             try {
-                body += Html.generateHWithColor(3, "Invite accepted at group \"" + dbm.getGroupTitleById(gid) + "\"\n", "text-success");
+                body += HtmlH.generateHWithColor(3, "Invite accepted at group \"" + dbm.getGroupTitleById(gid) + "\"\n", "text-success");
             } catch (SQLException e) {
             }
         }
@@ -227,29 +281,33 @@ public class Login extends HttpServlet {
 
     }
 
-    private String constructStringLogin(String date) throws SQLException {
-        String ret = "",aux="";
-        String avatar = dbm.getAvatar(dbm.getIdFromUser(user));
-        if (avatar != null && (!avatar.equals(""))) {
-            aux += Html.getImageAvatarSmall(avatar);
-        }
-        if (date.equals("")) {
+    private String constructStringLogin() throws SQLException {
+        String ret = "", aux = "";
+        if (lastLogin.equals("")) {
             ret += "<h3>Primo accesso eseguito su questo pc</h3><h1>\n";
             ret += aux;
-            ret += " Welcome " + user + "</h1>";
         } else {
             Date data = new Date();
-            data.setTime(Long.parseLong(date));
-            DateFormat formatter = new SimpleDateFormat("HH:mm:ss");
+            data.setTime(Long.parseLong(lastLogin));
+            DateFormat formatter = new SimpleDateFormat("dd-MM-yyy HH:mm:ss");
             String dateFormatted = formatter.format(data);
-            ret += "<h3>Ultimo accesso eseguito il " + data.toString() + "</h3><h1>";
+            ret += "<h3>Ultimo accesso eseguito il " + dateFormatted + "</h3><h1>";
             ret += aux;
-            ret += " Re-Welcome " + user + "</h1>\n";
         }
         return ret;
     }
 
-    private String setDateCookie(HttpServletRequest request,
+    private String getDateCookie(HttpServletRequest request,
+            HttpServletResponse response) {
+        String ret = "";
+        Cookie userCookie = getCookie(request, user);
+        if (userCookie != null) {
+            ret = userCookie.getValue();
+        }
+        return ret;
+    }
+
+    private void setDateCookie(HttpServletRequest request,
             HttpServletResponse response) {
 
         String ret = "";
@@ -262,7 +320,6 @@ public class Login extends HttpServlet {
         userCookie.setMaxAge(3600 * 24 * 30 * 6);
         response.addCookie(userCookie);
 
-        return ret;
     }
 
     public static Cookie getCookie(HttpServletRequest request, String name) {

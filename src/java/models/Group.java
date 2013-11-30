@@ -14,7 +14,7 @@ public class Group {
     
     int id;
     int owner;
-    int lastChange;
+    long lastChange;
     String groupName;
     String CreationDate;
     String ownername;
@@ -23,12 +23,16 @@ public class Group {
         return id;
     }
 
-    public Group(int id, int owner, int lastChange, String groupName, String CreationDate) {
+    public Group(int id, int owner, long lastChange, String groupName, String CreationDate) {
         this.id = id;
         this.owner = owner;
         this.groupName = groupName;
         this.lastChange = lastChange;
         this.CreationDate = CreationDate;
+    }
+    
+    public long getLastChange(){
+        return lastChange;
     }
 
     public String getOwnerName() {
