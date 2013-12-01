@@ -171,10 +171,10 @@ public class UploadAvatar extends HttpServlet {
                 } else {
 
                     //inputFile
-                    dbm.setAvatar(user, extension);
+                    dbm.setAvatar(user, "png");
 
                     String path = request.getServletContext().getRealPath("/");
-                    File outputFile = new File(path + "/img/" + user + "." + extension);
+                    File outputFile = new File(path + "/img/" + user + ".png");
                     if (!outputFile.exists()) {
                         outputFile.createNewFile();
                     }
@@ -203,7 +203,7 @@ public class UploadAvatar extends HttpServlet {
                     g.dispose();
                     g.setComposite(AlphaComposite.Src);
                     
-                    ImageIO.write(resizedImage, extension, foutput);
+                    ImageIO.write(resizedImage, "png", foutput);
                     finput.close();
                     foutput.close();
                     response.sendRedirect("./uploadAvatar");
