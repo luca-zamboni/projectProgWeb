@@ -94,6 +94,13 @@ public class HtmlH {
                 .format(new Date(l * 1000L));
         return dateAsText;
     }
+    
+    public static String getDateFromTimestampLong(String timestamp) {
+        long l = Long.parseLong(timestamp);
+        String dateAsText = new SimpleDateFormat("dd-MM-yyy HH:mm:ss")
+                .format(new Date(l));
+        return dateAsText;
+    }
 
     public static String generateForm(String action, String method, String content) {
         String ret = "";
@@ -129,7 +136,7 @@ public class HtmlH {
         nav += "<ul class=\"nav navbar-nav navbar-right\">\n"+
                 "<li><a href='./uploadAvatar'></a></li>"+
                 "<li class=\"dropdown\">\n" +
-                "        <a href=\"#\" style='padding-top:5px; padding-bottom:5px;' class=\"dropdown-toggle\" data-toggle=\"dropdown\">"+
+                "        <a href=\"#\" style='padding-top:10px; padding-bottom:10px;' class=\"dropdown-toggle\" data-toggle=\"dropdown\">"+
                 getImageAvatarSmall(avatar)+" " + user + " <b class=\"caret\"></b></a>\n" +
                 "        <ul class=\"dropdown-menu\">\n" +
                 "          <li><a href=\"./uploadAvatar\">Change Avatar</a></li>\n" +

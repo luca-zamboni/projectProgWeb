@@ -6,6 +6,7 @@
 
 import db.DBManager;
 import html.HtmlH;
+import static html.HtmlH.getDateFromTimestamp;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -98,7 +99,8 @@ public class GroupHome extends HttpServlet {
                     + "</b> <span style=\"font-size:12px;\">says:</span>"
                     + "</div> <br>\n";
             thread += h.getText();
-            thread += "<br><br><div style=\"font-size:12px;\">Posted on "+ h.getCreationdate() + "</div>";
+            thread += "<br><br><div style=\"font-size:12px;\">Posted on "+
+                    "" + HtmlH.getDateFromTimestampLong(h.getCreationdate()) + "</div>";
             thread += "</div>";
         }
         return thread;
