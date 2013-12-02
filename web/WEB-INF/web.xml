@@ -20,6 +20,10 @@
         <filter-name>ProtectFiles</filter-name>
         <filter-class>ProtectFiles</filter-class>
     </filter>
+    <filter>
+        <filter-name>ProtectPdf</filter-name>
+        <filter-class>ProtectPdf</filter-class>
+    </filter>
     <filter-mapping>
         <filter-name>ProtectFiles</filter-name>
         <url-pattern>/files/*</url-pattern>
@@ -74,6 +78,10 @@
     </filter-mapping>
     <filter-mapping>
         <filter-name>FilterLogin</filter-name>
+        <url-pattern>/pdf/*</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>ProtectPdf</filter-name>
         <url-pattern>/pdf/*</url-pattern>
     </filter-mapping>
     <servlet>
