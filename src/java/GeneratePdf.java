@@ -8,6 +8,7 @@ import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import db.DBManager;
+import html.HtmlH;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.sql.SQLException;
@@ -29,9 +30,9 @@ import javax.swing.BorderFactory;
  */
 public class GeneratePdf {
 
-    public static void generatePdf(ArrayList<ArrayList<Object>> c, int groupId, DBManager dbm) {
+    public static void generatePdf(String path,ArrayList<ArrayList<Object>> c, int groupId, DBManager dbm) {
 
-        String path = "/home/forna/git/projectProgWeb/build/web";
+        
         File b = new File(path + "/pdf/" + groupId + "/");
         b.mkdirs();
         
@@ -83,7 +84,7 @@ public class GeneratePdf {
                     System.err.println(""+avatar.getWidth()+" "+avatar.getHeight());
                     PdfPCell pc1 = new PdfPCell(avatar);
                     p.add(new Paragraph("Username: " + username));
-                    p.add(new Paragraph("Last post: " + date));
+                    p.add(new Paragraph("Last post: " + HtmlH.getDateFromTimestampLong(date)));
                     p.add(new Paragraph("Post in group: " + postNum + "\n\n"));
                     PdfPCell pc2 = new PdfPCell();
                     pc2.addElement(p);

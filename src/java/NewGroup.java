@@ -115,7 +115,8 @@ public class NewGroup extends HttpServlet {
             int gp = Integer.parseInt(gpaux);
             body += HtmlH.h1String("Manage this group");
             ArrayList<ArrayList<Object>> alalo = dbm.getDataForReport(gp);
-            GeneratePdf.generatePdf(alalo, gp, dbm);
+            String path = request.getServletContext().getRealPath("/");
+            GeneratePdf.generatePdf(path,alalo, gp, dbm);
         }
 
         try {
