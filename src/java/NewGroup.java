@@ -114,7 +114,7 @@ public class NewGroup extends HttpServlet {
         } else {
             int gp = Integer.parseInt(gpaux);
             body += HtmlH.generateH(4, "Report of the Group");
-            body += HtmlH.generateButton("Download", "pdf/"+gp+"/report.pdf", "btn btn-success");
+            body += HtmlH.generateButton("Download", "pdf/"+gp+"/report.pdf", "btn btn-success","book");
             body += HtmlH.h1String("Manage this group");
             ArrayList<ArrayList<Object>> alalo = dbm.getDataForReport(gp);
             String path = request.getServletContext().getRealPath("/");
