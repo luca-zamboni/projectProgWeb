@@ -7,7 +7,7 @@
 package models;
 
 /**
- *
+ * classe che rappresenta il post
  * @author luca
  */
 public class Post {

@@ -7,7 +7,7 @@
 package models;
 
 /**
- *
+ * classe che rappresenta il gruppo
  * @author luca
  */
 public class Group {
