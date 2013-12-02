@@ -113,6 +113,8 @@ public class NewGroup extends HttpServlet {
             body += HtmlH.h1String("Create a new Group");
         } else {
             int gp = Integer.parseInt(gpaux);
+            body += HtmlH.generateH(4, "Report of the Group");
+            body += HtmlH.generateButton("Download", "pdf/"+gp+"/report.pdf", "btn btn-success");
             body += HtmlH.h1String("Manage this group");
             ArrayList<ArrayList<Object>> alalo = dbm.getDataForReport(gp);
             String path = request.getServletContext().getRealPath("/");
@@ -156,9 +158,9 @@ public class NewGroup extends HttpServlet {
                     + "<input name='title-group' value=\"" + dbm.getGroupTitleById(gp)
                     + "\" type=\"text\" class=\"form-control\" placeholder=\"Title\">";
         }
-        if (gp>=0) {
+        /*if (gp>=0) {
             form += "<a href='pdf/"+gp+"/report.pdf'>\nDownload report!</a>\n";
-        }
+        }*/
         form += HtmlH.generateH(3, "Segli chi invitare");
         try {
             if (err.equals("2")) {
