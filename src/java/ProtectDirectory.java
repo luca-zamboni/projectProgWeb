@@ -9,7 +9,8 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- *
+ * protegge le cartelle del programma reindirizzando tutto a home
+ * in particolare noi abbiamo usato questo filtro per proteggere il db
  * @author luca
  */
 public class ProtectDirectory implements Filter {

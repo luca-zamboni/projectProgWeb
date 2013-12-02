@@ -6,7 +6,6 @@
 package db;
 
 import java.io.Serializable;
-import java.lang.reflect.Array;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -14,17 +13,17 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import javax.servlet.http.HttpServletRequest;
 import models.Group;
 import models.Post;
-import org.omg.CORBA.NameValuePair;
 
 /**
- *
+ * classe che si occupa dell'interfaccia con il database e di svolgere
+ * le richieste al database necessarie per il funzionamento del 
+ * programma
  * @author jibbo
  */
 public class DBManager implements Serializable {

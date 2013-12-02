@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 /**
- *
+ * la classe pulisce il cookie del login e reindirizza alla pagina di login
  * @author jibbo
  */
 public class Logout extends HttpServlet {

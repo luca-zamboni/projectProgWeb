@@ -14,6 +14,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+/**
+ * stampa la pagina di creazione/gestione gruppo in base ai parametri 
+ * in get, permettendo di modificare titolo e utenti del gruppo 
+ * creato/modificato
+ * @author forna
+ */
 public class NewGroup extends HttpServlet {
 
     private DBManager dbm;

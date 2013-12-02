@@ -11,7 +11,8 @@ import java.util.Date;
 import java.util.Iterator;
 
 /**
- *
+ * Classe che si occupa di generare le parti di html usate piu' 
+ * comunemente
  * @author luca
  */
 public class HtmlHelper {

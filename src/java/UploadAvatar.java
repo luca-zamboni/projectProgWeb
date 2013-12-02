@@ -35,7 +35,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 /**
- *
+ * si occupa di stampare la pagina per l'upload avatar e anche dell'
+ * upload dell'avatar qual'ora venisse inserito
  * @author luca
  */
 public class UploadAvatar extends HttpServlet {
