@@ -30,7 +30,7 @@ import javax.servlet.http.HttpSession;
 import javax.servlet.http.Part;
 
 /**
- *
+ * Classe che gestisce l'aggiunta di un post al gruppo
  * @author luca
  */
 public class AddPost extends HttpServlet {
@@ -42,6 +42,15 @@ public class AddPost extends HttpServlet {
     private HttpServletResponse mResp;
     private int error = 0;
 
+    /**
+     * Usiamo una post per gestire l'invio di messaggi in un gruppo da
+     * parte dell'utente, inseriamo il messaggio nel database quindi 
+     * reindirizziamo alla home del gruppo per il refresh
+     * @param req
+     * @param resp
+     * @throws ServletException
+     * @throws IOException 
+     */
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         try {
@@ -87,6 +96,12 @@ public class AddPost extends HttpServlet {
 
     }
 
+    /**
+     * rimuore i tag < e > di html per evitare che possano essere 
+     * lanciati script direttamente da commento sul server
+     * @param post
+     * @return 
+     */
     private String cleanString(String post) {
         post = post.replaceAll("<", "&lt;");
         post = post.replaceAll(">", "&gt;");
@@ -110,6 +125,14 @@ public class AddPost extends HttpServlet {
         return textPost;
     }
 
+    /**
+     * metodo usato per gestire il caso di upload di file multipli da 
+     * parte del'utente su un singolo post, siccome la libreria 
+     * utilizzata non gestiva questo particolare caso.
+     * @throws IOException
+     * @throws ServletException
+     * @throws SQLException 
+     */
     private void getFiles() throws IOException, ServletException, SQLException {
         Collection<Part> p = mReq.getParts();
         for (Part part : p) {
@@ -164,6 +187,11 @@ public class AddPost extends HttpServlet {
         
     }
 
+    /**
+     * metodo che si occupa di fare il parse dei link tra $$link$$
+     * @param post
+     * @return 
+     */
     private String getStringWithLink(String post) {
         String ret = "";
         String path = mReq.getServletContext().getRealPath("/");

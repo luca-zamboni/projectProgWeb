@@ -11,7 +11,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- *
+ * Filtro che si occupa di proteggere le parti del sito relative a un
+ * gruppo da utenti non appartententi a quel gruppo
  * @author luca
  */
 public class FilterNotInGroup implements Filter {

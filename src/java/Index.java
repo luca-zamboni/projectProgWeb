@@ -13,7 +13,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 /**
- *
+ * Classe che si occupa di stampare la pagina di login del sito e nel 
+ * caso reindirizzare alla home
  * @author luca
  */
 public class Index extends HttpServlet {

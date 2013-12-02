@@ -16,13 +16,23 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 /**
- *
+ * Classe usata per gestire la risposta inviata dall'utente su un invito
+ * a un gruppo (accetta/rifiuta)
  * @author luca
  */
 public class AcceptInvitation extends HttpServlet {
     
     private DBManager dbm;
-
+    
+    /**
+     * in base ai parametri g che indica il groupid e dec che indica se
+     * e' stato rifiutato modifica sul db le informazioni sull'utente 
+     * relative al gruppo per poi reindirizzare alla home
+     * @param req
+     * @param resp
+     * @throws ServletException
+     * @throws IOException 
+     */
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         try {

@@ -1,9 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 import db.DBManager;
 import html.HtmlHelper;
 import java.io.File;
@@ -21,7 +15,7 @@ import javax.servlet.http.HttpSession;
 import models.Post;
 
 /**
- *
+ * Classe che genera il thread principale del gruppo
  * @author forna
  */
 public class GroupHome extends HttpServlet {
@@ -32,6 +26,13 @@ public class GroupHome extends HttpServlet {
     private HttpServletRequest mReq;
     private HttpServletResponse mResp;
 
+    /**
+     * Stampa i post nella home del gruppo usando generateHtml()
+     * @param req
+     * @param resp
+     * @throws ServletException
+     * @throws IOException 
+     */   
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         try {

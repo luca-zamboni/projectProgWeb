@@ -11,7 +11,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- *
+ * filtro che si occupa di gestire la protezione della pagina di 
+ * impostazioni del gruppo da utenti non autorizzati
  * @author luca
  */
 public class FilterNotOwner implements Filter {

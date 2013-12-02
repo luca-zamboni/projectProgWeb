@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- *
+ * filtro che si occupa di proteggere il sito da utenti non loggati
  * @author luca
  */
 public class FilterLogin implements Filter {
