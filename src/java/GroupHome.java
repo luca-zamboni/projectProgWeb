@@ -80,6 +80,9 @@ public class GroupHome extends HttpServlet {
                 + "    <div id=\"collapseOne\" class=\"panel-collapse collapse\">\n"
                 + "      <div class=\"panel-body\">\n";
         ret += "\n<div class=\"list-group\">\n";
+        if(a.isEmpty()){
+            ret += "No files added";
+        }
          for(String aux : a){
          ret += "<a class=\"list-group-item\"href='files/"+groupid+"/"+aux+"'>" +aux + "</a>\n" ;
          }

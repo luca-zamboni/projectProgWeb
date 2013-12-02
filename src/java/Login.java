@@ -24,10 +24,11 @@ import javax.servlet.http.HttpSession;
 import models.Group;
 
 /**
- * gestisce i dati passati in input nel form di login per autorizzare
- * il browser alla navigazione usando un cookie, nel caso di utente 
- * autorizzato genera la pagina principale del sistema (home) in caso 
- * contrario reindirizza alla pagina di login
+ * gestisce i dati passati in input nel form di login per autorizzare il browser
+ * alla navigazione usando un cookie, nel caso di utente autorizzato genera la
+ * pagina principale del sistema (home) in caso contrario reindirizza alla
+ * pagina di login
+ *
  * @author forna
  */
 public class Login extends HttpServlet {
@@ -138,50 +139,63 @@ public class Login extends HttpServlet {
 
     public String getAllGroups(ArrayList<Group> groups, String user) {
         String html = "";
-        boolean ctrl = true;
-        html += "<style> .table td {\n"
-                + "   text-align: center;   \n"
-                + "}"
-                + "</style>";
-        html += "" + generateH(3, "Your Groups");
-        html += "<table class=\"table table-condensed table-hover\">";
-        html += "<tr>";
-        html += "<td><b>Owner</b></td>";
-        html += "<td><b>Group Name</b></td>";
-        html += "<td><b>Creation Date</b></td>";
-        html += "<td><b>Admin</b></td>";
-        html += "</tr>";
-        html += "<tr><td colspan=\"4\"><b>Groups changed after your last login</b></td></tr>";
-        for (Group aux : groups) {
-            long l = Long.parseLong(lastLogin);
-            System.err.println(lastLogin);
-            System.err.println(aux.getLastChange());
-            System.err.println(" - ");
-            if(aux.getLastChange() < l && ctrl) {
-                html += "<tr><td colspan=\"4\">&nbsp</td></tr>"
-                        + "<tr><td colspan=\"4\"><b>Other Groups</b></td></tr>";
-                ctrl = false;
-            }
-            if (aux.getOwnerName().equals(user)) {
-                html += "<tr class=\"success\">";
-                html += "<td>" + aux.getOwnerName() + "</td>";
-                html += "<td><a href=\"groupHome?g=" + aux.getId() + "\">" + aux.getGroupName() + "</a></td>";
-                html += "<td>" + getDateFromTimestamp(aux.getCreationDate()) + "</td>";
-                html += "<td><a href=\"newGroup?g=" + aux.getId() + "\"><button type=\"button\" class=\"btn btn-default btn-xs\">\n"
-                        + "  <span class=\"glyphicon glyphicon-th\"></span> Manage\n"
-                        + "</button></a></td>";
-            } else {
-                html += "<tr>";
-                html += "<td>" + aux.getOwnerName() + "</td>";
-                html += "<td><a href=\"groupHome?g=" + aux.getId() + "\">" + aux.getGroupName() + "</a></td>";
-                html += "<td>" + getDateFromTimestamp(aux.getCreationDate()) + "</td>";
-                html += "<td><button type=\"button\" class=\"btn btn-danger btn-xs\">\n"
-                        + "  <span class=\"glyphicon glyphicon-log-out\"></span> &nbsp;&nbsp;Leave&nbsp;\n"
-                        + "</button></td>";
-            }
+        if (groups.isEmpty()) {
+            html += HtmlHelper.generateH(3, "You don't belong to any group");
+            html += HtmlHelper.generateH(4, "Create your own");
+            html += HtmlHelper.generateButton("Create Group", "./newGroup", "btn btn-success");
+        } else {
+            boolean ctrl = true;
+            html += "<style> .table td {\n"
+                    + "   text-align: center;   \n"
+                    + "}"
+                    + "</style>";
+            html += "" + generateH(3, "Your Groups");
+            html += "<table class=\"table table-condensed table-hover\">";
+            html += "<tr><td colspan=\"4\"><b>Groups changed after your last login</b></td></tr>";
+            html += "<tr>";
+            html += "<td><b>Owner</b></td>";
+            html += "<td><b>Group Name</b></td>";
+            html += "<td><b>Creation Date</b></td>";
+            html += "<td><b>Admin</b></td>";
             html += "</tr>";
+            for (Group aux : groups) {
+                long l = Long.parseLong(lastLogin);
+                System.err.println(lastLogin);
+                System.err.println(aux.getLastChange());
+                System.err.println(" - ");
+                if (aux.getLastChange() < l && ctrl) {
+                    html += "<tr><td colspan=\"4\">&nbsp</td></tr>"
+                            + "<tr><td colspan=\"4\"><b>Other Groups</b></td></tr>";
+                    html += "<tr>";
+                    html += "<td><b>Owner</b></td>";
+                    html += "<td><b>Group Name</b></td>";
+                    html += "<td><b>Creation Date</b></td>";
+                    html += "<td><b>Admin</b></td>";
+                    html += "</tr>";
+                    ctrl = false;
+                }
+                if (aux.getOwnerName().equals(user)) {
+                    html += "<tr class=\"success\">";
+                    html += "<td>" + aux.getOwnerName() + "</td>";
+                    html += "<td><a href=\"groupHome?g=" + aux.getId() + "\">" + aux.getGroupName() + "</a></td>";
+                    html += "<td>" + getDateFromTimestamp(aux.getCreationDate()) + "</td>";
+                    html += "<td><a href=\"newGroup?g=" + aux.getId() + "\"><button type=\"button\" class=\"btn btn-default btn-xs\">\n"
+                            + "  <span class=\"glyphicon glyphicon-th\"></span> Manage\n"
+                            + "</button></a></td>";
+                } else {
+                    html += "<tr>";
+                    html += "<td>" + aux.getOwnerName() + "</td>";
+                    html += "<td><a href=\"groupHome?g=" + aux.getId() + "\">" + aux.getGroupName() + "</a></td>";
+                    html += "<td>" + getDateFromTimestamp(aux.getCreationDate()) + "</td>";
+                    html += "<td><button type=\"button\" class=\"btn btn-danger btn-xs\">\n"
+                            + "  <span class=\"glyphicon glyphicon-log-out\"></span> &nbsp;&nbsp;Leave&nbsp;\n"
+                            + "</button></td>";
+                }
+                html += "</tr>";
+            }
+            html += "</table>";
         }
-        return html + "</table>";
+        return html;
     }
 
     private String getTableGroups() {
@@ -215,7 +229,7 @@ public class Login extends HttpServlet {
                             + "\" \n!!", "text-danger");
                 }
             } catch (NumberFormatException | SQLException e) {
-                
+
             }
         }
 
