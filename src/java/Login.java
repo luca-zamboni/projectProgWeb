@@ -139,6 +139,8 @@ public class Login extends HttpServlet {
 
     public String getAllGroups(ArrayList<Group> groups, String user) {
         String html = "";
+        String haux = "";
+        int i=0;
         if (groups.isEmpty()) {
             html += HtmlHelper.generateH(3, "You don't belong to any group");
             html += HtmlHelper.generateH(4, "Create your own");
@@ -149,23 +151,22 @@ public class Login extends HttpServlet {
                     + "   text-align: center;   \n"
                     + "}"
                     + "</style>";
-            html += "" + generateH(3, "Your Groups");
-            html += "<table class=\"table table-condensed table-hover\">";
-            html += "<tr><td colspan=\"4\"><b>Groups changed after your last login</b></td></tr>";
-            html += "<tr>";
-            html += "<td><b>Owner</b></td>";
-            html += "<td><b>Group Name</b></td>";
-            html += "<td><b>Creation Date</b></td>";
-            html += "<td><b>Admin</b></td>";
-            html += "</tr>";
+            haux += "" + generateH(3, "Your Groups");
+            haux += "<table class=\"table table-condensed table-hover\">";
+            haux += "<tr><td colspan=\"4\"><b>Groups changed after your last login</b></td></tr>";
+            haux += "<tr>";
+            haux += "<td><b>Owner</b></td>";
+            haux += "<td><b>Group Name</b></td>";
+            haux += "<td><b>Creation Date</b></td>";
+            haux += "<td><b>Admin</b></td>";
+            haux += "</tr>";
+            html += "<table>";
             for (Group aux : groups) {
                 long l = Long.parseLong(lastLogin);
-                System.err.println(lastLogin);
-                System.err.println(aux.getLastChange());
-                System.err.println(" - ");
                 if (aux.getLastChange() < l && ctrl) {
-                    html += "<tr><td colspan=\"4\">&nbsp</td></tr>"
-                            + "<tr><td colspan=\"4\"><b>Other Groups</b></td></tr>";
+                    html +="</table>";
+                    html += "<table class=\"table table-condensed table-hover\">";
+                    html += "<tr><td colspan=\"4\"><b>Groups which did not change</b></td></tr>";
                     html += "<tr>";
                     html += "<td><b>Owner</b></td>";
                     html += "<td><b>Group Name</b></td>";
@@ -173,6 +174,9 @@ public class Login extends HttpServlet {
                     html += "<td><b>Admin</b></td>";
                     html += "</tr>";
                     ctrl = false;
+                }
+                if(ctrl){
+                    html += haux;
                 }
                 if (aux.getOwnerName().equals(user)) {
                     html += "<tr class=\"success\">";

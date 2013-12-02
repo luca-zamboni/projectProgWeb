@@ -73,7 +73,7 @@ public class GroupHome extends HttpServlet {
                 + "    <div class=\"panel-heading\">\n"
                 + "      <h4 class=\"panel-title\">\n"
                 + "        <a data-toggle=\"collapse\" data-parent=\"#accordion\" href=\"#collapseOne\">\n"
-                + "          Files\n"
+                + "          + Files\n"
                 + "        </a>\n"
                 + "      </h4>\n"
                 + "    </div>"
