@@ -66,6 +66,7 @@ public class AddPost extends HttpServlet {
                 } else {
                     getFiles();
                     post = cleanString(post);
+                    post = post.replace("\n", "<br>");
                     post = getStringWithLink(post);
                     dbm.insertPost(dbm.getIdFromUser(user), groupid, post);
 
