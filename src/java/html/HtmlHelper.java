@@ -152,7 +152,8 @@ public class HtmlHelper {
     public static String includeHead() {
         String ret = "";
 
-        ret += "<head>";
+        ret += "<head>"
+                + "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">";
         ret += "<link href=\"css/bootstrap.min.css\" rel=\"stylesheet\">\n"
                 + "<script src=\"js/jquery.js\"></script>\n"
                 + "<script src=\"js/bootstrap.min.js\"></script>\n";

@@ -28,6 +28,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.servlet.http.Part;
+import org.apache.commons.lang.StringEscapeUtils;
 
 /**
  * Classe che gestisce l'aggiunta di un post al gruppo
@@ -103,8 +104,7 @@ public class AddPost extends HttpServlet {
      * @return 
      */
     private String cleanString(String post) {
-        post = post.replaceAll("<", "&lt;");
-        post = post.replaceAll(">", "&gt;");
+        post = StringEscapeUtils.escapeHtml(post);
         return post;
     }
 
