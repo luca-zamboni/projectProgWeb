@@ -176,6 +176,7 @@ public class Login extends HttpServlet {
                     ctrl = false;
                 }
                 if(ctrl){
+                    html += "</table>";
                     html += haux;
                 }
                 if (aux.getOwnerName().equals(user)) {
