@@ -43,7 +43,7 @@ public class ProtectPdf implements Filter {
             db.DBManager dbm = null;
             dbm = new DBManager((HttpServletRequest) request);
             
-            int gr = Integer.parseInt(split[i]);
+            int gr = Integer.parseInt(split[i-1]);
             String user = (String) ((HttpServletRequest) request).getSession().getAttribute(Login.SESSION_USER);
             System.err.println(dbm.isInGroup(dbm.getIdFromUser(user), gr));
             if(dbm.getGroupOwnerById(gr) == dbm.getIdFromUser(user)){

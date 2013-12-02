@@ -402,10 +402,12 @@ public class DBManager implements Serializable {
                 + "WHERE post.ownerid = users.userid "
                 + "AND users.userid = user_groups.userid "
                 + "AND user_groups.groupid = groups.groupid "
+                + "AND post.groupid = ?"
                 + "AND groups.groupid = ? GROUP BY users.userid";
         
         PreparedStatement stm = con.prepareStatement(sql1);
         stm.setInt(1, groupId);
+        stm.setInt(2, groupId);
 
         ResultSet rs;
         rs = stm.executeQuery();

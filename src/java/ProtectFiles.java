@@ -36,7 +36,7 @@ public class ProtectFiles implements Filter {
         String[] split = uri.toString().split("[/]");
         int i;
         for (i = 0; i < split.length; i++) {
-            if (split[i].equals("pdf")) break;
+            if (split[i].equals("files")) break;
         }
         i+=2;
         try{
@@ -44,7 +44,7 @@ public class ProtectFiles implements Filter {
             db.DBManager dbm = null;
             dbm = new DBManager((HttpServletRequest) request);
             
-            int gr = Integer.parseInt(split[i]);
+            int gr = Integer.parseInt(split[i-1]);
             String user = (String) ((HttpServletRequest) request).getSession().getAttribute(Login.SESSION_USER);
             System.err.println(dbm.isInGroup(dbm.getIdFromUser(user), gr));
             if(dbm.isInGroup(dbm.getIdFromUser(user), gr)){
