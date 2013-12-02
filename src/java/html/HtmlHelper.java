@@ -15,7 +15,7 @@ import models.Group;
  *
  * @author luca
  */
-public class HtmlH {
+public class HtmlHelper {
 
     public static final String POST = "POST";
     public static final String GET = "GET";
@@ -41,7 +41,7 @@ public class HtmlH {
     }
 
     public static String getImageAvatarSmall(String avatar) {
-        String ret = "<img src=\"img/" + avatar + "\" style='width:50px;heigth:100px;' "
+        String ret = "<img src=\"img/" + avatar + "\" style='height:48px;' "
                 + "alt=\"This is you? You are so ugly...\" class=\"img-rounded\">";
         return ret;
     }
@@ -136,7 +136,7 @@ public class HtmlH {
         nav += "<ul class=\"nav navbar-nav navbar-right\">\n"+
                 "<li><a href='./uploadAvatar'></a></li>"+
                 "<li class=\"dropdown\">\n" +
-                "        <a href=\"#\" style='padding-top:10px; padding-bottom:10px;' class=\"dropdown-toggle\" data-toggle=\"dropdown\">"+
+                "        <a href=\"#\" style='padding-top:2px; padding-bottom:2px;' class=\"dropdown-toggle\" data-toggle=\"dropdown\">"+
                 getImageAvatarSmall(avatar)+" " + user + " <b class=\"caret\"></b></a>\n" +
                 "        <ul class=\"dropdown-menu\">\n" +
                 "          <li><a href=\"./uploadAvatar\">Change Avatar</a></li>\n" +
@@ -166,12 +166,12 @@ public class HtmlH {
     public static String addHtml(String html, String user, String avatar) {
         String ret = "";
         ret += "<html>";
-        ret += HtmlH.includeHead();
+        ret += HtmlHelper.includeHead();
         ret += "<body>";
         ret += "<div class=\"row\">"
                 + "<div class=\"col-md-2\">&nbsp;</div>"
                 + "<div class=\"col-md-8\">";
-        ret += HtmlH.getNavBar(user,avatar) + html;
+        ret += HtmlHelper.getNavBar(user,avatar) + html;
         ret += "<div class=\"col-md-2\">&nbsp</div>"
                 + "</div>";
         ret += "</body>";

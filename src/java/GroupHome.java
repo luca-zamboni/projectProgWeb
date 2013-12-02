@@ -5,8 +5,8 @@
  */
 
 import db.DBManager;
-import html.HtmlH;
-import static html.HtmlH.getDateFromTimestamp;
+import html.HtmlHelper;
+import static html.HtmlHelper.getDateFromTimestamp;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -53,7 +53,7 @@ public class GroupHome extends HttpServlet {
         PrintWriter pw = mResp.getWriter();
         String body = "";
         body += "<style>h2{text-align:center}</style>";
-        body += HtmlH.generateH(2, dbm.getGroupTitleById(groupid)) + "<br>";
+        body += HtmlHelper.generateH(2, dbm.getGroupTitleById(groupid)) + "<br>";
         body += getStringError();
         body += generateHtmlAllFile();
         body += generateThread();
@@ -61,7 +61,7 @@ public class GroupHome extends HttpServlet {
                 + generateNewPostForm()
                 + "</form>";
 
-        pw.print(HtmlH.addHtml(body, username, dbm.getAvatar(dbm.getIdFromUser(username))));
+        pw.print(HtmlHelper.addHtml(body, username, dbm.getAvatar(dbm.getIdFromUser(username))));
 
     }
 
@@ -104,7 +104,7 @@ public class GroupHome extends HttpServlet {
                 + "<p class=\"help-block\">Insert your files</p>\n"
                 + "</div>\n";
         form += "<textarea name=\"post\" class=\"form-control\" rows=\"6\"></textarea><br>";
-        form += HtmlH.generateButtonSubmit("Submit", "btn btn-success btn-lg pull-right");
+        form += HtmlHelper.generateButtonSubmit("Submit", "btn btn-success btn-lg pull-right");
 
         return form;
     }
@@ -114,12 +114,12 @@ public class GroupHome extends HttpServlet {
         ArrayList<Post> p = dbm.getAllPost(groupid);
         for (Post h : p) {
             thread += "<div class=\"well\">\n";
-            thread += "<div style=\"font-size:16px;\">" + HtmlH.getImageAvatarSmallTumb(dbm.getOwnerPostAvatar(h.getOwner())) + " <b>" + dbm.getUserFormId(h.getOwner())
+            thread += "<div style=\"font-size:16px;\">" + HtmlHelper.getImageAvatarSmallTumb(dbm.getOwnerPostAvatar(h.getOwner())) + " <b>" + dbm.getUserFormId(h.getOwner())
                     + "</b> <span style=\"font-size:12px;\">says:</span>"
                     + "</div> <br>\n";
             thread += h.getText();
             thread += "<br><br><div style=\"font-size:12px;\">Posted on "
-                    + "" + HtmlH.getDateFromTimestampLong(h.getCreationdate()) + "</div>";
+                    + "" + HtmlHelper.getDateFromTimestampLong(h.getCreationdate()) + "</div>";
             thread += "</div>";
         }
         return thread;

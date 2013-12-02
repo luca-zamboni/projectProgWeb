@@ -8,7 +8,7 @@ import com.oreilly.servlet.MultipartRequest;
 import com.oreilly.servlet.multipart.DefaultFileRenamePolicy;
 import com.oreilly.servlet.multipart.FileRenamePolicy;
 import db.DBManager;
-import html.HtmlH;
+import html.HtmlHelper;
 import java.awt.AlphaComposite;
 import java.awt.Graphics2D;
 import java.awt.Image;
@@ -78,7 +78,7 @@ public class UploadAvatar extends HttpServlet {
             String body = "", inform = "", avatar, submit = "Submit";
             PrintWriter pw = response.getWriter();
 
-            body += HtmlH.generateH(1, "Upload your AVATAR");
+            body += HtmlHelper.generateH(1, "Upload your AVATAR");
 
             avatar = dbm.getAvatar(dbm.getIdFromUser(user));
             if (avatar != null && (!avatar.equals(""))) {
@@ -86,7 +86,7 @@ public class UploadAvatar extends HttpServlet {
             } else {
                 avatar = "img.jpg";
             }
-            body += HtmlH.getImageAvatar(avatar);
+            body += HtmlHelper.getImageAvatar(avatar);
 
             String erru = getErrString(request);
 
@@ -102,7 +102,7 @@ public class UploadAvatar extends HttpServlet {
                     + inform
                     + "</form>";
 
-            pw.print(HtmlH.addHtml(body, user,dbm.getAvatar(dbm.getIdFromUser(user))));
+            pw.print(HtmlHelper.addHtml(body, user,dbm.getAvatar(dbm.getIdFromUser(user))));
         } catch (Exception e) {
         }
     }
@@ -128,7 +128,7 @@ public class UploadAvatar extends HttpServlet {
             if (str.equals("")) {
                 return str;
             }
-            str = HtmlH.generateHWithColor(4, str, "text-danger");
+            str = HtmlHelper.generateHWithColor(4, str, "text-danger");
         }
 
         return str;

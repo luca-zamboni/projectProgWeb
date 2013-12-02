@@ -1,6 +1,6 @@
 
 import db.DBManager;
-import html.HtmlH;
+import html.HtmlHelper;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -96,7 +96,7 @@ public class NewGroup extends HttpServlet {
     private void generateHtml(HttpServletRequest request, HttpServletResponse response, String user) throws IOException {
         PrintWriter pw = response.getWriter();
         try {
-            pw.print(HtmlH.addHtml(generateStringBody(request, response, user), user,dbm.getAvatar(dbm.getIdFromUser(user))));
+            pw.print(HtmlHelper.addHtml(generateStringBody(request, response, user), user,dbm.getAvatar(dbm.getIdFromUser(user))));
         } catch (Exception e) {
             e.printStackTrace();
             pw.println("\t" + e.getClass());
@@ -110,19 +110,19 @@ public class NewGroup extends HttpServlet {
         String gpaux = (String) request.getParameter("g");
         
         if (gpaux == null || gpaux.equals("-1")) {
-            body += HtmlH.h1String("Create a new Group");
+            body += HtmlHelper.h1String("Create a new Group");
         } else {
             int gp = Integer.parseInt(gpaux);
-            body += HtmlH.generateH(4, "Report of the Group");
-            body += HtmlH.generateButton("Download", "pdf/"+gp+"/report.pdf", "btn btn-success","book");
-            body += HtmlH.h1String("Manage this group");
+            body += HtmlHelper.generateH(4, "Report of the Group");
+            body += HtmlHelper.generateButton("Download", "pdf/"+gp+"/report.pdf", "btn btn-success","book");
+            body += HtmlHelper.h1String("Manage this group");
             ArrayList<ArrayList<Object>> alalo = dbm.getDataForReport(gp);
             String path = request.getServletContext().getRealPath("/");
             GeneratePdf.generatePdf(path,alalo, gp, dbm);
         }
 
         try {
-            form = HtmlH.generateForm("./newGroup", HtmlH.POST, getStringForm(user, request));
+            form = HtmlHelper.generateForm("./newGroup", HtmlHelper.POST, getStringForm(user, request));
         } catch (SQLException e) {
             form = "Something gones wrong";
         }
@@ -148,23 +148,23 @@ public class NewGroup extends HttpServlet {
 
         form += "<input  type='hidden' style='visibility:hidden' name='group' value='" + gp + "'>";
         if (err.equals("1")) {
-            form += HtmlH.generateH(3, "Group's title")
+            form += HtmlHelper.generateH(3, "Group's title")
                     + "<div class=\"form-group has-error\">"
                     + "<input name='title-group'  value=\"" + dbm.getGroupTitleById(gp)
                     + "\" type=\"text\" class=\"form-control\" placeholder=\"Title\">"
                     + "</div>";
         } else {
-            form += HtmlH.generateH(3, "Group's title")
+            form += HtmlHelper.generateH(3, "Group's title")
                     + "<input name='title-group' value=\"" + dbm.getGroupTitleById(gp)
                     + "\" type=\"text\" class=\"form-control\" placeholder=\"Title\">";
         }
         /*if (gp>=0) {
             form += "<a href='pdf/"+gp+"/report.pdf'>\nDownload report!</a>\n";
         }*/
-        form += HtmlH.generateH(3, "Segli chi invitare");
+        form += HtmlHelper.generateH(3, "Segli chi invitare");
         try {
             if (err.equals("2")) {
-                form += html.HtmlH.generateHWithColor(3, "Add at least one user", "text-danger");
+                form += html.HtmlHelper.generateHWithColor(3, "Add at least one user", "text-danger");
             }
             for (String i : dbm.getAllUser()) {
                 int id = dbm.getIdFromUser(i);

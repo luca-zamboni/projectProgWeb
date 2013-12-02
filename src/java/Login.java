@@ -1,8 +1,8 @@
 
 import db.DBManager;
-import html.HtmlH;
-import static html.HtmlH.generateH;
-import static html.HtmlH.getDateFromTimestamp;
+import html.HtmlHelper;
+import static html.HtmlHelper.generateH;
+import static html.HtmlHelper.getDateFromTimestamp;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
@@ -83,7 +83,7 @@ public class Login extends HttpServlet {
         body += getTableGroups();
         body += "</div>";
 
-        pw.print(HtmlH.addHtml(body, user, dbm.getAvatar(dbm.getIdFromUser(user))));
+        pw.print(HtmlHelper.addHtml(body, user, dbm.getAvatar(dbm.getIdFromUser(user))));
 
     }
 
@@ -115,9 +115,9 @@ public class Login extends HttpServlet {
                     html += "<td>" + aux.getGroupName() + "</td>";
                     html += "<td>" + getDateFromTimestamp(aux.getCreationDate()) + "</td>";
                     html += "<td>";
-                    html += HtmlH.generateButton("Accept", link, "btn btn-success btn-xs", "ok");
+                    html += HtmlHelper.generateButton("Accept", link, "btn btn-success btn-xs", "ok");
                     html += " ";
-                    html += HtmlH.generateButton("Decline", link + "&dec=1", "btn btn-danger btn-xs", "remove");
+                    html += HtmlHelper.generateButton("Decline", link + "&dec=1", "btn btn-danger btn-xs", "remove");
                     html += "</td>";
 
                     html += "</tr>";
@@ -195,7 +195,7 @@ public class Login extends HttpServlet {
         if (error != null && error.equals("10")) {
             try {
                 int gid = Integer.parseInt(request.getParameter("g"));
-                body += HtmlH.generateHWithColor(3, "You are not the owner of the group \"" + dbm.getGroupTitleById(gid)
+                body += HtmlHelper.generateHWithColor(3, "You are not the owner of the group \"" + dbm.getGroupTitleById(gid)
                         + "\" \n!!", "text-danger");
             } catch (Exception e) {
             }
@@ -204,7 +204,7 @@ public class Login extends HttpServlet {
             try {
                 int gid = Integer.parseInt(request.getParameter("g"));
                 if (!dbm.isInGroup(dbm.getIdFromUser(user), gid)) {
-                    body += HtmlH.generateHWithColor(3, "You are not invited in the group \"" + dbm.getGroupTitleById(gid)
+                    body += HtmlHelper.generateHWithColor(3, "You are not invited in the group \"" + dbm.getGroupTitleById(gid)
                             + "\" \n!!", "text-danger");
                 }
             } catch (NumberFormatException | SQLException e) {
@@ -216,7 +216,7 @@ public class Login extends HttpServlet {
         if (acc != null && acc.equals("1")) {
             int gid = Integer.parseInt(request.getParameter("g"));
             try {
-                body += HtmlH.generateHWithColor(3, "Invite accepted at group \"" + dbm.getGroupTitleById(gid) + "\"\n", "text-success");
+                body += HtmlHelper.generateHWithColor(3, "Invite accepted at group \"" + dbm.getGroupTitleById(gid) + "\"\n", "text-success");
             } catch (SQLException e) {
             }
         }

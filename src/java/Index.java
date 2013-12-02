@@ -1,6 +1,6 @@
 
 import db.DBManager;
-import html.HtmlH;
+import html.HtmlHelper;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
@@ -42,7 +42,7 @@ public class Index extends HttpServlet {
         String error ="";
         String gpaux = (String) req.getParameter("error");
         if(gpaux != null && gpaux.equals("1"))
-            error += HtmlH.generateHWithColor(3, "Login invalid!!", "text-danger");
+            error += HtmlHelper.generateHWithColor(3, "Login invalid!!", "text-danger");
         pw.print("<!DOCTYPE html>\n" +
 "<!--\n" +
 "To change this license header, choose License Headers in Project Properties.\n" +

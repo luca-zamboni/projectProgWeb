@@ -8,7 +8,7 @@ import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import db.DBManager;
-import html.HtmlH;
+import html.HtmlHelper;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.sql.SQLException;
@@ -84,7 +84,7 @@ public class GeneratePdf {
                     System.err.println(""+avatar.getWidth()+" "+avatar.getHeight());
                     PdfPCell pc1 = new PdfPCell(avatar);
                     p.add(new Paragraph("Username: " + username));
-                    p.add(new Paragraph("Last post: " + HtmlH.getDateFromTimestampLong(date)));
+                    p.add(new Paragraph("Last post: " + HtmlHelper.getDateFromTimestampLong(date)));
                     p.add(new Paragraph("Post in group: " + postNum + "\n\n"));
                     PdfPCell pc2 = new PdfPCell();
                     pc2.addElement(p);
