@@ -6,6 +6,7 @@
 
 import com.oreilly.servlet.MultipartRequest;
 import com.oreilly.servlet.multipart.DefaultFileRenamePolicy;
+import com.oreilly.servlet.multipart.FileRenamePolicy;
 import db.DBManager;
 import html.HtmlH;
 import java.awt.AlphaComposite;
@@ -44,17 +45,7 @@ public class UploadAvatar extends HttpServlet {
 
     private DBManager dbm;
     private String dirName;
-
-    /*
-     BufferedImage resizedImage = new BufferedImage(IMG_WIDTH, IMG_HEIGHT, type);
-     Graphics2D g = resizedImage.createGraphics();
-     g.drawImage(originalImage, 0, 0, IMG_WIDTH, IMG_HEIGHT, null);
-     g.dispose();
-     g.setComposite(AlphaComposite.Src);
-     g.setRenderingHint(RenderingHints.KEY_INTERPOLATION,RenderingHints.VALUE_INTERPOLATION_BILINEAR);
-     g.setRenderingHint(RenderingHints.KEY_RENDERING,RenderingHints.VALUE_RENDER_QUALITY);
-     g.setRenderingHint(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_ON);
-     */
+    
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         connectToDatabase(request);
@@ -148,7 +139,13 @@ public class UploadAvatar extends HttpServlet {
         try {
 
             MultipartRequest multi = new MultipartRequest(request, dirName, 10 * 1024 * 1024,
-                    "ISO-8859-1", new DefaultFileRenamePolicy());
+                    "ISO-8859-1", new FileRenamePolicy() {
+
+                @Override
+                public File rename(File file) {
+                    return file;
+                }
+            });
             Enumeration files = multi.getFileNames();
             while (files.hasMoreElements()) {
                 String name = (String) files.nextElement();
