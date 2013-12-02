@@ -6,7 +6,6 @@
 
 import db.DBManager;
 import html.HtmlHelper;
-import static html.HtmlHelper.getDateFromTimestamp;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
