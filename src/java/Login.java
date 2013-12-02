@@ -23,6 +23,13 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import models.Group;
 
+/**
+ * gestisce i dati passati in input nel form di login per autorizzare
+ * il browser alla navigazione usando un cookie, nel caso di utente 
+ * autorizzato genera la pagina principale del sistema (home) in caso 
+ * contrario reindirizza alla pagina di login
+ * @author forna
+ */
 public class Login extends HttpServlet {
 
     //Session variables
