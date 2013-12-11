@@ -161,7 +161,12 @@ public class Login extends HttpServlet {
             haux += "</tr>";
             html += "<table>";
             for (Group aux : groups) {
-                long l = Long.parseLong(lastLogin);
+                long l=0;
+                try{
+                l = Long.parseLong(lastLogin);
+                }catch(NumberFormatException e){
+                    l=0;
+                }
                 if (aux.getLastChange() < l && ctrl) {
                     html +="</table>";
                     html += "<table class=\"table table-condensed table-hover\">";
