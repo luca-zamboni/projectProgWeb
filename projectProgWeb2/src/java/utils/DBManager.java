@@ -32,6 +32,7 @@ public class DBManager implements Serializable {
     public static final String USERID = "userid";
     public static final String USERNAME = "username";
     public static final String PASSWORD = "password";
+    public static final String EMAIL = "email";
     public static final String AVATAR = "avatar"; //(file)
 
     public static final String GROUP_TABLE = "groups";
@@ -533,9 +534,31 @@ public class DBManager implements Serializable {
         }
         return "";
     }
-
-    public boolean login(String user, String passwd) throws SQLException {
-        String sql = "select count(*) from users where username=? AND password=?";
+    
+    public String getEmail(int userId) throws SQLException{
+       String sql = "select email from users where "+USERID+"=?";
+        PreparedStatement stm = con.prepareStatement(sql);
+        stm.setInt(1, userId);
+        ResultSet rs;
+        rs = stm.executeQuery();
+        try {
+            if (rs.next()) {
+                return rs.getString(1);
+            }
+        } finally {
+            rs.close();
+            stm.close();
+        }
+        return null; 
+    }
+    
+    /**
+     * 
+     * @return the id of the user if logged -1 otherwise
+     * @throws SQLException 
+     */        
+    public int login(String user, String passwd) throws SQLException {
+        String sql = "select "+USERID+" from users where username=? AND password=?";
         PreparedStatement stm = con.prepareStatement(sql);
         stm.setString(1, user);
         stm.setString(2, passwd);
@@ -543,12 +566,12 @@ public class DBManager implements Serializable {
         rs = stm.executeQuery();
         try {
             if (rs.next()) {
-                return rs.getInt(1) == 1;
+                return rs.getInt(1);
             }
         } finally {
             rs.close();
             stm.close();
         }
-        return false;
+        return -1;
     }
 }

@@ -58,12 +58,17 @@ public class Login extends HttpServlet {
             throws ServletException, IOException {
         String[] credentials = getCredentials(request);
         String page = "/index.jsp";
-        if(loginValid(request,credentials[0],credentials[1])){
-            UserBean user = new UserBean(credentials[0]);
+        int login=loginValid(request,credentials[0],credentials[1]);
+        if(login>=0){
+            UserBean user = new UserBean(login);
             Support.addToSession(request, SessionUtils.USER, user);
-            page="home.jsp";
-        }else{
+            page="/home.jsp";
+        }else if(login==-1){
             Message msg = new Message("Parametri non validi");
+            request.setAttribute(RequestUtils.MESSAGE, msg);
+        }
+        else{
+            Message msg = new Message("Qualcosa e' andato storto");
             request.setAttribute(RequestUtils.MESSAGE, msg);
         }
         Support.forward(getServletContext(), request, response, page);
@@ -85,14 +90,18 @@ public class Login extends HttpServlet {
         return out;
     }
     
-    private boolean loginValid(HttpServletRequest request,String username,String password) {
+    /**
+     * 
+     * @return -2 se errore server, -1 se non lo trova id dell'utente altrimenti
+     */
+    private int loginValid(HttpServletRequest request,String username,String password) {
         try {
             DBManager dbm = new DBManager(request);
             return dbm.login(username, password);
         } catch (SQLException ex) {
             Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return false;
+        return -2;
 
     }
 

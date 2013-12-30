@@ -4,6 +4,14 @@
         <filter-name>LoginFilter</filter-name>
         <filter-class>filters.LoginFilter</filter-class>
     </filter>
+    <filter>
+        <filter-name>GetFilter</filter-name>
+        <filter-class>filters.GetFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>GetFilter</filter-name>
+        <url-pattern>/database/*</url-pattern>
+    </filter-mapping>
     <filter-mapping>
         <filter-name>LoginFilter</filter-name>
         <url-pattern>/home.jsp</url-pattern>
