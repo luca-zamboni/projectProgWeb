@@ -58,6 +58,11 @@ public class Message {
         this.msg = msg;
     }
 
+    public MessageType getType() {
+        return type;
+    }
+
+
     @Override
     public String toString() {
         if (type == MessageType.ERROR) {

@@ -8,11 +8,15 @@ package servlets;
 import beans.Message;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.SQLException;
 import java.util.Enumeration;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import utils.DBManager;
 import utils.RequestUtils;
 import utils.Support;
 
@@ -49,9 +53,21 @@ public class Register extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String[] params = getParams(request);
-        Message msg = buildMessage(params);
+        
+        int code=0;
+        boolean sanitized=checkInput(params,code);
+        boolean isInserted=false;
+        if(sanitized)
+             isInserted= insertUser(request,params);
+        Message msg = buildMessage(code,isInserted );
+        
         request.setAttribute(RequestUtils.MESSAGE, msg);
-        Support.forward(getServletContext(), request, response, "/register.jsp");
+        if (msg.getType() == Message.MessageType.ERROR) {
+            Support.forward(getServletContext(), request, response, "/register.jsp");
+        } else {
+            Support.forward(getServletContext(), request, response, "/index.jsp");
+        }
+
     }
 
     public String[] getParams(HttpServletRequest request) {
@@ -70,20 +86,45 @@ public class Register extends HttpServlet {
                 out[2] = paramValues[0];
             }
         }
-        if(out[0]==null || out[0].length()<1)
-            out[0]=out[2];
+        if (out[0] == null || out[0].length() < 1) {
+            out[0] = out[2];
+        }
         return out;
     }
+    
+    private boolean checkInput(String[] params,int code){
+        if (!Support.isInputValid(params[0], 5)) {
+            code=1;
+            return false;
+        }
+        if (!Support.isInputValid(params[1], 5)) {
+            code=2;
+            return false;
+        }
+        if (!Support.isEmailValid(params[2])) {
+            code=3;
+            return false;
+        }
+        code=0;
+        return true;
+    }
 
-    private Message buildMessage(String[] params) {
-        if(!Support.isInputValid(params[0], 5))
-            return new Message(Message.MessageType.ERROR,1);
-        if(!Support.isInputValid(params[1], 5))
-           return new Message(Message.MessageType.ERROR,2);
-        if(!Support.isEmailValid(params[2]))
-           return new Message(Message.MessageType.ERROR,3);
+    private Message buildMessage(int code ,boolean inserted) {
         
+        //non e' riuscito perche' la mail/username gia' esiste
+        if(!inserted)
+            return new Message(Message.MessageType.ERROR,code);
         //everything is ok
-        return new Message(Message.MessageType.SUCCESS,0);
+        return new Message(Message.MessageType.SUCCESS, 0);
+    }
+
+    private boolean insertUser(HttpServletRequest request,String[] params) {
+        try {
+            DBManager dBManager = new DBManager(request);
+            return dBManager.insertUser(params[0], params[1], params[2]);
+        } catch (SQLException ex) {
+            Logger.getLogger(Register.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return false;
     }
 }

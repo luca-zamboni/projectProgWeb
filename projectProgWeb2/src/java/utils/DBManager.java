@@ -16,14 +16,16 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.http.HttpServletRequest;
 //import models.Group;
 //import models.Post;
 
 /**
- * classe che si occupa dell'interfaccia con il database e di svolgere
- * le richieste al database necessarie per il funzionamento del 
- * programma
+ * classe che si occupa dell'interfaccia con il database e di svolgere le
+ * richieste al database necessarie per il funzionamento del programma
+ *
  * @author jibbo
  */
 public class DBManager implements Serializable {
@@ -171,8 +173,8 @@ public class DBManager implements Serializable {
         return groupid;
 
     }
-    
-    public void newFile(int ownerid,int groupid,String nomeFile) throws SQLException{
+
+    public void newFile(int ownerid, int groupid, String nomeFile) throws SQLException {
         String sql = "INSERT INTO post_file(ownerid,groupid,filename) VALUES (?,?,?)";
         PreparedStatement stm = con.prepareStatement(sql);
         stm.setInt(1, ownerid);
@@ -181,8 +183,8 @@ public class DBManager implements Serializable {
         stm.executeUpdate();
         stm.close();
     }
-    
-    public String getOwnerPostAvatar(int owner) throws SQLException{
+
+    public String getOwnerPostAvatar(int owner) throws SQLException {
         String ownerA = "";
         String sql = "SELECT avatar FROM users WHERE userid = ?";
         PreparedStatement stm = con.prepareStatement(sql);
@@ -190,14 +192,14 @@ public class DBManager implements Serializable {
         ResultSet rs;
         rs = stm.executeQuery();
         try {
-            if(rs.next()) {
+            if (rs.next()) {
                 ownerA = rs.getString(1);
             }
         } finally {
             rs.close();
             stm.close();
         }
-        if(ownerA == null || ownerA.equals("")){
+        if (ownerA == null || ownerA.equals("")) {
             ownerA = "img.jpg";
         }
         return ownerA;
@@ -223,7 +225,6 @@ public class DBManager implements Serializable {
 //        }
 //        return p;
 //    }
-
     public void insertPost(int userid, int groupid, String post) throws SQLException {
         Date d = new Date();
         String aux = "" + d.getTime();
@@ -374,25 +375,25 @@ public class DBManager implements Serializable {
     private String getDateOfLastPostInGroupByUser(int groupId, int userId) throws SQLException {
         String sql = "SELECT date FROM post WHERE ownerid = ?  "
                 + "AND groupid = ? ORDER BY date DESC LIMIT 1;";
-        
+
         PreparedStatement stm = con.prepareStatement(sql);
         stm.setInt(2, groupId);
         stm.setInt(1, userId);
-        
+
         ResultSet rs;
         rs = stm.executeQuery();
-        
+
         String date = null;
-        
+
         try {
-            if(rs.next()) {
+            if (rs.next()) {
                 date = rs.getString(1);
             }
         } finally {
             rs.close();
             stm.close();
         }
-        
+
         return date;
     }
 
@@ -404,7 +405,7 @@ public class DBManager implements Serializable {
                 + "AND user_groups.groupid = groups.groupid "
                 + "AND post.groupid = ?"
                 + "AND groups.groupid = ? GROUP BY users.userid";
-        
+
         PreparedStatement stm = con.prepareStatement(sql1);
         stm.setInt(1, groupId);
         stm.setInt(2, groupId);
@@ -424,7 +425,7 @@ public class DBManager implements Serializable {
                 userId = rs.getInt(4);
                 ///// 3 hardcoded change this shit
                 ArrayList<Object> aux = new ArrayList();
-                
+
                 aux.add(0, postNum);
                 aux.add(1, userName);
                 aux.add(2, avatarPath);
@@ -483,7 +484,6 @@ public class DBManager implements Serializable {
 //        return getGroups(0, user);
 //
 //    }
-
     public int getIdFromUser(String user) throws SQLException {
         String sql = "select userid from users where username = ?";
         PreparedStatement stm = con.prepareStatement(sql);
@@ -534,9 +534,9 @@ public class DBManager implements Serializable {
         }
         return "";
     }
-    
-    public String getEmail(int userId) throws SQLException{
-       String sql = "select email from users where "+USERID+"=?";
+
+    public String getEmail(int userId) throws SQLException {
+        String sql = "select email from users where " + USERID + "=?";
         PreparedStatement stm = con.prepareStatement(sql);
         stm.setInt(1, userId);
         ResultSet rs;
@@ -549,16 +549,16 @@ public class DBManager implements Serializable {
             rs.close();
             stm.close();
         }
-        return null; 
+        return null;
     }
-    
+
     /**
-     * 
+     *
      * @return the id of the user if logged -1 otherwise
-     * @throws SQLException 
-     */        
+     * @throws SQLException
+     */
     public int login(String user, String passwd) throws SQLException {
-        String sql = "select "+USERID+" from users where username=? AND password=?";
+        String sql = "select " + USERID + " from users where username=? AND password=?";
         PreparedStatement stm = con.prepareStatement(sql);
         stm.setString(1, user);
         stm.setString(2, passwd);
@@ -573,5 +573,26 @@ public class DBManager implements Serializable {
             stm.close();
         }
         return -1;
+    }
+
+    public boolean insertUser(String user, String passwd, String email) throws SQLException {
+        String sql = "insert into " + USER_TABLE + "(" + USERNAME + "," + PASSWORD + "," + EMAIL + ") values(?,?,?)";
+        PreparedStatement stm = null;
+        try {
+            stm = con.prepareStatement(sql);
+            stm.setString(1, user);
+            stm.setString(2, passwd);
+            stm.setString(3, email);
+            stm.addBatch();
+            stm.executeBatch();
+            return true;
+        } catch (SQLException ex) {
+            Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            if (stm != null) {
+                stm.close();
+            }
+        }
+        return false;
     }
 }
