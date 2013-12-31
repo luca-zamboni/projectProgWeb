@@ -3,31 +3,24 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package servlets;
 
 import beans.Message;
-import beans.UserBean;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.sql.SQLException;
 import java.util.Enumeration;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import utils.DBManager;
 import utils.RequestUtils;
-import utils.SessionUtils;
 import utils.Support;
 
 /**
  *
  * @author jibbo
  */
-public class Login extends HttpServlet {
+public class Register extends HttpServlet {
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
@@ -41,8 +34,7 @@ public class Login extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        request.setAttribute(RequestUtils.MESSAGE, new Message(Message.MessageType.ERROR,0));
-        Support.forward(getServletContext(), request, response, "/index.jsp");
+        Support.forward(getServletContext(), request, response, "/register.jsp");
     }
 
     /**
@@ -56,25 +48,14 @@ public class Login extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String[] credentials = getCredentials(request);
-        String page = "/index.jsp";
-        int login=loginValid(request,credentials[0],credentials[1]);
-        if(login>=0){
-            UserBean user = new UserBean(login);
-            Support.addToSession(request, SessionUtils.USER, user);
-            page="/home.jsp";
-        }else if(login==-1){
-            Message msg = new Message(Message.MessageType.ERROR,0);
-            request.setAttribute(RequestUtils.MESSAGE, msg);
-        }
-        else{
-            request.setAttribute(RequestUtils.MESSAGE, new Message());
-        }
-        Support.forward(getServletContext(), request, response, page);
+        String[] params = getParams(request);
+        Message msg = buildMessage(params);
+        request.setAttribute(RequestUtils.MESSAGE, msg);
+        Support.forward(getServletContext(), request, response, "/register.jsp");
     }
-    
-    public String[] getCredentials(HttpServletRequest request){
-        String[] out = new String[]{null,null};
+
+    public String[] getParams(HttpServletRequest request) {
+        String[] out = new String[]{null, null, null};
         Enumeration<String> paramNames = request.getParameterNames();
         while (paramNames.hasMoreElements()) {
             String paramName = paramNames.nextElement();
@@ -85,23 +66,24 @@ public class Login extends HttpServlet {
             if (paramName.equals(RequestUtils.PASSWD)) {
                 out[1] = paramValues[0];
             }
+            if (paramName.equals(RequestUtils.EMAIL)) {
+                out[2] = paramValues[0];
+            }
         }
+        if(out[0]==null || out[0].length()<1)
+            out[0]=out[2];
         return out;
     }
-    
-    /**
-     * 
-     * @return -2 se errore server, -1 se non lo trova id dell'utente altrimenti
-     */
-    private int loginValid(HttpServletRequest request,String username,String password) {
-        try {
-            DBManager dbm = new DBManager(request);
-            return dbm.login(username, password);
-        } catch (SQLException ex) {
-            Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return -2;
 
+    private Message buildMessage(String[] params) {
+        if(!Support.isInputValid(params[0], 5))
+            return new Message(Message.MessageType.ERROR,1);
+        if(!Support.isInputValid(params[1], 5))
+           return new Message(Message.MessageType.ERROR,2);
+        if(!Support.isEmailValid(params[2]))
+           return new Message(Message.MessageType.ERROR,3);
+        
+        //everything is ok
+        return new Message(Message.MessageType.SUCCESS,0);
     }
-
 }

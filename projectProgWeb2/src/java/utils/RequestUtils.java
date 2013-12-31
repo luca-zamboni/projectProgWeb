@@ -15,4 +15,5 @@ public class RequestUtils {
     
     public static final String USERNAME="username";
     public static final String PASSWD="passwd";
+    public static final String EMAIL="mail";
 }
