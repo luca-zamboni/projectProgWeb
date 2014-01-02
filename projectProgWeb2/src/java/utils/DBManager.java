@@ -5,6 +5,7 @@
  */
 package utils;
 
+import beans.UserBean;
 import java.io.Serializable;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -551,13 +552,16 @@ public class DBManager implements Serializable {
         }
         return null;
     }
+    
 
     /**
      *
      * @return the id of the user if logged -1 otherwise
      * @throws SQLException
      */
-    public int login(String user, String passwd) throws SQLException {
+    public UserBean login(String user, String passwd) throws SQLException {
+        int userid=-1,lastlogin=-1;
+        
         String sql = "select " + USERID + " from users where username=? AND password=?";
         PreparedStatement stm = con.prepareStatement(sql);
         stm.setString(1, user);
@@ -566,13 +570,33 @@ public class DBManager implements Serializable {
         rs = stm.executeQuery();
         try {
             if (rs.next()) {
-                return rs.getInt(1);
+                userid = rs.getInt(1);
             }
         } finally {
             rs.close();
             stm.close();
         }
-        return -1;
+        
+        sql = "SELECT last_login FROM user_login WHERE id_user=? ORDER BY last_login DESC";
+        stm = con.prepareStatement(sql);
+        stm.setString(1, user);
+        rs = stm.executeQuery();
+        try {
+            if (rs.next()) {
+                lastlogin = rs.getInt(1);
+            }
+        } finally {
+            rs.close();
+            stm.close();
+        }
+        
+        sql = "INSERT into user_login (id_user,last_login) VALUES (?,?)";
+        stm = con.prepareStatement(sql);
+        stm.setInt(1, getIdFromUser(user));
+        stm.setString(2, "" + new Date().getTime());
+        stm.executeUpdate();
+        
+        return new UserBean(userid, lastlogin);
     }
 
     public boolean insertUser(String user, String passwd, String email) throws SQLException {

@@ -15,12 +15,22 @@ import javax.ejb.Stateless;
 @Stateless
 public class UserBean {
     private int userID;
+    private int lastLogin;
 
     public UserBean() {
     }
 
-    public UserBean(int id) {
+    public UserBean(int id,int lastLogin) {
         this.userID=id;
+        this.lastLogin=lastLogin;
+    }
+    
+    public int getUserID(){
+        return userID;
+    }
+    
+    public int getLastLogin(){
+        return lastLogin;
     }
     
 }

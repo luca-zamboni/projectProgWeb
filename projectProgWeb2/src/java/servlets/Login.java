@@ -27,6 +27,7 @@ import utils.Support;
  * @author jibbo
  */
 public class Login extends HttpServlet {
+    DBManager dbm;
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
@@ -40,6 +41,7 @@ public class Login extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        connectDatabase(request);
         request.setAttribute(RequestUtils.MESSAGE, new Message(Message.MessageType.ERROR,0));
         Support.forward(getServletContext(), request, response, "/index.jsp");
     }
@@ -55,14 +57,14 @@ public class Login extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        connectDatabase(request);
         String[] credentials = getCredentials(request);
         String page = "/index.jsp";
-        int login=loginValid(request,credentials[0],credentials[1]);
-        if(login>=0){
-            UserBean user = new UserBean(login);
-            Support.addToSession(request, SessionUtils.USER, user);
+        UserBean login=loginValid(request,credentials[0],credentials[1]);
+        if(login.getUserID()>=0){
+            Support.addToSession(request, SessionUtils.USER, login);
             page="/home.jsp";
-        }else if(login==-1){
+        }else if( login.getUserID() ==-1){
             Message msg = new Message(Message.MessageType.ERROR,0);
             request.setAttribute(RequestUtils.MESSAGE, msg);
         }
@@ -90,17 +92,24 @@ public class Login extends HttpServlet {
     
     /**
      * 
-     * @return -2 se errore server, -1 se non lo trova id dell'utente altrimenti
+     * @return null se errore server, -1 se non lo trova id dell'utente altrimenti
      */
-    private int loginValid(HttpServletRequest request,String username,String password) {
+    private UserBean loginValid(HttpServletRequest request,String username,String password) {
         try {
-            DBManager dbm = new DBManager(request);
             return dbm.login(username, password);
         } catch (SQLException ex) {
             Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return -2;
+        return new UserBean(-2,0);
 
+    }
+    
+    public void connectDatabase(HttpServletRequest request){
+        try {
+            dbm = new DBManager(request);
+        } catch (SQLException ex) {
+            Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
 }
