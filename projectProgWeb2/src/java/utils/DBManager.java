@@ -79,7 +79,7 @@ public class DBManager implements Serializable {
             String path = request.getServletContext().getRealPath("/");
             DBManager.con = DriverManager.getConnection(URL_PREFIX + path + DB_URL);
         } catch (ClassNotFoundException | SQLException e) {
-            throw new RuntimeException(e.toString(), e);
+            //throw new RuntimeException(e.toString(), e);
         }
     }
 
@@ -583,8 +583,7 @@ public class DBManager implements Serializable {
             stm.setString(1, user);
             stm.setString(2, passwd);
             stm.setString(3, email);
-            stm.addBatch();
-            stm.executeBatch();
+            stm.executeUpdate();
             return true;
         } catch (SQLException ex) {
             Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);

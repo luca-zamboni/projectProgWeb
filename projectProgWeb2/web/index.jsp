@@ -11,9 +11,9 @@
 
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <head>  
         <title>Login</title>
+        <%@ include file="header.jsp" %>
     </head>
     <body>
         <% if (request.getSession().getAttribute(SessionUtils.USER) == null) {
@@ -29,5 +29,4 @@
             <jsp:forward page="home.jsp"/>
         <% }%>
     </body>
-    <%@ include file="header.jsp" %>
 </html>
