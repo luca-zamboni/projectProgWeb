@@ -59,11 +59,11 @@ public class Login extends HttpServlet {
             throws ServletException, IOException {
         connectDatabase(request);
         String[] credentials = getCredentials(request);
-        String page = "/index.jsp";
+        String page = "./index.jsp";
         UserBean login=loginValid(request,credentials[0],credentials[1]);
         if(login.getUserID()>=0){
             Support.addToSession(request, SessionUtils.USER, login);
-            page="/home.jsp";
+            page="./home.jsp";
         }else if( login.getUserID() ==-1){
             Message msg = new Message(Message.MessageType.ERROR,0);
             request.setAttribute(RequestUtils.MESSAGE, msg);
@@ -71,7 +71,7 @@ public class Login extends HttpServlet {
         else{
             request.setAttribute(RequestUtils.MESSAGE, new Message());
         }
-        Support.forward(getServletContext(), request, response, page);
+        response.sendRedirect(page);
     }
     
     public String[] getCredentials(HttpServletRequest request){

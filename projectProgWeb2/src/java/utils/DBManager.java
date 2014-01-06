@@ -574,7 +574,7 @@ public class DBManager implements Serializable {
 
         sql = "SELECT last_login FROM user_login WHERE id_user=? ORDER BY last_login DESC";
         stm = con.prepareStatement(sql);
-        stm.setString(1, user);
+        stm.setInt(1, getIdFromUser(user));
         rs = stm.executeQuery();
         try {
             if (rs.next()) {

@@ -36,7 +36,7 @@ public class Support {
     }
     
     public static String getDateFromTime(long date){
-        return new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(date);
+        return date + new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(date);
     }
 
     public static void addToSession(HttpServletRequest request, String name, Object value) {
