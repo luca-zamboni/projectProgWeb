@@ -37,33 +37,28 @@ public class DBManager implements Serializable {
     public static final String PASSWORD = "password";
     public static final String EMAIL = "email";
     public static final String AVATAR = "avatar"; //(file)
-
     public static final String GROUP_TABLE = "groups";
     public static final String GROUP_ID = "groupid";
     public static final String GROUP_NAME = "groupname";
     public static final String GROUP_OWNER_ID = "ownerid";
     public static final String GROUP_CREATION_DATE = "groupcreation";
-
     public static final String RELATION_USER_GROUP = "user_groups";
     public static final String RELATION_USER_GROUP_ID = "id";
     // field userid
     //fiel groupid
     public static final String RELATION_USER_GROUP_STATUS = "status";
-
     public static final String POST_TABLE = "post";
     public static final String POST_ID = "postid";
     public static final String POST_DATE = "date";
     public static final String POST_GROUP_ID = "groupid";
     public static final String POST_CONTENT = "content";
     public static final String POST_OWNER = "ownerid";
-
     public static final String FILE_TABLE = "post_file";
     public static final String FILE_ID = "fileid";
     public static final String FILE_CONTENT = "filepath";
     public static final String FILE_POST_ID = "postid";
     //facultative (id_gruppo)
     //facultative (id_scrivente)
-
     //  invites relational between group and users, we can also add a field in 
     //  the group members table with a value as "accepted", "pending", "declined", etc.
     // transient == non viene serializzato
@@ -552,7 +547,6 @@ public class DBManager implements Serializable {
         }
         return null;
     }
-    
 
     /**
      *
@@ -560,8 +554,9 @@ public class DBManager implements Serializable {
      * @throws SQLException
      */
     public UserBean login(String user, String passwd) throws SQLException {
-        int userid=-1,lastlogin=-1;
-        
+        int userid = -1;
+        long lastlogin = -1;
+
         String sql = "select " + USERID + " from users where username=? AND password=?";
         PreparedStatement stm = con.prepareStatement(sql);
         stm.setString(1, user);
@@ -576,26 +571,26 @@ public class DBManager implements Serializable {
             rs.close();
             stm.close();
         }
-        
+
         sql = "SELECT last_login FROM user_login WHERE id_user=? ORDER BY last_login DESC";
         stm = con.prepareStatement(sql);
         stm.setString(1, user);
         rs = stm.executeQuery();
         try {
             if (rs.next()) {
-                lastlogin = rs.getInt(1);
+                lastlogin = Long.parseLong(rs.getString(1));
             }
         } finally {
             rs.close();
             stm.close();
         }
-        
+
         sql = "INSERT into user_login (id_user,last_login) VALUES (?,?)";
         stm = con.prepareStatement(sql);
         stm.setInt(1, getIdFromUser(user));
         stm.setString(2, "" + new Date().getTime());
         stm.executeUpdate();
-        
+
         return new UserBean(userid, lastlogin);
     }
 
@@ -615,6 +610,78 @@ public class DBManager implements Serializable {
             if (stm != null) {
                 stm.close();
             }
+        }
+        return false;
+    }
+
+    public void setNewForgetPass(int user, String code, String scadenza) {
+        try {
+            String sql = "INSERT INTO forget_pass (code,user,scadenza) VALUES (?,?,?)";
+            PreparedStatement stm = null;
+
+            stm = con.prepareStatement(sql);
+            stm.setString(1, code);
+            stm.setInt(2, user);
+            stm.setString(3, scadenza);
+            stm.executeUpdate();
+            stm.close();
+
+        } catch (SQLException ex) {
+            Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    public long getScadenza(String code) {
+        try {
+            String sql = "SELECT scadenza FROM forget_pass WHERE code = ?";
+            PreparedStatement stm = null;
+
+            stm = con.prepareStatement(sql);
+            stm.setString(1, code);
+            
+            ResultSet rs = stm.executeQuery();
+            try {
+                if (rs.next()) {
+                    String scad = rs.getString(1);
+                    return Long.parseLong(scad);
+                }
+            } finally {
+                rs.close();
+                stm.close();
+            }
+            stm.close();
+
+        } catch (SQLException ex) {
+            Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return 0;
+    }
+
+    public boolean setNewPassword(String code, String pass) {
+        try{
+            int user = -1;
+            String sql = "select user from forget_pass where code = ?";
+            PreparedStatement stm = con.prepareStatement(sql);
+            stm.setString(1, code);
+            ResultSet rs = stm.executeQuery();
+            if (rs.next()) {
+                user = rs.getInt(1);
+            }
+            rs.close();
+            stm.close();
+            
+            if(user==-1)
+                return false;
+            
+            sql = "UPDATE users SET password = ? WHERE userid = ?";
+            stm = con.prepareStatement(sql);
+            stm.setString(1, pass);
+            stm.setInt(2, user);
+            stm.executeUpdate();
+            return true;
+            
+        }catch(Exception e){
+            System.out.println("Acciderbolina qualcosa è andato storto\n");
         }
         return false;
     }

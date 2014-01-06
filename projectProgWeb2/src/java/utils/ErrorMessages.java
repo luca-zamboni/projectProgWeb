@@ -16,6 +16,8 @@ public class ErrorMessages {
     private static String USERNAME = "Username non valido";
     private static String PASSWORD = "Password non valida";
     private static String EMAIL = "E-Mail non valida";
+    private static String PASSNONCOBACIANO = "Le due password non combaciano";
+    private static String USERINESISTENTE = "Username o email inseistenti";
 
     public static String getErrorMessage(int code) {
         switch (code) {
@@ -27,6 +29,10 @@ public class ErrorMessages {
                 return PASSWORD;
             case 3:
                 return EMAIL;
+            case 4:
+                return PASSNONCOBACIANO;
+            case 5:
+                return USERINESISTENTE;
             default:
                 return GENERAL;
         }

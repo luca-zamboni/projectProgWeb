@@ -22,20 +22,25 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import utils.RequestUtils;
 import utils.SessionUtils;
+import utils.Support;
 
 /**
  *
  * @author luca
  */
-public class CambioPassword extends HttpServlet {
+public class ForgetPassword extends HttpServlet {
 
     DBManager dbm;
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         connectDatabase(req);
+        
         String user = (String) req.getParameter(RequestUtils.EMAIL);
-
+        
+        String code = Support.randomStringSHA1(32);
+        String link = "http://localhost:8080/projectProgWeb2/changePassword.jsp?code="+code;
+                
         Security.addProvider(new com.sun.net.ssl.internal.ssl.Provider());
 
         final String SSL_FACTORY = "javax.net.ssl.SSLSocketFactory";
@@ -64,8 +69,8 @@ public class CambioPassword extends HttpServlet {
             int id = dbm.getIdFromUser(user);
             String mail = dbm.getEmail(id);
             if(mail == null){
-                req.getSession().setAttribute(RequestUtils.MESSAGE, new beans.Message(beans.Message.MessageType.ERROR, 4));
-                resp.sendRedirect("./cambiopassword.jsp");
+                req.getSession().setAttribute(RequestUtils.MESSAGE, new beans.Message(beans.Message.MessageType.ERROR, 5));
+                resp.sendRedirect("./forgetPassword.jsp");
             }else{
                 // — Create a new message –
                 Message msg = new MimeMessage(session);
@@ -74,12 +79,15 @@ public class CambioPassword extends HttpServlet {
                 msg.setRecipients(Message.RecipientType.TO,
                         InternetAddress.parse(mail , false));
                 msg.setSubject("Cambio password");
-                msg.setText("Cambio password " + new Date());
+                msg.setText("Hai 90 secondi per cambiare password al link " + link);
                 msg.setSentDate(new Date());
                 Transport.send(msg);
+                
+                dbm.setNewForgetPass(id, code,"" + (new Date().getTime() + 90));
+                
             }
         } catch (MessagingException | SQLException ex) {
-            Logger.getLogger(CambioPassword.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ForgetPassword.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

@@ -15,5 +15,7 @@ public class RequestUtils {
     
     public static final String USERNAME="username";
     public static final String PASSWD="passwd";
+    public static final String CONFERMAPASSWD="confpasswd";
     public static final String EMAIL="mail";
+    public static final String CODE="code";
 }

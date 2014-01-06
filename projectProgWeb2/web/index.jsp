@@ -9,6 +9,8 @@
 <%@page import="utils.SessionUtils"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 
+
+
 <!DOCTYPE html>
 <html>
     <head>  
@@ -16,17 +18,20 @@
         <%@ include file="header.jsp" %>
     </head>
     <body>
-        <% if (request.getSession().getAttribute(SessionUtils.USER) == null) {
-                Message msg = (Message) request.getAttribute(RequestUtils.MESSAGE);%>
-
-        <p><%= msg == null ? "" : msg.toString()%></p>
-        <form action="login" method="POST">
-            <% out.println("<input placeholder=\"username\" type=\"text\" name=" + RequestUtils.USERNAME + " />"); %>
-            <% out.println("<input placeholder=\"password\" type=\"password\" name=" + RequestUtils.PASSWD + " />"); %>
-            <input type="submit" value="Entra!" />
-        </form> 
+        <% if (request.getSession().getAttribute(SessionUtils.USER) == null) {%>
+            
+            <%@ include file="getMessage.jsp" %>
+            <form action="login" method="POST">
+                <% out.println("<input placeholder=\"username\" type=\"text\" name=" + RequestUtils.USERNAME + " />"); %>
+                <% out.println("<input placeholder=\"password\" type=\"password\" name=" + RequestUtils.PASSWD + " />"); %>
+                <input type="submit" value="Entra!" />
+            </form> 
         <% } else { %>
             <jsp:forward page="home.jsp"/>
         <% }%>
+        <a href="register.jsp">Registrati</a>
+        <a href="forgetPassword.jsp">Passowrd dimenticata?</a>
+
     </body>
 </html>
+

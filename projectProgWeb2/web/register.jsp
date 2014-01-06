@@ -13,7 +13,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <%@ include file="header.jsp" %>
         <title>Registrazione</title>
     </head>
     <body>
@@ -31,7 +31,5 @@
             <jsp:forward page="home.jsp"/>
         <% }%>
     </body>
-    <%@ include file="header.jsp" %>
-<!--    <script type="text/javascript" src="js/jquery-ui-1.10.3.custom.min.js"></script>
-    <script type="text/javascript" src="js/registration.js"></script>-->
+    
 </html>

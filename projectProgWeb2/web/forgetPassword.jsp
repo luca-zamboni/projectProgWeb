@@ -9,12 +9,12 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Cambio password</title>
+        <title>Password dimenaticata?</title>
     </head>
     <body>
         <h1>Insert your username or email</h1>
         <%@ include file="getMessage.jsp" %>
-        <form action="cambioPassword" method="POST">
+        <form action="ForgetPassword" method="POST">
             <input type="text" name="mail" />
         </form>
     </body>
