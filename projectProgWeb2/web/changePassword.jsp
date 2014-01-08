@@ -4,6 +4,7 @@
     Author     : luca
 --%>
 
+<%@page import="utils.Support"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -13,12 +14,12 @@
     </head>
     <body>
         <h1>Insert your new password</h1>
-        <%@ include file="getMessage.jsp" %>
+         <p><%= Support.getMessageFromSession(request.getSession()) %></p>
         <form action="changePass" method="POST">
             <input type="password" name="passwd" />
             <input type="password" name="confpasswd" />
-            <input type="hidden" value="<%= request.getParameter("code") %>" name="code" />
-<input type="submit">
+            <input type="hidden" value="<%= request.getParameter("code")%>" name="code" />
+            <input type="submit">
         </form>
     </body>
 </html>

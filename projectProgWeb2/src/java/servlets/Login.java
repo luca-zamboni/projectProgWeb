@@ -27,7 +27,7 @@ import utils.Support;
  * @author jibbo
  */
 public class Login extends HttpServlet {
-    DBManager dbm;
+    private DBManager dbm;
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**

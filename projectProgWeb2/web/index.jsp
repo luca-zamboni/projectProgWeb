@@ -3,6 +3,7 @@
     Created on : Dec 30, 2013, 8:23:28 PM
 --%>
 
+<%@page import="utils.Support"%>
 <%@page import="beans.Message"%>
 <%@page import="beans.UserBean" %>
 <%@page import="utils.RequestUtils"%>
@@ -18,7 +19,7 @@
         <%@ include file="header.jsp" %>
     </head>
     <body>
-        <%@ include file="getMessage.jsp" %>
+        <p><%= Support.getMessageFromSession(request.getSession()) %></p>
         <form action="login" method="POST">
             <% out.println("<input placeholder=\"username\" type=\"text\" name=" + RequestUtils.USERNAME + " />"); %>
             <% out.println("<input placeholder=\"password\" type=\"password\" name=" + RequestUtils.PASSWD + " />");%>

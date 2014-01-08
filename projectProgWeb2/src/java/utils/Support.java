@@ -83,4 +83,13 @@ public class Support {
             return "";
         }
     }
+    
+    public static String getMessageFromSession(HttpSession session){
+        Message msg = (Message) session.getAttribute(RequestUtils.MESSAGE);
+        if(msg != null){
+            session.setAttribute(RequestUtils.MESSAGE, null);
+            return msg.toString();
+        }
+        return null;
+    }
 }

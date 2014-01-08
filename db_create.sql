@@ -2,7 +2,8 @@ CREATE TABLE users(
     userid INTEGER PRIMARY KEY AUTOINCREMENT,
     username TEXT NOT NULL UNIQUE,
     password TEXT NOT NULL,
-    avatar TEXT
+    avatar TEXT,
+    email TEXT NOT NULL
 );
 
 CREATE TABLE groups(

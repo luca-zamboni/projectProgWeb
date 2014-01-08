@@ -4,6 +4,7 @@
     Author     : jibbo
 --%>
 
+<%@page import="utils.Support"%>
 <%@page import="beans.Message"%>
 <%@page import="beans.UserBean" %>
 <%@page import="utils.RequestUtils"%>
@@ -17,10 +18,8 @@
         <title>Registrazione</title>
     </head>
     <body>
-        <% if (request.getSession().getAttribute(SessionUtils.USER) == null) {
-                Message msg = (Message) request.getAttribute(RequestUtils.MESSAGE);%>
-
-        <p><%= msg == null ? "" : msg.toString()%></p>
+        <% if (request.getSession().getAttribute(SessionUtils.USER) == null) { %>
+         <p><%= Support.getMessageFromSession(request.getSession()) %></p>
         <form action="register" method="POST" id="regform">
             <% out.println("<input placeholder=\"email\" type='email' name=" + RequestUtils.EMAIL + " required />"); %>
             <% out.println("<input pattern=\".{6,}\" title=\"Almeno 6 caratteri\" placeholder=\"username (Opzionale)\" type=\"text\" name=" + RequestUtils.USERNAME + " />"); %>
