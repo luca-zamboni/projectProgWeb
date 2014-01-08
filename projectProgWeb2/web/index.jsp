@@ -30,7 +30,7 @@
             <jsp:forward page="home.jsp"/>
         <% }%>
         <a href="register.jsp">Registrati</a>
-        <a href="forgetPassword.jsp">Passowrd dimenticata?</a>
+        <a href="forgetPassword.jsp">Password dimenticata?</a>
 
     </body>
 </html>

@@ -118,13 +118,17 @@ public class NewGroup extends HttpServlet {
         if (gpaux == null || gpaux.equals("-1")) {
             body += HtmlHelper.h1String("Create a new Group");
         } else {
+            String pdfForm = "";
             int gp = Integer.parseInt(gpaux);
             body += HtmlHelper.generateH(4, "Report of the Group");
-            body += HtmlHelper.generateButton("Download", "pdf/"+gp+"/report.pdf", "btn btn-success","book");
+            pdfForm +=     "<input  type='hidden' style='visibility:hidden' name='g' value='" + gp + "'>\n"
+                    +   "<button type=\"submit\" class=\"btn btn-default\">Download Report</button>";
+            body += HtmlHelper.generateForm("GeneratePdf", HtmlHelper.POST, pdfForm);
+            //body += HtmlHelper.generateButton("Download", "pdf/"+gp+"/report.pdf", "btn btn-success","book");
             body += HtmlHelper.h1String("Manage this group");
             ArrayList<ArrayList<Object>> alalo = dbm.getDataForReport(gp);
             String path = request.getServletContext().getRealPath("/");
-            GeneratePdf.generatePdf(path,alalo, gp, dbm);
+            //GeneratePdf.generatePdf(path,alalo, gp, dbm);
         }
 
         try {
