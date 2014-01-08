@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package utils;
 
 /**
@@ -11,11 +10,12 @@ package utils;
  * @author jibbo
  */
 public class RequestUtils {
-    public static final String MESSAGE="msg";
-    
-    public static final String USERNAME="username";
-    public static final String PASSWD="passwd";
-    public static final String CONFERMAPASSWD="confpasswd";
-    public static final String EMAIL="mail";
-    public static final String CODE="code";
+
+    public static final String MESSAGE = "msg";
+
+    public static final String USERNAME = "username";
+    public static final String PASSWD = "passwd";
+    public static final String CONFERMAPASSWD = "confpasswd";
+    public static final String EMAIL = "mail";
+    public static final String CODE = "code";
 }

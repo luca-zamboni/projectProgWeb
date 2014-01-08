@@ -6,8 +6,16 @@
     </filter>
     <filter>
         <filter-name>GetFilter</filter-name>
-        <filter-class>filters.GetFilter</filter-class>
+        <filter-class>filters.FIleAccess</filter-class>
     </filter>
+    <filter>
+        <filter-name>AlreadyLogged</filter-name>
+        <filter-class>filters.AlreadyLogged</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>AlreadyLogged</filter-name>
+        <url-pattern>/index.jsp</url-pattern>
+    </filter-mapping>
     <filter-mapping>
         <filter-name>GetFilter</filter-name>
         <url-pattern>/database/*</url-pattern>

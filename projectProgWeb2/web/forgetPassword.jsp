@@ -4,6 +4,7 @@
     Author     : luca
 --%>
 
+<%@page import="utils.Support"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -13,7 +14,7 @@
     </head>
     <body>
         <h1>Insert your username or email</h1>
-        <%@ include file="getMessage.jsp" %>
+         <jsp:include page="messagedisplayer.jsp" />
         <form action="ForgetPassword" method="POST">
             <input type="text" name="mail" />
         </form>

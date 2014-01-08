@@ -17,7 +17,7 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author luca
  */
-public class GetFilter implements Filter {
+public class FIleAccess implements Filter {
 
     private FilterConfig filterConfig = null;
 

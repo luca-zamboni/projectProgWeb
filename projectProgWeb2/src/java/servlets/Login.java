@@ -27,7 +27,7 @@ import utils.Support;
  * @author jibbo
  */
 public class Login extends HttpServlet {
-    DBManager dbm;
+    private DBManager dbm;
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
@@ -59,19 +59,16 @@ public class Login extends HttpServlet {
             throws ServletException, IOException {
         connectDatabase(request);
         String[] credentials = getCredentials(request);
-        String page = "./index.jsp";
+        String page = "/index.jsp";
         UserBean login=loginValid(request,credentials[0],credentials[1]);
         if(login.getUserID()>=0){
             Support.addToSession(request, SessionUtils.USER, login);
-            page="./home.jsp";
+            page="/home.jsp";
         }else if( login.getUserID() ==-1){
             Message msg = new Message(Message.MessageType.ERROR,0);
             request.setAttribute(RequestUtils.MESSAGE, msg);
         }
-        else{
-            request.setAttribute(RequestUtils.MESSAGE, new Message());
-        }
-        response.sendRedirect(page);
+        Support.forward(getServletContext(), request, response, page);
     }
     
     public String[] getCredentials(HttpServletRequest request){

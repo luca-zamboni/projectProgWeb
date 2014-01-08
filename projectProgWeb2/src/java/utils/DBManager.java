@@ -37,6 +37,7 @@ public class DBManager implements Serializable {
     public static final String PASSWORD = "password";
     public static final String EMAIL = "email";
     public static final String AVATAR = "avatar"; //(file)
+    public static final String USERTYPE = "type";
     public static final String GROUP_TABLE = "groups";
     public static final String GROUP_ID = "groupid";
     public static final String GROUP_NAME = "groupname";
