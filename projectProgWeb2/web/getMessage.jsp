@@ -7,6 +7,6 @@
 <%@page import="utils.RequestUtils"%>
 <%@page import="beans.Message"%>
 
-<%  Message msg = (Message) session.getAttribute(RequestUtils.MESSAGE); %>
+<%  Message msg = (Message) session.getAttribute(RequestUtils.MESSAGE);%>
 <p><%= msg == null ? "" : msg.toString()%></p>
-<%  session.setAttribute(RequestUtils.MESSAGE,null); %>
+<%  session.setAttribute(RequestUtils.MESSAGE, null);%>
