@@ -21,7 +21,7 @@
             <p class="btn-success">
 <%
         }
-        out.print(msg.getMsg());
+        out.print(msg.toString());
     }
 %>
 </p>
