@@ -9,6 +9,7 @@ import beans.Message;
 import java.io.IOException;
 import java.security.MessageDigest;
 import java.text.SimpleDateFormat;
+import java.util.Random;
 import java.util.regex.Pattern;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
@@ -36,7 +37,7 @@ public class Support {
     }
 
     public static String getDateFromTime(long date) {
-        return date + new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(date);
+        return new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(date);
     }
 
     public static void addToSession(HttpServletRequest request, String name, Object value) {
@@ -64,9 +65,10 @@ public class Support {
 
     public static String randomStringSHA1(int lenght) {
         try {
+            Random r = new Random();
             StringBuffer sb = new StringBuffer();
             for (int i = 0; i < lenght; i++) {
-                sb.append(goodChar[(int) Math.random() % lenght]);
+                sb.append(goodChar[(int) r.nextInt(lenght)]);
             }
             MessageDigest md = MessageDigest.getInstance("SHA1");
             md.reset();

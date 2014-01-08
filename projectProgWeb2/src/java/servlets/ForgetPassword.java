@@ -39,7 +39,8 @@ public class ForgetPassword extends HttpServlet {
         String user = (String) req.getParameter(RequestUtils.EMAIL);
         
         String code = Support.randomStringSHA1(32);
-        String link = "http://localhost:8080/projectProgWeb2/changePassword.jsp?code="+code;
+        String link = "http://localhost:8080/projectProgWeb2/changePass?code="+code;
+        String newPass = Support.randomStringSHA1(32);
                 
         Security.addProvider(new com.sun.net.ssl.internal.ssl.Provider());
 
@@ -55,7 +56,7 @@ public class ForgetPassword extends HttpServlet {
         props.put("mail.smtp.auth", "true");
         props.put("mail.debug", "true");
         final String username = "lucazamboni92@gmail.com";
-        final String password = "****";
+        final String password = "TUA PASSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSWOrD";
         Session session;
         session = Session.getInstance(props, new Authenticator() {
             @Override
@@ -79,11 +80,11 @@ public class ForgetPassword extends HttpServlet {
                 msg.setRecipients(Message.RecipientType.TO,
                         InternetAddress.parse(mail , false));
                 msg.setSubject("Cambio password");
-                msg.setText("Hai 90 secondi per cambiare password al link " + link);
+                msg.setText("Se clikki sul link entro 90 secondi la tua nuova password sarà "+ newPass +" \n" + link);
                 msg.setSentDate(new Date());
                 Transport.send(msg);
                 
-                dbm.setNewForgetPass(id, code,"" + (new Date().getTime() + 90));
+                dbm.setNewForgetPass(id, code,newPass,"" + (new Date().getTime() + 90));
                 
             }
         } catch (MessagingException | SQLException ex) {
