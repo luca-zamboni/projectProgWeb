@@ -68,10 +68,7 @@ public class Login extends HttpServlet {
             Message msg = new Message(Message.MessageType.ERROR,0);
             request.setAttribute(RequestUtils.MESSAGE, msg);
         }
-        else{
-            request.setAttribute(RequestUtils.MESSAGE, new Message());
-        }
-        response.sendRedirect(page);
+        Support.forward(getServletContext(), request, response, page);
     }
     
     public String[] getCredentials(HttpServletRequest request){

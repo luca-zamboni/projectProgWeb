@@ -19,7 +19,7 @@
     </head>
     <body>
         <% if (request.getSession().getAttribute(SessionUtils.USER) == null) { %>
-         <p><%= Support.getMessageFromSession(request.getSession()) %></p>
+         <jsp:include page="messagedisplayer.jsp" />
         <form action="register" method="POST" id="regform">
             <% out.println("<input placeholder=\"email\" type='email' name=" + RequestUtils.EMAIL + " required />"); %>
             <% out.println("<input pattern=\".{6,}\" title=\"Almeno 6 caratteri\" placeholder=\"username (Opzionale)\" type=\"text\" name=" + RequestUtils.USERNAME + " />"); %>

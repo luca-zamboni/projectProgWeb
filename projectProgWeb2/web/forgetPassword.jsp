@@ -14,7 +14,7 @@
     </head>
     <body>
         <h1>Insert your username or email</h1>
-         <p><%= Support.getMessageFromSession(request.getSession()) %></p>
+         <jsp:include page="messagedisplayer.jsp" />
         <form action="ForgetPassword" method="POST">
             <input type="text" name="mail" />
         </form>

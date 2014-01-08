@@ -14,7 +14,7 @@
     </head>
     <body>
         <h1>Insert your new password</h1>
-         <p><%= Support.getMessageFromSession(request.getSession()) %></p>
+        <jsp:include page="messagedisplayer.jsp" />
         <form action="changePass" method="POST">
             <input type="password" name="passwd" />
             <input type="password" name="confpasswd" />
