@@ -5,6 +5,7 @@
  */
 package filters;
 
+import beans.Message;
 import beans.UserBean;
 import java.io.IOException;
 import javax.servlet.Filter;
@@ -15,6 +16,7 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import utils.RequestUtils;
 import utils.SessionUtils;
 
 /**
@@ -38,6 +40,7 @@ public class AlreadyLogged implements Filter {
         if (bean == null) { // non e' loggato
             chain.doFilter(request, response);
         } else {
+            request.setAttribute(RequestUtils.MESSAGE, new Message(Message.MessageType.ERROR,6));
             ((HttpServletResponse) response).sendRedirect(url + "/home.jsp");
         }
     }

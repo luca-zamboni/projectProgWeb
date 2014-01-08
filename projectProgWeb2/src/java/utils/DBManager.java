@@ -557,8 +557,9 @@ public class DBManager implements Serializable {
     public UserBean login(String user, String passwd) throws SQLException {
         int userid = -1;
         long lastlogin = -1;
+        int type = -1;
 
-        String sql = "select " + USERID + " from users where username=? AND password=?";
+        String sql = "select (" + USERID + ","+ USERTYPE+") from users where username=? AND password=?";
         PreparedStatement stm = con.prepareStatement(sql);
         stm.setString(1, user);
         stm.setString(2, passwd);
@@ -567,6 +568,7 @@ public class DBManager implements Serializable {
         try {
             if (rs.next()) {
                 userid = rs.getInt(1);
+                type= rs.getInt(2);
             }
         } finally {
             rs.close();
@@ -592,7 +594,7 @@ public class DBManager implements Serializable {
         stm.setString(2, "" + new Date().getTime());
         stm.executeUpdate();
 
-        return new UserBean(userid, lastlogin);
+        return new UserBean(userid, lastlogin,user,type);
     }
 
     public boolean insertUser(String user, String passwd, String email) throws SQLException {

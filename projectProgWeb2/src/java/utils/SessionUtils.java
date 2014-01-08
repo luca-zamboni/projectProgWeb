@@ -7,5 +7,4 @@ package utils;
  */
 public class SessionUtils {
     public static final String USER="user";
-    
 }

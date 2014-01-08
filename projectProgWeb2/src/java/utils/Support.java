@@ -88,4 +88,8 @@ public class Support {
         Message msg = (Message) req.getAttribute(RequestUtils.MESSAGE);
         return msg;
     }
+    
+    public static Object getInSession(HttpServletRequest req,String key){
+        return req.getSession().getAttribute(key);
+    }
 }

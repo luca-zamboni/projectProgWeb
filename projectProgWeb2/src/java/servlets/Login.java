@@ -97,8 +97,7 @@ public class Login extends HttpServlet {
         } catch (SQLException ex) {
             Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return new UserBean(-2,0);
-
+        return new UserBean(-2,0,"",0);
     }
     
     public void connectDatabase(HttpServletRequest request){

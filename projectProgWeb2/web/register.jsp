@@ -18,17 +18,13 @@
         <title>Registrazione</title>
     </head>
     <body>
-        <% if (request.getSession().getAttribute(SessionUtils.USER) == null) { %>
-         <jsp:include page="messagedisplayer.jsp" />
+        <jsp:include page="messagedisplayer.jsp" />
         <form action="register" method="POST" id="regform">
             <% out.println("<input placeholder=\"email\" type='email' name=" + RequestUtils.EMAIL + " required />"); %>
             <% out.println("<input pattern=\".{6,}\" title=\"Almeno 6 caratteri\" placeholder=\"username (Opzionale)\" type=\"text\" name=" + RequestUtils.USERNAME + " />"); %>
-            <% out.println("<input pattern=\".{6,}\" title=\"Almeno 6 caratteri\" placeholder=\"password\" type=\"password\" name=" + RequestUtils.PASSWD + " />"); %>
+            <% out.println("<input pattern=\".{6,}\" title=\"Almeno 6 caratteri\" placeholder=\"password\" type=\"password\" name=" + RequestUtils.PASSWD + " />");%>
             <input type="submit" id="regBtn" value="Registrati"/>
         </div> 
-        <% } else { %>
-            <jsp:forward page="home.jsp"/>
-        <% }%>
-    </body>
-    
+</body>
+
 </html>

@@ -17,8 +17,10 @@
         <title>Home</title>
     </head>
     <body>
-        <h1>Ciao belli</h1>
-        <p><%= Support.getDateFromTime(((UserBean) request.getSession().getAttribute(SessionUtils.USER)).getLastLogin()) %></p>
+        <jsp:include page="messagedisplayer.jsp" />
+        <% UserBean user = (UserBean) Support.getInSession(request, SessionUtils.USER); %>
+        <h1>Ciao belli! sono </h1><a href="profile.jsp"><%= user.getUsername() %></a>
+        <p><%= Support.getDateFromTime(user.getLastLogin()) %></p>
         <p><a href="./logout">Logout</a></p>
     </body>
 </html>

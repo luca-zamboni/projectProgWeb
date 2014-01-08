@@ -10,7 +10,8 @@ package utils;
  * @author jibbo
  */
 public class ErrorMessages {
-
+    
+    //Errors
     private static String GENERAL = "Qualcosa e' andato storto";
     private static String PARAMETERS = "Parametri non validi";
     private static String USERNAME = "Username non valido";
@@ -18,6 +19,7 @@ public class ErrorMessages {
     private static String EMAIL = "E-Mail non valida";
     private static String PASSNONCOBACIANO = "Le due password non combaciano";
     private static String USERINESISTENTE = "Username o email inseistenti";
+    private static String LOGGED = "Sei già autenticato";
 
     public static String getErrorMessage(int code) {
         switch (code) {
@@ -33,6 +35,8 @@ public class ErrorMessages {
                 return PASSNONCOBACIANO;
             case 5:
                 return USERINESISTENTE;
+            case 6:
+                return LOGGED;
             default:
                 return GENERAL;
         }
