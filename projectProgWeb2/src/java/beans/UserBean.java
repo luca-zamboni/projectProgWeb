@@ -67,7 +67,7 @@ public class UserBean {
 
     @Override
     public String toString() {
-        return "UserBean{" + "userID=" + userID + ", lastLogin=" + lastLogin + ", username=" + username + ", avatar=" + avatar==null?"":avatar + ", type=" + type + '}';
+        return "UserBean{" + "userID=" + userID + ", lastLogin=" + lastLogin + ", username=" + username + ", avatar=" + ((avatar==null)?"":avatar) + ", type=" + type + '}';
     }
     
     

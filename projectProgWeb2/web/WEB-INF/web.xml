@@ -28,6 +28,10 @@
         <filter-name>LoginFilter</filter-name>
         <url-pattern>/home.jsp</url-pattern>
     </filter-mapping>
+    <filter-mapping>
+        <filter-name>LoginFilter</filter-name>
+        <url-pattern>/profile.jsp</url-pattern>
+    </filter-mapping>
     <servlet>
         <servlet-name>login</servlet-name>
         <servlet-class>servlets.Login</servlet-class>
