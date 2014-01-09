@@ -55,6 +55,14 @@
     <servlet>
         <servlet-name>ModProfile</servlet-name>
         <servlet-class>servlets.ModProfile</servlet-class>
+        <init-param>
+            <param-name>
+                uploadDir
+            </param-name>
+            <param-value>
+                /tmp
+            </param-value>
+        </init-param>
     </servlet>
     <servlet-mapping>
         <servlet-name>login</servlet-name>

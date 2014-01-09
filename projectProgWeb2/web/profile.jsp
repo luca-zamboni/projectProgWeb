@@ -21,10 +21,12 @@
         <jsp:include page="includes/messagedisplayer.jsp" />
         <% UserBean user = (UserBean) Support.getInSession(request, SessionUtils.USER); %>
         <p><%= user.toString() %></p>
-        <form action="/modprofile" method="POST">
-            <% out.println("<input name=\""+RequestUtils.PARAM+"\" type=\"hidden\" value=\"" + RequestUtils.AVATARMOD+"\"/>"); %>
-            <% out.println("<input type=\"file\" name=" + RequestUtils.AVATAR + " />");%>
-            <input type="submit" value="change..." />
+        <form action="modprofile" enctype="multipart/form-data" method="POST">
+            <% out.println("<input name=\""+RequestUtils.PARAM+"\""
+                    + " type=\"hidden\" value=\"" + RequestUtils.AVATARMOD+"\"/>"); %>
+            <% out.println("<input required type=\"file\" name=" + RequestUtils.AVATAR + " accept=\"image/*\" />");%>
+            <input type="submit" value="change..." disabled />
         </form> 
     </body>
+    <script type="text/javascript" src="js/avatar.js" ></script>
 </html>

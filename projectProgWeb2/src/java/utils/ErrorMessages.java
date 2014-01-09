@@ -20,6 +20,7 @@ public class ErrorMessages {
     private static String PASSNONCOBACIANO = "Le due password non combaciano";
     private static String USERINESISTENTE = "Username o email inseistenti";
     private static String LOGGED = "Sei già autenticato";
+    private static String IMAGENOTVALID = "I formati accettati sono png, bitmap o jpeg";
 
     public static String getErrorMessage(int code) {
         switch (code) {
@@ -37,6 +38,8 @@ public class ErrorMessages {
                 return USERINESISTENTE;
             case 6:
                 return LOGGED;
+            case 7:
+                return IMAGENOTVALID;
             default:
                 return GENERAL;
         }
