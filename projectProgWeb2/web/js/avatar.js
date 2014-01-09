@@ -9,13 +9,13 @@ $(document).ready(function(){
         var file = $(this).get(0).files[0];
         if(typeof file != 'undefined' && file.size>0)
             if(file.size<MAX_SIZE)
-                $("input[type='submit']").prop("disabled",false);
+                $("#avatarBtn").prop("disabled",false);
             else{
-                $("input[type='submit']").prop("disabled",true);
+                $("#avatarBtn").prop("disabled",true);
                 $("#messages").removeClass("hidden");
                 $("#messages").html("Immagine troppo grande, max 1MB");
             }
         else
-            $("input[type='submit']").prop("disabled",true);
+            $("#avatarBtn").prop("disabled",true);
     });
 });

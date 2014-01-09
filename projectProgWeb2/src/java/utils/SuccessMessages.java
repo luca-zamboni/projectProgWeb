@@ -11,12 +11,15 @@ package utils;
  * @author jibbo
  */
 public class SuccessMessages {
-     private static String REGISTRATION = "Ottimo, adesso puoi effettuare il Log-in!";
+    private static String REGISTRATION = "Ottimo, adesso puoi effettuare il Log-in!";
+    private static String PASSWORDCHANGE = "Password aggiornata con success!";
 
     public static String getSuccessMessage(int code) {
         switch (code) {
             case 0:
                 return REGISTRATION;
+            case 1:
+                return PASSWORDCHANGE;
             default:
                 return "";
         }

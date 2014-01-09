@@ -37,6 +37,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import utils.DBManager;
+import utils.RequestUtils;
 import utils.SessionUtils;
 import utils.Support;
 
@@ -47,7 +48,6 @@ import utils.Support;
 public class ModProfile extends HttpServlet {
 
     private static String DEFAULT_EXT = "png";
-    
 
     private String dirName;
 
@@ -71,6 +71,20 @@ public class ModProfile extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        String param = request.getParameter(RequestUtils.PARAM);
+        if (param.equals(RequestUtils.PASSWORDMOD)) {
+            try {
+                managePassword(request, request.getParameter(RequestUtils.PASSWD));
+                Support.forward(getServletContext(), request, response, "/profile.jsp", new Message(Message.MessageType.SUCCESS,1));
+            } catch (SQLException ex) {
+                Logger.getLogger(ModProfile.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        } else {
+            manageAvatar(request, response);
+        }
+    }
+
+    private void manageAvatar(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         File f = getUploadedFile(request);
         if (f != null) {
             if (isImage(f)) {
@@ -121,7 +135,7 @@ public class ModProfile extends HttpServlet {
             dbm.setAvatar(user, DEFAULT_EXT);
 
             String path = request.getServletContext().getRealPath("/");
-            File outputFile = new File(path + "/img/" + user +"."+ DEFAULT_EXT);
+            File outputFile = new File(path + "/img/" + user + "." + DEFAULT_EXT);
             if (!outputFile.exists()) {
                 outputFile.createNewFile();
             }
@@ -129,7 +143,7 @@ public class ModProfile extends HttpServlet {
             InputStream finput = new BufferedInputStream(new FileInputStream(f));
             OutputStream foutput = new BufferedOutputStream(
                     new FileOutputStream(outputFile));
-            
+
             //Resizing
             Image img = ImageIO.read(finput);
             int x = img.getWidth(null);
@@ -159,5 +173,11 @@ public class ModProfile extends HttpServlet {
             Logger.getLogger(ModProfile.class
                     .getName()).log(Level.SEVERE, null, ex);
         }
+    }
+
+    private void managePassword(HttpServletRequest request, String pass) throws SQLException {
+        DBManager dbm = new DBManager(request);
+        UserBean bean = (UserBean) Support.getInSession(request, SessionUtils.USER);
+        dbm.setPassword(bean.getUserID(), pass);
     }
 }

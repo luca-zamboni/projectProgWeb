@@ -17,6 +17,7 @@ public class RequestUtils {
     public static final String USERNAME = "username";
     public static final String PASSWD = "passwd";
     public static final String CONFERMAPASSWD = "confpasswd";
+    public static final String PASSWORDMOD = "modpassword";
     public static final String EMAIL = "mail";
     public static final String CODE = "code";
     
@@ -26,5 +27,5 @@ public class RequestUtils {
     
     public static final String AVATAR = "avatar";
     public static final String AVATARMOD = "modavatar";
-    
+
 }

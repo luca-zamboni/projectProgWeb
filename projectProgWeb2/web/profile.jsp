@@ -19,15 +19,27 @@
     </head>
     <body>
         <jsp:include page="includes/messagedisplayer.jsp" />
-        <% UserBean user = (UserBean) Support.getInSession(request, SessionUtils.USER); %>
-        <p><%= user.toString() %></p>
+        <% UserBean user = (UserBean) Support.getInSession(request, SessionUtils.USER);%>
+        <p><%= user.toString()%></p>
         <p class="btn-danger hidden" id="messages"></p>
         <form action="modprofile" enctype="multipart/form-data" method="POST">
-            <% out.println("<input name=\""+RequestUtils.PARAM+"\""
-                    + " type=\"hidden\" value=\"" + RequestUtils.AVATARMOD+"\"/>"); %>
-            <% out.println("<input required type=\"file\" name=" + RequestUtils.AVATAR + " accept=\"image/*\" />");%>
-            <input type="submit" value="change..." disabled />
-        </form> 
+            <fieldset>
+                <legend>Nuovo avatar</legend>
+                <% out.print("<input name=\"" + RequestUtils.PARAM + "\""
+                        + " type=\"hidden\" value=\"" + RequestUtils.AVATARMOD + "\"/>"); %>
+                <% out.print("<input required type=\"file\" name=" + RequestUtils.AVATAR + " accept=\"image/*\" />");%>
+                <input id="avatarBtn" type="submit" value="Vai!" disabled />
+            </fieldset>
+        </form>
+        <form action="modprofile"  method="POST">
+            <fieldset>
+                <legend>Cambia Password</legend>
+                <% out.print("<input name=\"" + RequestUtils.PARAM + "\""
+                        + " type=\"hidden\" value=\"" + RequestUtils.PASSWORDMOD + "\"/>"); %>
+                <% out.print("<input required type=\"password\" pattern=\".{6,}\" title=\"Almeno 6 caratteri\" name=" + RequestUtils.PASSWD + " />");%>
+                <input type="submit" value="Esegui!" />
+            </fieldset>
+        </form>     
     </body>
     <script type="text/javascript" src="js/avatar.js" ></script>
 </html>

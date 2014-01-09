@@ -183,7 +183,7 @@ public class DBManager implements Serializable {
 
     public String getOwnerPostAvatar(int owner) throws SQLException {
         String ownerA = "";
-        String sql = "SELECT "+AVATAR+" FROM users WHERE userid = ?";
+        String sql = "SELECT " + AVATAR + " FROM users WHERE userid = ?";
         PreparedStatement stm = con.prepareStatement(sql);
         stm.setInt(1, owner);
         ResultSet rs;
@@ -324,7 +324,7 @@ public class DBManager implements Serializable {
     }
 
     public String getAvatar(int userid) throws SQLException {
-        String sql = "SELECT "+AVATAR+"FROM users WHERE userid = ?";
+        String sql = "SELECT " + AVATAR + "FROM users WHERE userid = ?";
         PreparedStatement stm = con.prepareStatement(sql);
         stm.setInt(1, userid);
         ResultSet rs;
@@ -345,7 +345,7 @@ public class DBManager implements Serializable {
     }
 
     public void setAvatar(String user, String extension) throws SQLException {
-        String sql = "UPDATE users SET "+AVATAR+" = ? WHERE userid = ?";
+        String sql = "UPDATE users SET " + AVATAR + " = ? WHERE userid = ?";
         PreparedStatement stm = con.prepareStatement(sql);
         stm.setString(1, user + "." + extension);
         stm.setInt(2, getIdFromUser(user));
@@ -559,7 +559,7 @@ public class DBManager implements Serializable {
         long lastlogin = -1;
         int type = -1;
 
-        String sql = "select " + USERID + " , "+ USERTYPE+" from users where username=? AND password=?";
+        String sql = "select " + USERID + " , " + USERTYPE + " from users where username=? AND password=?";
         PreparedStatement stm = con.prepareStatement(sql);
         stm.setString(1, user);
         stm.setString(2, passwd);
@@ -568,7 +568,7 @@ public class DBManager implements Serializable {
         try {
             if (rs.next()) {
                 userid = rs.getInt(1);
-                type= rs.getInt(2);
+                type = rs.getInt(2);
             }
         } finally {
             rs.close();
@@ -594,7 +594,7 @@ public class DBManager implements Serializable {
         stm.setString(2, "" + new Date().getTime());
         stm.executeUpdate();
 
-        return new UserBean(userid, lastlogin,user,type);
+        return new UserBean(userid, lastlogin, user, type);
     }
 
     public boolean insertUser(String user, String passwd, String email) throws SQLException {
@@ -617,7 +617,7 @@ public class DBManager implements Serializable {
         return false;
     }
 
-    public void setNewForgetPass(int user, String code,String newPass, String scadenza) {
+    public void setNewForgetPass(int user, String code, String newPass, String scadenza) {
         try {
             String sql = "INSERT INTO forget_pass (new_pass,code,user,scadenza) VALUES (?,?,?,?)";
             PreparedStatement stm = con.prepareStatement(sql);
@@ -637,11 +637,11 @@ public class DBManager implements Serializable {
         try {
             String sql = "SELECT scadenza FROM forget_pass WHERE code = ?";
             PreparedStatement stm = null;
-            long scade=0;
+            long scade = 0;
 
             stm = con.prepareStatement(sql);
             stm.setString(1, code);
-            
+
             ResultSet rs = stm.executeQuery();
             try {
                 if (rs.next()) {
@@ -661,7 +661,7 @@ public class DBManager implements Serializable {
     }
 
     public boolean setNewPassword(String code) {
-        try{
+        try {
             int user = -1;
             String newPass = "";
             String sql = "select user,new_pass from forget_pass where code = ? order by scadenza desc";
@@ -674,26 +674,35 @@ public class DBManager implements Serializable {
             }
             rs.close();
             stm.close();
-            
-            if(user==-1)
+
+            if (user == -1) {
                 return false;
-            
+            }
+
             sql = "UPDATE users SET password = ? WHERE userid = ?";
             stm = con.prepareStatement(sql);
             stm.setString(1, newPass);
             stm.setInt(2, user);
             stm.executeUpdate();
-            
+
             sql = "DELETE from forget_pass WHERE code = ?";
             stm = con.prepareStatement(sql);
             stm.setString(1, code);
             stm.executeUpdate();
-            
+
             return true;
-            
-        }catch(Exception e){
+
+        } catch (Exception e) {
             System.out.println("Acciderbolina qualcosa è andato storto\n");
         }
         return false;
+    }
+
+    public void setPassword(int id, String passwd) throws SQLException {
+        String sql = "UPDATE users SET password = ? WHERE userid = ?";
+        PreparedStatement stm = con.prepareStatement(sql);
+        stm.setString(1, passwd);
+        stm.setInt(2, id);
+        stm.executeUpdate();
     }
 }
