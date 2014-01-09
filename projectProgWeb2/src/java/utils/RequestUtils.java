@@ -24,8 +24,9 @@ public class RequestUtils {
     public static final String GROUP_ID = "gid";
     public static final String GROUP_TITLE = "gtitle";
     public static final String GROUP_PRIVATE = "gflag";
+    public static final String GROUP_USERS = "checkuser";
+    
     
     public static final String AVATAR = "avatar";
     public static final String AVATARMOD = "modavatar";
-
 }

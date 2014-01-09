@@ -235,6 +235,21 @@ public class DBManager implements Serializable {
         stm.close();
     }
 
+//    TODO finish this
+//    public boolean insertGroup(String groupName, boolean prvt, int[] userIds, 
+//            int ownerId) throws SQLException {
+//
+//        String sql = "INSERT INTO " + GROUP_TABLE + " (groupname, ownerid) "
+//                + "VALUES (?,?)";
+//        PreparedStatement stm = con.prepareStatement(sql);
+//        stm.setString(1, groupName);
+//        stm.setInt(2, ownerId);
+//        int changed = stm.executeUpdate();
+//        stm.close;
+//        
+//        String sql2 = "INSERT INTO user_groups(userid,groupid,status) VALUES (?,?,2)";
+//    }
+
     public boolean isKicked(int userid, int groupid) throws SQLException {
         String sql = "select count(*) from user_groups where userid=? AND groupid=? AND status = 1";
         PreparedStatement stm = con.prepareStatement(sql);
