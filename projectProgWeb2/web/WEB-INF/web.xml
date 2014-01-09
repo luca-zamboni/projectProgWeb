@@ -37,6 +37,10 @@
         <servlet-class>servlets.Login</servlet-class>
     </servlet>
     <servlet>
+        <servlet-name>GroupCreate</servlet-name>
+        <servlet-class>servlets.GroupCreate</servlet-class>
+    </servlet>
+    <servlet>
         <servlet-name>Register</servlet-name>
         <servlet-class>servlets.Register</servlet-class>
     </servlet>
@@ -71,6 +75,10 @@
     <servlet-mapping>
         <servlet-name>Register</servlet-name>
         <url-pattern>/register</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>GroupCreate</servlet-name>
+        <url-pattern>/groupCreate</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>ChangePass</servlet-name>
