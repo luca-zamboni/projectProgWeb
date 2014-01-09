@@ -235,6 +235,21 @@ public class DBManager implements Serializable {
         stm.close();
     }
 
+//    TODO finish this
+//    public boolean insertGroup(String groupName, boolean prvt, int[] userIds, 
+//            int ownerId) throws SQLException {
+//
+//        String sql = "INSERT INTO " + GROUP_TABLE + " (groupname, ownerid) "
+//                + "VALUES (?,?)";
+//        PreparedStatement stm = con.prepareStatement(sql);
+//        stm.setString(1, groupName);
+//        stm.setInt(2, ownerId);
+//        int changed = stm.executeUpdate();
+//        stm.close;
+//        
+//        String sql2 = "INSERT INTO user_groups(userid,groupid,status) VALUES (?,?,2)";
+//    }
+
     public boolean isKicked(int userid, int groupid) throws SQLException {
         String sql = "select count(*) from user_groups where userid=? AND groupid=? AND status = 1";
         PreparedStatement stm = con.prepareStatement(sql);
@@ -559,7 +574,7 @@ public class DBManager implements Serializable {
         long lastlogin = -1;
         int type = -1;
 
-        String sql = "select " + USERID + " , "+ USERTYPE+" from users where username=? AND password=?";
+        String sql = "select " + USERID + " , " + USERTYPE + " from users where username=? AND password=?";
         PreparedStatement stm = con.prepareStatement(sql);
         stm.setString(1, user);
         stm.setString(2, passwd);
@@ -568,7 +583,7 @@ public class DBManager implements Serializable {
         try {
             if (rs.next()) {
                 userid = rs.getInt(1);
-                type= rs.getInt(2);
+                type = rs.getInt(2);
             }
         } finally {
             rs.close();
@@ -594,7 +609,7 @@ public class DBManager implements Serializable {
         stm.setString(2, "" + new Date().getTime());
         stm.executeUpdate();
 
-        return new UserBean(userid, lastlogin,user,type);
+        return new UserBean(userid, lastlogin, user, type);
     }
 
     public boolean insertUser(String user, String passwd, String email) throws SQLException {
@@ -617,7 +632,7 @@ public class DBManager implements Serializable {
         return false;
     }
 
-    public void setNewForgetPass(int user, String code,String newPass, String scadenza) {
+    public void setNewForgetPass(int user, String code, String newPass, String scadenza) {
         try {
             String sql = "INSERT INTO forget_pass (new_pass,code,user,scadenza) VALUES (?,?,?,?)";
             PreparedStatement stm = con.prepareStatement(sql);
@@ -637,11 +652,11 @@ public class DBManager implements Serializable {
         try {
             String sql = "SELECT scadenza FROM forget_pass WHERE code = ?";
             PreparedStatement stm = null;
-            long scade=0;
+            long scade = 0;
 
             stm = con.prepareStatement(sql);
             stm.setString(1, code);
-            
+
             ResultSet rs = stm.executeQuery();
             try {
                 if (rs.next()) {
@@ -661,7 +676,7 @@ public class DBManager implements Serializable {
     }
 
     public boolean setNewPassword(String code) {
-        try{
+        try {
             int user = -1;
             String newPass = "";
             String sql = "select user,new_pass from forget_pass where code = ? order by scadenza desc";
@@ -674,24 +689,25 @@ public class DBManager implements Serializable {
             }
             rs.close();
             stm.close();
-            
-            if(user==-1)
+
+            if (user == -1) {
                 return false;
-            
+            }
+
             sql = "UPDATE users SET password = ? WHERE userid = ?";
             stm = con.prepareStatement(sql);
             stm.setString(1, newPass);
             stm.setInt(2, user);
             stm.executeUpdate();
-            
+
             sql = "DELETE from forget_pass WHERE code = ?";
             stm = con.prepareStatement(sql);
             stm.setString(1, code);
             stm.executeUpdate();
-            
+
             return true;
-            
-        }catch(Exception e){
+
+        } catch (Exception e) {
             System.out.println("Acciderbolina qualcosa è andato storto\n");
         }
         return false;
