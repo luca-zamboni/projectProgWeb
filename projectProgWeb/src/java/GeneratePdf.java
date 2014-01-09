@@ -11,26 +11,45 @@ import db.DBManager;
 import html.HtmlHelper;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /**
- * Classe statica usata per generare il pdf su server, viene chiamata 
- * al caricamento della pagina di gestione del gruppo accessibile all'
- * amministratore del gruppo
+ * Servlet usata per generare il report in pdf, viene chiamata al quando il 
+ * bottone per scaricare il report viene premuto dall'amministratore del gruppo
+ *
  * @author forna
  */
-public class GeneratePdf {
+public class GeneratePdf extends HttpServlet {
 
-    public static void generatePdf(String path,ArrayList<ArrayList<Object>> c, int groupId, DBManager dbm) {
+    private DBManager dbm;
 
-        
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        try {
+            int gp = Integer.parseInt(req.getParameter("g"));
+            connectToDatabase(req);
+            String path = req.getServletContext().getRealPath("/");
+            ArrayList<ArrayList<Object>> alalo = dbm.getDataForReport(gp);
+            generatePdf(path, alalo, gp);
+            resp.sendRedirect("pdf/"+gp+"/report.pdf");
+        } catch (Exception e) {
+        }
+    }
+
+    private void generatePdf(String path, ArrayList<ArrayList<Object>> c, int groupId) {
+
         File b = new File(path + "/pdf/" + groupId + "/");
         b.mkdirs();
-        
-        String outPath = path+"/pdf/" + groupId + "/report.pdf";
+
+        String outPath = path + "/pdf/" + groupId + "/report.pdf";
         Document doc = new Document();
         PdfWriter pdf;
 
@@ -42,14 +61,14 @@ public class GeneratePdf {
 
         if (pdf != null) {
             doc.open();
-            doc.addTitle("report_group_"+groupId);
+            doc.addTitle("report_group_" + groupId);
             String tit = "Group Report of group ";
             try {
-                tit += "\""+dbm.getGroupTitleById(groupId)+"\"";
+                tit += "\"" + dbm.getGroupTitleById(groupId) + "\"";
             } catch (SQLException ex) {
                 tit = "";
             }
-            Font font = new Font(Font.FontFamily.HELVETICA  , 25, Font.BOLDITALIC);
+            Font font = new Font(Font.FontFamily.HELVETICA, 25, Font.BOLDITALIC);
             Paragraph title = new Paragraph(tit, font);
             title.setSpacingAfter(5f);
             try {
@@ -59,7 +78,7 @@ public class GeneratePdf {
             }
 
             for (ArrayList<Object> data : c) {
-                
+
                 int postNum = (int) data.get(0);
                 String username = (String) data.get(1);
                 String avatarPath = (String) data.get(2);
@@ -70,26 +89,26 @@ public class GeneratePdf {
                 try {
                     PdfPTable tbl = new PdfPTable(2);
                     Paragraph p = new Paragraph();
-                    
-                    float[] widths = {1f,3f};
+
+                    float[] widths = {1f, 3f};
                     tbl.setWidths(widths);
-                    
-                    avatar = Image.getInstance(path+"/img/" + avatarPath); 
-                    System.err.println(""+avatar.getWidth()+" "+avatar.getHeight());
+
+                    avatar = Image.getInstance(path + "/img/" + avatarPath);
+                    System.err.println("" + avatar.getWidth() + " " + avatar.getHeight());
                     PdfPCell pc1 = new PdfPCell(avatar);
                     p.add(new Paragraph("Username: " + username));
                     p.add(new Paragraph("Last post: " + HtmlHelper.getDateFromTimestampLong(date)));
                     p.add(new Paragraph("Post in group: " + postNum + "\n\n"));
                     PdfPCell pc2 = new PdfPCell();
                     pc2.addElement(p);
-                    
+
                     pc1.setBorder(PdfPCell.NO_BORDER);
                     pc2.setBorder(PdfPCell.NO_BORDER);
-                    
+
                     tbl.addCell(pc1);
                     tbl.addCell(pc2);
                     tbl.setSpacingBefore(10f);
-                    
+
                     doc.add(tbl);
                 } catch (Exception ex) {
                     System.err.println("ano3");
@@ -99,6 +118,14 @@ public class GeneratePdf {
             doc.close();
         }
 
+    }
+
+    private void connectToDatabase(HttpServletRequest request) {
+        try {
+            dbm = new DBManager(request);
+        } catch (SQLException ex) {
+            Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
 }

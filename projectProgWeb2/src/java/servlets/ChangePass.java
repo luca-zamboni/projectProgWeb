@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import utils.DBManager;
 import utils.RequestUtils;
+import utils.Support;
 
 /**
  *
@@ -26,7 +27,7 @@ public class ChangePass extends HttpServlet {
     DBManager dbm;
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         
         connectDatabase(req);
         
@@ -38,13 +39,14 @@ public class ChangePass extends HttpServlet {
         
         if(scadenza > now){
             req.getSession().setAttribute(RequestUtils.MESSAGE, new beans.Message(beans.Message.MessageType.ERROR, 4));
-            resp.sendRedirect("./changepassword.jsp");
+            Support.forward(getServletContext(), req, resp, "/changepassword.jsp");
         }else{
-            if(!dbm.setNewPassword(code,pass)){
+            if(!dbm.setNewPassword(code)){
                 req.getSession().setAttribute(RequestUtils.MESSAGE, new beans.Message(beans.Message.MessageType.ERROR, 0));
-                resp.sendRedirect("./changepassword.jsp");
+                Support.forward(getServletContext(), req, resp, "/changepassword.jsp");
+                Support.forward(getServletContext(), req, resp, "/index.jsp");
             }
-            resp.sendRedirect("./");
+            Support.forward(getServletContext(), req, resp, "/index.jsp");
         }
         
     }

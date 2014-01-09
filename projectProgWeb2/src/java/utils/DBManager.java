@@ -617,15 +617,14 @@ public class DBManager implements Serializable {
         return false;
     }
 
-    public void setNewForgetPass(int user, String code, String scadenza) {
+    public void setNewForgetPass(int user, String code,String newPass, String scadenza) {
         try {
-            String sql = "INSERT INTO forget_pass (code,user,scadenza) VALUES (?,?,?)";
-            PreparedStatement stm = null;
-
-            stm = con.prepareStatement(sql);
-            stm.setString(1, code);
-            stm.setInt(2, user);
-            stm.setString(3, scadenza);
+            String sql = "INSERT INTO forget_pass (new_pass,code,user,scadenza) VALUES (?,?,?,?)";
+            PreparedStatement stm = con.prepareStatement(sql);
+            stm.setString(1, newPass);
+            stm.setString(2, code);
+            stm.setInt(3, user);
+            stm.setString(4, scadenza);
             stm.executeUpdate();
             stm.close();
 
@@ -638,6 +637,7 @@ public class DBManager implements Serializable {
         try {
             String sql = "SELECT scadenza FROM forget_pass WHERE code = ?";
             PreparedStatement stm = null;
+            long scade=0;
 
             stm = con.prepareStatement(sql);
             stm.setString(1, code);
@@ -646,13 +646,13 @@ public class DBManager implements Serializable {
             try {
                 if (rs.next()) {
                     String scad = rs.getString(1);
-                    return Long.parseLong(scad);
+                    scade = Long.parseLong(scad);
                 }
             } finally {
                 rs.close();
                 stm.close();
             }
-            stm.close();
+            return scade;
 
         } catch (SQLException ex) {
             Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
@@ -660,15 +660,17 @@ public class DBManager implements Serializable {
         return 0;
     }
 
-    public boolean setNewPassword(String code, String pass) {
+    public boolean setNewPassword(String code) {
         try{
             int user = -1;
-            String sql = "select user from forget_pass where code = ?";
+            String newPass = "";
+            String sql = "select user,new_pass from forget_pass where code = ? order by scadenza desc";
             PreparedStatement stm = con.prepareStatement(sql);
             stm.setString(1, code);
             ResultSet rs = stm.executeQuery();
             if (rs.next()) {
                 user = rs.getInt(1);
+                newPass = rs.getString(2);
             }
             rs.close();
             stm.close();
@@ -678,9 +680,15 @@ public class DBManager implements Serializable {
             
             sql = "UPDATE users SET password = ? WHERE userid = ?";
             stm = con.prepareStatement(sql);
-            stm.setString(1, pass);
+            stm.setString(1, newPass);
             stm.setInt(2, user);
             stm.executeUpdate();
+            
+            sql = "DELETE from forget_pass WHERE code = ?";
+            stm = con.prepareStatement(sql);
+            stm.setString(1, code);
+            stm.executeUpdate();
+            
             return true;
             
         }catch(Exception e){

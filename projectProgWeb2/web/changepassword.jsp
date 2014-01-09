@@ -13,13 +13,8 @@
         <title>Cambio password</title>
     </head>
     <body>
-        <h1>Insert your new password</h1>
+        <h2>Bravo ora puoi accedere e cambiare la password o se preferisci puoi tenere questa</h2>
+        <a href="./">HOME</a>
         <jsp:include page="messagedisplayer.jsp" />
-        <form action="changePass" method="POST">
-            <input type="password" name="passwd" />
-            <input type="password" name="confpasswd" />
-            <input type="hidden" value="<%= request.getParameter("code")%>" name="code" />
-            <input type="submit">
-        </form>
     </body>
 </html>
