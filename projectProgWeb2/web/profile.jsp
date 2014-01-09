@@ -21,6 +21,7 @@
         <jsp:include page="includes/messagedisplayer.jsp" />
         <% UserBean user = (UserBean) Support.getInSession(request, SessionUtils.USER); %>
         <p><%= user.toString() %></p>
+        <p class="btn-danger hidden" id="messages"></p>
         <form action="modprofile" enctype="multipart/form-data" method="POST">
             <% out.println("<input name=\""+RequestUtils.PARAM+"\""
                     + " type=\"hidden\" value=\"" + RequestUtils.AVATARMOD+"\"/>"); %>
