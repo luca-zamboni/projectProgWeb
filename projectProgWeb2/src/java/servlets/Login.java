@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package servlets;
 
 import beans.Message;
@@ -27,6 +26,7 @@ import utils.Support;
  * @author jibbo
  */
 public class Login extends HttpServlet {
+
     private DBManager dbm;
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -42,8 +42,7 @@ public class Login extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         connectDatabase(request);
-        request.setAttribute(RequestUtils.MESSAGE, new Message(Message.MessageType.ERROR,0));
-        Support.forward(getServletContext(), request, response, "/index.jsp");
+        Support.forward(getServletContext(), request, response, "/index.jsp", new Message(Message.MessageType.ERROR, 0));
     }
 
     /**
@@ -60,19 +59,20 @@ public class Login extends HttpServlet {
         connectDatabase(request);
         String[] credentials = getCredentials(request);
         String page = "/index.jsp";
-        UserBean login=loginValid(request,credentials[0],credentials[1]);
-        if(login.getUserID()>=0){
+        UserBean login = loginValid(request, credentials[0], credentials[1]);
+        Message msg = null;
+        if (login.getUserID() >= 0) {
             Support.addToSession(request, SessionUtils.USER, login);
-            page="/home.jsp";
-        }else if( login.getUserID() ==-1){
-            Message msg = new Message(Message.MessageType.ERROR,0);
+            page = "/home.jsp";
+        } else {
+            msg = new Message(Message.MessageType.ERROR, 0);
             request.setAttribute(RequestUtils.MESSAGE, msg);
         }
-        Support.forward(getServletContext(), request, response, page);
+        Support.forward(getServletContext(), request, response, page,msg);
     }
-    
-    public String[] getCredentials(HttpServletRequest request){
-        String[] out = new String[]{null,null};
+
+    public String[] getCredentials(HttpServletRequest request) {
+        String[] out = new String[]{null, null};
         Enumeration<String> paramNames = request.getParameterNames();
         while (paramNames.hasMoreElements()) {
             String paramName = paramNames.nextElement();
@@ -86,21 +86,22 @@ public class Login extends HttpServlet {
         }
         return out;
     }
-    
+
     /**
-     * 
-     * @return null se errore server, -1 se non lo trova id dell'utente altrimenti
+     *
+     * @return null se errore server, -1 se non lo trova id dell'utente
+     * altrimenti
      */
-    private UserBean loginValid(HttpServletRequest request,String username,String password) {
+    private UserBean loginValid(HttpServletRequest request, String username, String password) {
         try {
             return dbm.login(username, password);
         } catch (SQLException ex) {
             Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return new UserBean(-2,0,"",0);
+        return new UserBean(-1, 0, "", 0);
     }
-    
-    public void connectDatabase(HttpServletRequest request){
+
+    public void connectDatabase(HttpServletRequest request) {
         try {
             dbm = new DBManager(request);
         } catch (SQLException ex) {

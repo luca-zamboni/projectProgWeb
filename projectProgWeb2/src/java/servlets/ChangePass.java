@@ -4,6 +4,7 @@
  */
 package servlets;
 
+import beans.Message;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
@@ -38,15 +39,13 @@ public class ChangePass extends HttpServlet {
         long now = new Date().getTime();
         
         if(scadenza > now){
-            req.getSession().setAttribute(RequestUtils.MESSAGE, new beans.Message(beans.Message.MessageType.ERROR, 4));
-            Support.forward(getServletContext(), req, resp, "/changepassword.jsp");
+            Support.forward(getServletContext(), req, resp, "/changepassword.jsp", new Message(Message.MessageType.ERROR, 4));
         }else{
             if(!dbm.setNewPassword(code)){
-                req.getSession().setAttribute(RequestUtils.MESSAGE, new beans.Message(beans.Message.MessageType.ERROR, 0));
-                Support.forward(getServletContext(), req, resp, "/changepassword.jsp");
-                Support.forward(getServletContext(), req, resp, "/index.jsp");
+                Support.forward(getServletContext(), req, resp, "/changepassword.jsp", new Message(Message.MessageType.ERROR, 0));
+                Support.forward(getServletContext(), req, resp, "/index.jsp", new Message(Message.MessageType.ERROR, 0));
             }
-            Support.forward(getServletContext(), req, resp, "/index.jsp");
+            Support.forward(getServletContext(), req, resp, "/index.jsp",null);
         }
         
     }

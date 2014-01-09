@@ -38,7 +38,7 @@ public class Register extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        Support.forward(getServletContext(), request, response, "/register.jsp");
+        Support.forward(getServletContext(), request, response, "/register.jsp",null);
     }
 
     /**
@@ -60,12 +60,10 @@ public class Register extends HttpServlet {
         if(sanitized)
              isInserted= insertUser(request,params);
         Message msg = buildMessage(code,isInserted );
-        
-        request.setAttribute(RequestUtils.MESSAGE, msg);
         if (msg.getType() == Message.MessageType.ERROR) {
-            Support.forward(getServletContext(), request, response, "/register.jsp");
+            Support.forward(getServletContext(), request, response, "/register.jsp",msg);
         } else {
-            Support.forward(getServletContext(), request, response, "/index.jsp");
+            Support.forward(getServletContext(), request, response, "/index.jsp",msg);
         }
 
     }

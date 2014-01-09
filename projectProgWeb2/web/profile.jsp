@@ -4,6 +4,7 @@
     Author     : jibbo
 --%>
 
+<%@page import="utils.RequestUtils"%>
 <%@page import="beans.UserBean"%>
 <%@page import="utils.Support"%>
 <%@page import="utils.SessionUtils"%>
@@ -20,5 +21,10 @@
         <jsp:include page="includes/messagedisplayer.jsp" />
         <% UserBean user = (UserBean) Support.getInSession(request, SessionUtils.USER); %>
         <p><%= user.toString() %></p>
+        <form action="/modprofile" method="POST">
+            <% out.println("<input name=\""+RequestUtils.PARAM+"\" type=\"hidden\" value=\"" + RequestUtils.AVATARMOD+"\"/>"); %>
+            <% out.println("<input type=\"file\" name=" + RequestUtils.AVATAR + " />");%>
+            <input type="submit" value="change..." />
+        </form> 
     </body>
 </html>

@@ -31,8 +31,10 @@ public class Support {
         '2', '3', '4', '5', '6', '7', '8', '9',};
 
     public static void forward(ServletContext sc, HttpServletRequest request,
-            HttpServletResponse response, String page) throws ServletException, IOException {
+            HttpServletResponse response, String page, Message msg) throws ServletException, IOException {
         RequestDispatcher rd = sc.getRequestDispatcher(page);
+        if(msg!=null)
+            request.setAttribute(RequestUtils.MESSAGE, msg);
         rd.forward(request, response);
     }
 
