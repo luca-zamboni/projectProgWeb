@@ -18,6 +18,7 @@
         <jsp:include page="includes/messagedisplayer.jsp" />
         <form action="ForgetPassword" method="POST">
             <input type="text" name="mail" />
+            <button type="submit" class="btn-default">Confirm</button>
         </form>
     </body>
 </html>
