@@ -15,10 +15,10 @@
 <html>
     <head>  
         <title>Login</title>
-        <%@ include file="header.jsp" %>
+        <%@ include file="includes/header.jsp" %>
     </head>
     <body>
-        <jsp:include page="messagedisplayer.jsp" />
+        <jsp:include page="includes/messagedisplayer.jsp" />
         <form action="login" method="POST">
             <% out.println("<input placeholder=\"username\" type=\"text\" name=" + RequestUtils.USERNAME + " />"); %>
             <% out.println("<input placeholder=\"password\" type=\"password\" name=" + RequestUtils.PASSWD + " />");%>

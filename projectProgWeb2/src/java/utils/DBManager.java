@@ -559,7 +559,7 @@ public class DBManager implements Serializable {
         long lastlogin = -1;
         int type = -1;
 
-        String sql = "select (" + USERID + ","+ USERTYPE+") from users where username=? AND password=?";
+        String sql = "select " + USERID + " , "+ USERTYPE+" from users where username=? AND password=?";
         PreparedStatement stm = con.prepareStatement(sql);
         stm.setString(1, user);
         stm.setString(2, passwd);

@@ -13,11 +13,11 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-         <%@ include file="header.jsp" %>
+        <%@ include file="includes/header.jsp" %>
         <title>Profile</title>
     </head>
     <body>
-        <jsp:include page="messagedisplayer.jsp" />
+        <jsp:include page="includes/messagedisplayer.jsp" />
         <% UserBean user = (UserBean) Support.getInSession(request, SessionUtils.USER); %>
         <p><%= user.toString() %></p>
     </body>

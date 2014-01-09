@@ -13,11 +13,11 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <%@ include file="header.jsp" %>
+        <%@ include file="includes/header.jsp" %>
         <title>Home</title>
     </head>
     <body>
-        <jsp:include page="messagedisplayer.jsp" />
+        <jsp:include page="includes/messagedisplayer.jsp" />
         <% UserBean user = (UserBean) Support.getInSession(request, SessionUtils.USER); %>
         <h1>Ciao belli! sono </h1><a href="profile.jsp"><%= user.getUsername() %></a>
         <p><%= Support.getDateFromTime(user.getLastLogin()) %></p>

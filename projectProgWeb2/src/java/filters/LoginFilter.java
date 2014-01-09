@@ -12,6 +12,7 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import utils.Support;
 
 /**
  * filtro che si occupa di proteggere il sito da utenti non loggati
@@ -26,7 +27,7 @@ public class LoginFilter implements Filter {
             FilterChain chain)
             throws IOException, ServletException {
 
-        UserBean bean = (UserBean) ((HttpServletRequest) request).getSession().getAttribute(SessionUtils.USER);
+        UserBean bean = (UserBean) Support.getInSession((HttpServletRequest)request, SessionUtils.USER);
 
         HttpServletRequest httpRequest = (HttpServletRequest) request;
         String url = ((HttpServletRequest)request).getRequestURI();
@@ -38,18 +39,19 @@ public class LoginFilter implements Filter {
             }else{
                 chain.doFilter(request, response);
             }
-        } else {
-            String path = request.getServletContext().getContextPath();
-            if(url.equals(path+"/home.jsp")){
-                chain.doFilter(request, response);
-            }else{
-                if (bean == null) {
-                    ((HttpServletResponse) response).sendRedirect("./");
-                }else{
-                    chain.doFilter(request, response);
-                }
-            }
         }
+//        } else {
+//            String path = request.getServletContext().getContextPath();
+//            if(url.equals(path+"/home.jsp")){
+//                chain.doFilter(request, response);
+//            }else{
+//                if (bean == null) {
+//                    ((HttpServletResponse) response).sendRedirect("./");
+//                }else{
+//                    chain.doFilter(request, response);
+//                }
+//            }
+//        }
     }
 
     @Override

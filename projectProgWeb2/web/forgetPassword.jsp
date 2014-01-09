@@ -10,11 +10,12 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <%@ include file="includes/header.jsp" %>
         <title>Forgot password?</title>
     </head>
     <body>
         <h1>Insert your username or email</h1>
-         <jsp:include page="messagedisplayer.jsp" />
+        <jsp:include page="includes/messagedisplayer.jsp" />
         <form action="ForgetPassword" method="POST">
             <input type="text" name="mail" />
         </form>
