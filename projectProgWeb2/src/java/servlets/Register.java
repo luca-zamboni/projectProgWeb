@@ -68,7 +68,7 @@ public class Register extends HttpServlet {
 
     }
 
-    public String[] getParams(HttpServletRequest request) {
+    private String[] getParams(HttpServletRequest request) {
         String[] out = new String[]{null, null, null};
         Enumeration<String> paramNames = request.getParameterNames();
         while (paramNames.hasMoreElements()) {

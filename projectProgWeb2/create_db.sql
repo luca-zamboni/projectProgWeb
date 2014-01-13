@@ -1,16 +1,18 @@
-CREATE TABLE users(
-    userid INTEGER PRIMARY KEY AUTOINCREMENT,
-    username TEXT NOT NULL UNIQUE,
-    password TEXT NOT NULL,
-    avatar TEXT,
-    type INTEGER
+CREATE TABLE users (
+	userid INTEGER PRIMARY KEY ,
+	username TEXT NOT NULL UNIQUE,
+	password TEXT NOT NULL ,
+	avatar TEXT,
+	email TEXT NOT NULL UNIQUE ,
+	type integer DEFAULT (0) 
 );
 
 CREATE TABLE groups(
     groupid INTEGER PRIMARY KEY AUTOINCREMENT,
     ownerid INTEGER NOT NULL,
     groupname TEXT NOT NULL,
-    creationdate TEXT
+    creationdate NUMERIC,
+	"private" BOOL NOT NULL  DEFAULT true
 );
 
 CREATE TABLE user_groups (
@@ -32,7 +34,9 @@ CREATE TABLE post(
 
 CREATE TABLE post_file(
     fileid INTEGER PRIMARY KEY AUTOINCREMENT,
-    postid INTEGER,
-    filepath TEXT,
-    FOREIGN KEY(postid) REFERENCES post(postid)
+	ownerid INTEGER,
+    groupid INTEGER,
+    filename TEXT,
+    FOREIGN KEY(groupid) REFERENCES groups(groupid),
+	FOREIGN KEY(ownerid) REFERENCES users(userid)
 );

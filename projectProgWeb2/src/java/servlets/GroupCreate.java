@@ -13,6 +13,8 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import utils.DBManager;
 import utils.RequestUtils;
 import utils.Support;
 
@@ -53,7 +55,24 @@ public class GroupCreate extends HttpServlet {
         String isPrivate = request.getParameter(RequestUtils.GROUP_PRIVATE);
         String[] users = request.getParameterValues(RequestUtils.GROUP_USERS);
         
-        
+        int groupId = addGroup(request, title, isPrivate, users);
         
     }
+
+    private int addGroup(HttpServletRequest request, String title, String aPrivate, String[] users) {
+        int ret = -1;
+        
+        //TODO need a way to get userId
+//        try {
+//            DBManager dbm = new DBManager(request);
+//            HttpSession session = request.getSession();
+//            session.getAttribute()
+//            dbm.newGroup(title, users, , aPrivate.equals("true"));
+//        } catch (Exception e) {
+//            System.out.println(e.toString());
+//        }
+//        
+//        return ret;
+    }
+    
 }

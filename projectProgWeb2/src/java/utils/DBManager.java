@@ -38,11 +38,14 @@ public class DBManager implements Serializable {
     public static final String EMAIL = "email";
     public static final String AVATAR = "avatar"; //(file)
     public static final String USERTYPE = "type";
+    
     public static final String GROUP_TABLE = "groups";
     public static final String GROUP_ID = "groupid";
     public static final String GROUP_NAME = "groupname";
     public static final String GROUP_OWNER_ID = "ownerid";
-    public static final String GROUP_CREATION_DATE = "groupcreation";
+    public static final String GROUP_CREATION_DATE = "creationdate";
+    public static final String GROUP_PVTFLAG = "private";
+    
     public static final String RELATION_USER_GROUP = "user_groups";
     public static final String RELATION_USER_GROUP_ID = "id";
     // field userid
@@ -130,13 +133,15 @@ public class DBManager implements Serializable {
 
     }
 
-    public int newGroup(String title, String[] users, int owner) throws SQLException {
+    public int newGroup(String title, String[] users, int owner, 
+            boolean isPrivate) throws SQLException {
 
-        String sql = "INSERT into GROUPS(ownerid,groupname,creationdate)"
-                + "VALUES (?,?,strftime('%s', 'now'))";
+        String sql = "INSERT into GROUPS(ownerid,groupname,creationdate,private)"
+                + "VALUES (?,?,strftime('%s', 'now'),?)";
         PreparedStatement stm = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
         stm.setInt(1, owner);
         stm.setString(2, title);
+        stm.setInt(3, isPrivate?1:0); //se e' privato setta a 1 altrimenti 0
         stm.executeUpdate();
         PreparedStatement stmaux = con.prepareStatement("SELECT last_insert_rowid()");
         int groupid = -1;
