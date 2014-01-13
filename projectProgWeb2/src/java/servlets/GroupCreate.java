@@ -72,7 +72,7 @@ public class GroupCreate extends HttpServlet {
 //            System.out.println(e.toString());
 //        }
 //        
-//        return ret;
+        return ret;
     }
     
 }
