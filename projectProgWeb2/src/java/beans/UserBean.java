@@ -50,11 +50,26 @@ public class UserBean {
     public UserType getType() {
         return type;
     }
+    
+    public void setUserId(int uid) {
+        this.userID = uid;
+    }
+    
+    public void setUserName(String username) {
+        this.username = username;
+    }
+    
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
+    }
 
     public void setType(UserType type) {
         this.type = type;
     }
     
+    public void setType(int type) {
+        this.type = convertToType(type);
+    }
     
     private UserType convertToType(int type) {
         switch (type) {

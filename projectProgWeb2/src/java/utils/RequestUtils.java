@@ -21,6 +21,9 @@ public class RequestUtils {
     public static final String EMAIL = "mail";
     public static final String CODE = "code";
     
+    public static final String USERLIST = "userlist";
+    public static final String USERCHECK = "usercheckboxes";
+    
     public static final String GROUP_ID = "gid";
     public static final String GROUP_OWNER = "gidowner";
     public static final String GROUP_TITLE = "gtitle";

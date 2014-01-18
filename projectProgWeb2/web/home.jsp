@@ -21,6 +21,7 @@
         <% UserBean user = (UserBean) Support.getInSession(request, SessionUtils.USER); %>
         <h1>Ciao belli! sono </h1><a href="profile.jsp"><%= user.getUsername() %></a>
         <p><%= Support.getDateFromTime(user.getLastLogin()) %></p>
+        <p><a href="creategroup.jsp">Crea gruppo!</a></p>
         <p><a href="./logout">Logout</a></p>
     </body>
 </html>

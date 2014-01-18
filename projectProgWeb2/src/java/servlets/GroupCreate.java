@@ -3,11 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package servlets;
 
+import beans.Message;
+import beans.UserBean;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -16,15 +18,16 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import utils.DBManager;
 import utils.RequestUtils;
+import utils.SessionUtils;
 import utils.Support;
 
 /**
  *
  * @author forna
  */
-@WebServlet(name = "GroupManage", urlPatterns = {"/GroupManage"})
+@WebServlet(name = "GroupCreate", urlPatterns = {"/groupCreate"})
 public class GroupCreate extends HttpServlet {
-    
+
     /**
      * Handles the HTTP <code>GET</code> method.
      *
@@ -36,7 +39,15 @@ public class GroupCreate extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        Support.forward(getServletContext(), request, response, "/creategroup.jsp",null);
+        ArrayList<UserBean> ub = null;
+        try {
+            DBManager dbm = new DBManager(request);
+            ub = dbm.getAllUser();
+        } catch (Exception e) {
+            System.out.println(e.toString());
+        }
+        request.setAttribute(RequestUtils.USERLIST, ub);
+        Support.forward(getServletContext(), request, response, "/creategroup.jsp", null);
     }
 
     /**
@@ -50,29 +61,52 @@ public class GroupCreate extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
+
         String title = request.getParameter(RequestUtils.GROUP_TITLE);
         String isPrivate = request.getParameter(RequestUtils.GROUP_PRIVATE);
         String[] users = request.getParameterValues(RequestUtils.GROUP_USERS);
-        
+
         int groupId = addGroup(request, title, isPrivate, users);
+
+        Message msg = buildMessage(groupId, title);
         
+        if (msg.getType() == Message.MessageType.ERROR) {
+            Support.forward(getServletContext(), request, response, "/creategroup.jsp",msg);
+        } else {
+            Support.forward(getServletContext(), request, response, "/home.jsp",msg);
+        }
     }
 
     private int addGroup(HttpServletRequest request, String title, String aPrivate, String[] users) {
         int ret = -1;
+        boolean check = title!=null && aPrivate!=null && !title.equals("") && !aPrivate.equals("");
         
-        //TODO need a way to get userId
-//        try {
-//            DBManager dbm = new DBManager(request);
-//            HttpSession session = request.getSession();
-//            session.getAttribute()
-//            dbm.newGroup(title, users, , aPrivate.equals("true"));
-//        } catch (Exception e) {
-//            System.out.println(e.toString());
-//        }
-//        
+        if (check) {
+            try {
+                DBManager dbm = new DBManager(request);
+                HttpSession session = request.getSession();
+                UserBean user = (UserBean) session.getAttribute(SessionUtils.USER);
+                ret = dbm.newGroup(title, users, user.getUserID(), aPrivate.equals("true"));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
         return ret;
     }
-    
+
+    private Message buildMessage(int groupId, String groupTitle) {
+        Message msg;
+        
+        //qualcosa non e' andato a buon fine
+        if (groupId<0) {
+            msg = new Message(Message.MessageType.ERROR, 10, "Impossibile "
+                    + "inserire "+groupTitle+" nel database");
+        } else {
+            msg = new Message(Message.MessageType.SUCCESS, 0, "Gruppo "
+                    +groupTitle+" inserito con successo!");
+        }
+        return msg;
+    }
+
 }

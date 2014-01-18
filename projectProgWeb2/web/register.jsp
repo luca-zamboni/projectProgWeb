@@ -24,7 +24,7 @@
             <% out.println("<input pattern=\".{6,}\" title=\"Almeno 6 caratteri\" placeholder=\"username (Opzionale)\" type=\"text\" name=" + RequestUtils.USERNAME + " />"); %>
             <% out.println("<input pattern=\".{6,}\" title=\"Almeno 6 caratteri\" placeholder=\"password\" type=\"password\" name=" + RequestUtils.PASSWD + " />");%>
             <input type="submit" id="regBtn" value="Registrati"/>
-        </div> 
-</body>
+        </form>
+    </body>
 
 </html>

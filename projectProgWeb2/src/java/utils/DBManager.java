@@ -90,7 +90,7 @@ public class DBManager implements Serializable {
         stm.setInt(2, group);
         stm.executeUpdate();
 
-        ArrayList<String> usersInDb = getAllUser();
+        ArrayList<UserBean> usersInDb = getAllUser();
         PreparedStatement stm2;
 
         String sql2;
@@ -114,8 +114,8 @@ public class DBManager implements Serializable {
         }
 
         usersInDb.removeAll(Arrays.asList(users));
-        for (String user : usersInDb) {
-            int id = getIdFromUser(user);
+        for (UserBean user : usersInDb) {
+            int id = user.getUserID();
             sql2 = "UPDATE user_groups SET status = 1 WHERE groupid = ? AND userid = ?";
             stm2 = con.prepareStatement(sql2);
             stm2.setInt(1, group);
@@ -240,21 +240,6 @@ public class DBManager implements Serializable {
         stm.close();
     }
 
-//    TODO finish this
-//    public boolean insertGroup(String groupName, boolean prvt, int[] userIds, 
-//            int ownerId) throws SQLException {
-//
-//        String sql = "INSERT INTO " + GROUP_TABLE + " (groupname, ownerid) "
-//                + "VALUES (?,?)";
-//        PreparedStatement stm = con.prepareStatement(sql);
-//        stm.setString(1, groupName);
-//        stm.setInt(2, ownerId);
-//        int changed = stm.executeUpdate();
-//        stm.close;
-//        
-//        String sql2 = "INSERT INTO user_groups(userid,groupid,status) VALUES (?,?,2)";
-//    }
-
     public boolean isKicked(int userid, int groupid) throws SQLException {
         String sql = "select count(*) from user_groups where userid=? AND groupid=? AND status = 1";
         PreparedStatement stm = con.prepareStatement(sql);
@@ -372,15 +357,20 @@ public class DBManager implements Serializable {
         stm.executeUpdate();
     }
 
-    public ArrayList<String> getAllUser() throws SQLException {
-        String sql = "SELECT username FROM users";
+    public ArrayList<UserBean> getAllUser() throws SQLException {
+        String sql = "SELECT username, userid, avatar FROM users";
         PreparedStatement stm = con.prepareStatement(sql);
         ResultSet rs;
         rs = stm.executeQuery();
-        ArrayList<String> mUsers = new ArrayList<>();
+        ArrayList<UserBean> mUsers = new ArrayList<>();
         try {
+            UserBean tmp;
             while (rs.next()) {
-                mUsers.add(rs.getString(1));
+                tmp = new UserBean();
+                tmp.setUserName(rs.getString(1));
+                tmp.setUserId(rs.getInt(2));
+                tmp.setAvatar(rs.getString(3));
+                mUsers.add(tmp);
             }
         } finally {
             rs.close();
