@@ -34,7 +34,7 @@
                         + user.getUserID() + "\"<\\input><br>"+user.toString()); %>
                 <%      } %>
                 <%  } %>
-                <input type="submit" id="regBtn" value="Registrati"/>
+                <input type="submit" id="regBtn" value="Aggiungi gruppo"/>
             </p>
         </form>
     </body>

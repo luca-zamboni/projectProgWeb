@@ -79,14 +79,14 @@ public class GroupCreate extends HttpServlet {
 
     private int addGroup(HttpServletRequest request, String title, String aPrivate, String[] users) {
         int ret = -1;
-        boolean check = title!=null && aPrivate!=null && !title.equals("") && !aPrivate.equals("");
-        
+        boolean check = title!=null && !title.equals("");
+        boolean prvt = aPrivate!=null;
         if (check) {
             try {
                 DBManager dbm = new DBManager(request);
                 HttpSession session = request.getSession();
-                UserBean user = (UserBean) session.getAttribute(SessionUtils.USER);
-                ret = dbm.newGroup(title, users, user.getUserID(), aPrivate.equals("true"));
+                UserBean user = (UserBean) Support.getInSession(request, SessionUtils.USER); //TODO fix nullpointerexception on user here!
+                ret = dbm.newGroup(title, users, user.getUserID(), prvt);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -97,9 +97,11 @@ public class GroupCreate extends HttpServlet {
 
     private Message buildMessage(int groupId, String groupTitle) {
         Message msg;
-        
         //qualcosa non e' andato a buon fine
-        if (groupId<0) {
+        if (groupTitle==null || groupTitle.equals("")) {
+            msg = new Message(Message.MessageType.ERROR, 11, "Impossibile "
+                    + "inserire un gruppo senza nome nel database");
+        } else if (groupId<0){
             msg = new Message(Message.MessageType.ERROR, 10, "Impossibile "
                     + "inserire "+groupTitle+" nel database");
         } else {
