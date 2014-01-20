@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package servlets;
+package servlets; 
 
 import beans.Message;
 import beans.UserBean;
@@ -92,8 +92,8 @@ public class ModProfile extends HttpServlet {
         if (f != null) {
             if (isImage(f)) {
                 try {
-                    saveAvatar(request, response,
-                            ((UserBean) Support.getInSession(request, SessionUtils.USER)).getUsername(), f);
+                    UserBean user = (UserBean) Support.getInSession(request, SessionUtils.USER);
+                    saveAvatar(request, response,user, f);
                 } catch (Exception ex) {
                     Support.forward(getServletContext(), request, response, "/profile.jsp", new Message(Message.MessageType.ERROR, -1));
 
@@ -132,13 +132,15 @@ public class ModProfile extends HttpServlet {
     }
 
     private void saveAvatar(HttpServletRequest request,
-            HttpServletResponse response, String user, File f) throws IOException {
+            HttpServletResponse response, UserBean user, File f) throws IOException {
         try {
             DBManager dbm = new DBManager(request);
-            dbm.setAvatar(user, DEFAULT_EXT);
-
             String path = request.getServletContext().getRealPath("/");
-            File outputFile = new File(path + "/img/" + user + "." + DEFAULT_EXT);
+            String fullpath= path+"img/" + user.getUserID() + "." + DEFAULT_EXT;
+            
+            dbm.setAvatar(user.getUserID(),fullpath);
+            
+            File outputFile = new File(path + "img/" + user.getUserID() + "." + DEFAULT_EXT);
             if (!outputFile.exists()) {
                 outputFile.createNewFile();
             }

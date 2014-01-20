@@ -15,14 +15,17 @@ import javax.ejb.Stateless;
 public class UserBean {
 
     public enum UserType {
+
         SIMPLE,
         MODERATOR
     }
 
+    public static final String DEFAULT_IMG_PATH = "img/";
+
     private int userID;
     private long lastLogin;
     private String username;
-    public String avatar;
+    private String avatar;
     private UserType type;
 
     public UserBean() {
@@ -47,18 +50,22 @@ public class UserBean {
         return username;
     }
 
+    public String getAvatar() {
+        return DEFAULT_IMG_PATH+ ((avatar == null) ? "default.jpg" : userID+".png");
+    }
+
     public UserType getType() {
         return type;
     }
-    
+
     public void setUserId(int uid) {
         this.userID = uid;
     }
-    
+
     public void setUserName(String username) {
         this.username = username;
     }
-    
+
     public void setAvatar(String avatar) {
         this.avatar = avatar;
     }
@@ -66,11 +73,11 @@ public class UserBean {
     public void setType(UserType type) {
         this.type = type;
     }
-    
+
     public void setType(int type) {
         this.type = convertToType(type);
     }
-    
+
     private UserType convertToType(int type) {
         switch (type) {
             case 1:
@@ -82,8 +89,7 @@ public class UserBean {
 
     @Override
     public String toString() {
-        return "UserBean{" + "userID=" + userID + ", lastLogin=" + lastLogin + ", username=" + username + ", avatar=" + ((avatar==null)?"":avatar) + ", type=" + type + '}';
+        return "UserBean{" + "userID=" + userID + ", lastLogin=" + lastLogin + ", username=" + username + ", avatar=" + ((avatar == null) ? "" : avatar) + ", type=" + type + '}';
     }
-    
-    
+
 }

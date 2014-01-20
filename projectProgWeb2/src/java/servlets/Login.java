@@ -59,7 +59,7 @@ public class Login extends HttpServlet {
         connectDatabase(request);
         String[] credentials = getCredentials(request);
         String page = "/index.jsp";
-        UserBean login = loginValid(request, credentials[0], credentials[1]);
+        UserBean login = getUser(request, credentials[0], credentials[1]);
         Message msg = null;
         if (login.getUserID() >= 0) {
             Support.addToSession(request, SessionUtils.USER, login);
@@ -92,9 +92,11 @@ public class Login extends HttpServlet {
      * @return null se errore server, -1 se non lo trova id dell'utente
      * altrimenti
      */
-    private UserBean loginValid(HttpServletRequest request, String username, String password) {
+    private UserBean getUser(HttpServletRequest request, String username, String password) {
         try {
-            return dbm.login(username, password);
+            UserBean out = dbm.login(username, password);
+            out.setAvatar(dbm.getAvatar(out.getUserID()));
+            return out;
         } catch (SQLException ex) {
             Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
         }

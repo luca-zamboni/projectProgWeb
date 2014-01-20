@@ -20,8 +20,8 @@
     <body>
         <jsp:include page="includes/messagedisplayer.jsp" />
         <% UserBean user = (UserBean) Support.getInSession(request, SessionUtils.USER);%>
-        <p><%= user.toString()%></p>
         <p class="btn-danger hidden" id="messages"></p>
+        <img src="<%=user.getAvatar()%>" />
         <form action="modprofile" enctype="multipart/form-data" method="POST">
             <fieldset>
                 <legend>Nuovo avatar</legend>
