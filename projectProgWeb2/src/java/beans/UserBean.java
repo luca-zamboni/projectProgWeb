@@ -51,7 +51,7 @@ public class UserBean {
     }
 
     public String getAvatar() {
-        return DEFAULT_IMG_PATH+ ((avatar == null) ? "default.jpg" : userID+".png");
+        return DEFAULT_IMG_PATH+ ((avatar == null) ? "img.jpg" : userID+".png");
     }
 
     public UserType getType() {

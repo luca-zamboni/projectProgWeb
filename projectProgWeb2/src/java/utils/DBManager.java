@@ -334,12 +334,12 @@ public class DBManager implements Serializable {
         stm.setInt(1, userid);
         ResultSet rs;
         rs = stm.executeQuery();
-        String avatarStr = "";
+        String avatarStr = null;
         try {
             if (rs.next()) {
                 avatarStr = rs.getString(1);
-                if (avatarStr == null || avatarStr.equals("")) {
-                    avatarStr = "img.jpg";
+                if (avatarStr != null && avatarStr.equals("")) {
+                    avatarStr = null;
                 }
             }
         } finally {
