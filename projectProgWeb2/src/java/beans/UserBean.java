@@ -54,7 +54,7 @@ public class UserBean {
     public String getAvatar() {
         return ((avatar == null) ? 
                 DEFAULT_IMG_PATH + "img.jpg" : 
-                ModProfile.IMG_PROF_DIR + "/" + userID + "." 
+                ModProfile.IMG_PROF_DIR + userID + "." 
                     + ModProfile.DEFAULT_EXT);
     }
 
