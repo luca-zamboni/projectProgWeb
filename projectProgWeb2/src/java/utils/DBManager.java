@@ -38,14 +38,14 @@ public class DBManager implements Serializable {
     public static final String EMAIL = "email";
     public static final String AVATAR = "avatar"; //(file)
     public static final String USERTYPE = "type";
-    
+
     public static final String GROUP_TABLE = "groups";
     public static final String GROUP_ID = "groupid";
     public static final String GROUP_NAME = "groupname";
     public static final String GROUP_OWNER_ID = "ownerid";
     public static final String GROUP_CREATION_DATE = "creationdate";
     public static final String GROUP_PVTFLAG = "private";
-    
+
     public static final String RELATION_USER_GROUP = "user_groups";
     public static final String RELATION_USER_GROUP_ID = "id";
     // field userid
@@ -133,7 +133,7 @@ public class DBManager implements Serializable {
 
     }
 
-    public int newGroup(String title, String[] users, int owner, 
+    public int newGroup(String title, String[] users, int owner,
             boolean isPrivate) throws SQLException {
 
         String sql = "INSERT into GROUPS(ownerid,groupname,creationdate,private)"
@@ -141,7 +141,7 @@ public class DBManager implements Serializable {
         PreparedStatement stm = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
         stm.setInt(1, owner);
         stm.setString(2, title);
-        stm.setInt(3, isPrivate?1:0); //se e' privato setta a 1 altrimenti 0
+        stm.setInt(3, isPrivate ? 1 : 0); //se e' privato setta a 1 altrimenti 0
         stm.executeUpdate();
         PreparedStatement stmaux = con.prepareStatement("SELECT last_insert_rowid()");
         int groupid = -1;
@@ -154,14 +154,16 @@ public class DBManager implements Serializable {
 
         String sql2;
 
-        for (String mUser : users) {
-            int aux = getIdFromUser(mUser);
-            sql2 = "INSERT INTO user_groups(userid,groupid,status) VALUES (?,?,2)";
-            PreparedStatement stm2 = con.prepareStatement(sql2);
-            stm2.setInt(1, aux);
-            stm2.setInt(2, groupid);
-            stm2.executeUpdate();
-            stm2.close();
+        if (users != null) {
+            for (String mUser : users) {
+                int aux = getIdFromUser(mUser);
+                sql2 = "INSERT INTO user_groups(userid,groupid,status) VALUES (?,?,2)";
+                PreparedStatement stm2 = con.prepareStatement(sql2);
+                stm2.setInt(1, aux);
+                stm2.setInt(2, groupid);
+                stm2.executeUpdate();
+                stm2.close();
+            }
         }
         sql2 = "INSERT INTO user_groups(userid,groupid,status) VALUES (?,?,0)";
         PreparedStatement stm2 = con.prepareStatement(sql2);
