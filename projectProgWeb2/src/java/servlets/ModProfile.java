@@ -139,7 +139,8 @@ public class ModProfile extends HttpServlet {
             String fullpath = path + IMG_PROF_DIR + user.getUserID() + "." + DEFAULT_EXT;
 
             dbm.setAvatar(user.getUserID(), fullpath);
-
+            user.setAvatar(fullpath);
+            
             File outputFile = new File(fullpath);
             if (!outputFile.exists()) {
                 outputFile.createNewFile();
