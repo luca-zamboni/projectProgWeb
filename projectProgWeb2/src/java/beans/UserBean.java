@@ -6,6 +6,7 @@
 package beans;
 
 import javax.ejb.Stateless;
+import servlets.ModProfile;
 
 /**
  *
@@ -51,7 +52,10 @@ public class UserBean {
     }
 
     public String getAvatar() {
-        return DEFAULT_IMG_PATH+ ((avatar == null) ? "img.jpg" : userID+".png");
+        return ((avatar == null) ? 
+                DEFAULT_IMG_PATH + "img.jpg" : 
+                ModProfile.IMG_PROF_DIR + "/" + userID + "." 
+                    + ModProfile.DEFAULT_EXT);
     }
 
     public UserType getType() {

@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package servlets; 
+package servlets;
 
 import beans.Message;
 import beans.UserBean;
@@ -47,7 +47,8 @@ import utils.Support;
  */
 public class ModProfile extends HttpServlet {
 
-    private static String DEFAULT_EXT = "png";
+    public static final String IMG_PROF_DIR = "imgs_profiles/";
+    public static final String DEFAULT_EXT = "png";
 
     private String dirName;
 
@@ -74,11 +75,11 @@ public class ModProfile extends HttpServlet {
         String param = request.getParameter(RequestUtils.PARAM);
         //Java quando gli passi un file in post sfancula tutto XD
         //ceercare di prendere gli altri parametrinn va(Guardato su internet)
-        
+
         if (param != null && param.equals(RequestUtils.PASSWORDMOD)) {
             try {
                 managePassword(request, request.getParameter(RequestUtils.PASSWD));
-                Support.forward(getServletContext(), request, response, "/profile.jsp", new Message(Message.MessageType.SUCCESS,1));
+                Support.forward(getServletContext(), request, response, "/profile.jsp", new Message(Message.MessageType.SUCCESS, 1));
             } catch (SQLException ex) {
                 Logger.getLogger(ModProfile.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -93,10 +94,9 @@ public class ModProfile extends HttpServlet {
             if (isImage(f)) {
                 try {
                     UserBean user = (UserBean) Support.getInSession(request, SessionUtils.USER);
-                    saveAvatar(request, response,user, f);
+                    saveAvatar(request, response, user, f);
                 } catch (Exception ex) {
                     Support.forward(getServletContext(), request, response, "/profile.jsp", new Message(Message.MessageType.ERROR, -1));
-
                 }
                 response.sendRedirect("./profile.jsp");
             } else {
@@ -136,11 +136,11 @@ public class ModProfile extends HttpServlet {
         try {
             DBManager dbm = new DBManager(request);
             String path = request.getServletContext().getRealPath("/");
-            String fullpath= path+"img/" + user.getUserID() + "." + DEFAULT_EXT;
-            
-            dbm.setAvatar(user.getUserID(),fullpath);
-            
-            File outputFile = new File(path + "img/" + user.getUserID() + "." + DEFAULT_EXT);
+            String fullpath = path + IMG_PROF_DIR + user.getUserID() + "." + DEFAULT_EXT;
+
+            dbm.setAvatar(user.getUserID(), fullpath);
+
+            File outputFile = new File(fullpath);
             if (!outputFile.exists()) {
                 outputFile.createNewFile();
             }
