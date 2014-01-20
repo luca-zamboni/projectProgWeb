@@ -9,16 +9,17 @@
 <%@page import="utils.Support"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
+<p 
 <%
     Message msg = Support.getMessageInRequest(request);
     if(msg!=null){
         if(msg.getType()==MessageType.ERROR){ 
 %>
-            <p class="btn-danger">
+            class="btn-danger">
 <%      }
         else{
 %>        
-            <p class="btn-success">
+            class="btn-success">
 <%
         }
         out.print(msg.toString());
