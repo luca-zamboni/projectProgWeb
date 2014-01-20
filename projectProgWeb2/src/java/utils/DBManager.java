@@ -331,17 +331,17 @@ public class DBManager implements Serializable {
     }
 
     public String getAvatar(int userid) throws SQLException {
-        String sql = "SELECT " + AVATAR + "FROM users WHERE userid = ?";
+        String sql = "SELECT " + AVATAR + " FROM users WHERE userid = ?";
         PreparedStatement stm = con.prepareStatement(sql);
         stm.setInt(1, userid);
         ResultSet rs;
         rs = stm.executeQuery();
-        String avatarStr = "";
+        String avatarStr = null;
         try {
             if (rs.next()) {
                 avatarStr = rs.getString(1);
-                if (avatarStr == null || avatarStr.equals("")) {
-                    avatarStr = "img.jpg";
+                if (avatarStr != null && avatarStr.equals("")) {
+                    avatarStr = null;
                 }
             }
         } finally {
@@ -351,11 +351,11 @@ public class DBManager implements Serializable {
         return avatarStr;
     }
 
-    public void setAvatar(String user, String extension) throws SQLException {
+    public void setAvatar(int userID,String path) throws SQLException {
         String sql = "UPDATE users SET " + AVATAR + " = ? WHERE userid = ?";
         PreparedStatement stm = con.prepareStatement(sql);
-        stm.setString(1, user + "." + extension);
-        stm.setInt(2, getIdFromUser(user));
+        stm.setString(1, path);
+        stm.setInt(2, userID);
         stm.executeUpdate();
     }
 
