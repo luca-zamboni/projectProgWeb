@@ -26,26 +26,43 @@
         </style>
         <script type="text/javascript">
             $(document).ready(function() {
-                $(".bubble").fadeIn();
+                $(".bubble").slideDown();
             });
         </script>
     </head>
     <body>
+        <div class="navbar mynavbar" >
+            <div class="container">
+                <div class="row">
+                    <div class="col-xs-12 col-md-6 col-lg-6"><p class="mybrand">StudyTalk</p></div>
+                    <div class="col-xs-12 col-md-6 col-lg-6">
+                        <jsp:include page="includes/messagedisplayer.jsp" />
+                        <form  action="login" method="POST" >
+                            <input placeholder=username type=text name="<%=RequestUtils.USERNAME%>" />
+                            <input placeholder=password type=password name="<%=RequestUtils.PASSWD%>" />
+                            <input class="btn btn-primary" type="submit" value="Entra!" />
+                            <a class="btn btn-success" href="forgetPassword.jsp">Password dimenticata?</a>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
         <div class="container">
             <div class="row">
-                <div class="col-xs-3 col-md-3 col-lg-3">&nbsp;</div>
-                <div class="col-xs-6 col-md-6 col-lg-6" style="margin-top:40px;">
+                <div class="col-xs-2 col-md-3 col-lg-6">&nbsp;</div>
+                <div class="col-xs-8 col-md-6 col-lg-6" style="margin-top:40px;">
                     <div class="bubble" style="display: none;">
-                        <p><a class="btn btn-warning" href="register.jsp">Registrati</a></p>
-                        <p>--Oppure--</p>
-                        <jsp:include page="includes/messagedisplayer.jsp" />
-                        <form  action="login" method="POST">
-                            <p><input placeholder=username type=text name="<%=RequestUtils.USERNAME%>" /></p>
-                            <p><input placeholder=password type=password name="<%=RequestUtils.PASSWD%>" /></p>
-                            
-                            <p><input class="btn btn-primary" type="submit" value="Entra!" /></p>
-                            <p><a class="btn btn-success" href="forgetPassword.jsp">Password dimenticata?</a></p
-                        </form>
+                        <p>
+                            Il posto <strong>perfetto</strong> per discutere 
+                            dei tuoi progetti,<strong> Idee</strong>, e compiti. 
+                        </p>
+                        <p>
+                            puoi anche condividere <strong>appunti</strong>, immagini,
+                            o <strong>registrazioni</strong>. 
+                        </p>
+                        <p>Per studiare sempre al 
+                            <strong>meglio</strong></p><br/>
+                        <p><a class="btn btn-warning" href="register.jsp">Iscriviti adesso!</a></p>
                     </div>
                 </div>
             </div>
