@@ -5,6 +5,7 @@
  */
 package utils;
 
+import beans.Post;
 import beans.UserBean;
 import java.io.Serializable;
 import java.sql.Connection;
@@ -177,6 +178,17 @@ public class DBManager implements Serializable {
         return groupid;
 
     }
+    
+    public ArrayList<UserBean> getAllUserInGroup(int groupid) throws SQLException{
+        ArrayList<UserBean> us = getAllUser();
+        ArrayList<UserBean> ret = new ArrayList<>();
+        for(UserBean a : us){
+            if(isInGroup(a.getUserID(), groupid)){
+                ret.add(a);
+            }
+        }
+        return ret;
+    }
 
     public void newFile(int ownerid, int groupid, String nomeFile) throws SQLException {
         String sql = "INSERT INTO post_file(ownerid,groupid,filename) VALUES (?,?,?)";
@@ -208,27 +220,66 @@ public class DBManager implements Serializable {
         }
         return ownerA;
     }
+    
+    public ArrayList<String> getAllFileInPost(int postid) throws SQLException{
+        ArrayList<String> ret = new ArrayList<>();
+        String sql = "select filename from post_file where postid=?";
+        PreparedStatement stm = con.prepareStatement(sql);
+        stm.setInt(1, postid);
+        ResultSet rs;
+        rs = stm.executeQuery();
+        try {
+            while (rs.next()) {
+                ret.add(rs.getString(1));
+            }
+        } finally {
+            rs.close();
+            stm.close();
+        }
+        return ret;
+    }
 
-//    public ArrayList<Post> getAllPost(int group) throws SQLException {
-//        ArrayList<Post> p = new ArrayList();
-//        String sql = "SELECT ownerid,date,content FROM post WHERE groupid = ?";
-//        PreparedStatement stm = con.prepareStatement(sql);
-//        stm.setInt(1, group);
-//        ResultSet rs;
-//        rs = stm.executeQuery();
-//        try {
-//            while (rs.next()) {
-//                int own = rs.getInt(1);
-//                String date = rs.getString(2);
-//                String content = rs.getString(3);
-//                p.add(new Post(own, date, content));
-//            }
-//        } finally {
-//            rs.close();
-//            stm.close();
-//        }
-//        return p;
-//    }
+    public ArrayList<Post> getAllPost(int group) throws SQLException {
+        ArrayList<Post> p = new ArrayList();
+        String sql = "SELECT ownerid,date,content,postid FROM post WHERE groupid = ?";
+        PreparedStatement stm = con.prepareStatement(sql);
+        stm.setInt(1, group);
+        ResultSet rs;
+        rs = stm.executeQuery();
+        try {
+            while (rs.next()) {
+                int ow = rs.getInt(1);
+                String own = getUserFormId(ow);
+                String d = rs.getString(2);
+                long date = Long.parseLong(d);
+                String content = rs.getString(3);
+                int postid = rs.getInt(4);
+                p.add(new Post(own,content,date,group,postid));
+            }
+        } finally {
+            rs.close();
+            stm.close();
+        }
+        return p;
+    }
+    
+    public boolean isPrivateGroup(int groupid) throws SQLException{
+        String sql = "select private from groups where groupid=?";
+        PreparedStatement stm = con.prepareStatement(sql);
+        stm.setInt(1, groupid);
+        ResultSet rs;
+        rs = stm.executeQuery();
+        try {
+            if (rs.next()) {
+                return rs.getInt(1) == 0;
+            }
+        } finally {
+            rs.close();
+            stm.close();
+        }
+        return false;
+    }
+    
     public void insertPost(int userid, int groupid, String post) throws SQLException {
         Date d = new Date();
         String aux = "" + d.getTime();

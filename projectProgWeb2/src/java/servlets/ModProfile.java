@@ -135,8 +135,8 @@ public class ModProfile extends HttpServlet {
             HttpServletResponse response, UserBean user, File f) throws IOException {
         try {
             DBManager dbm = new DBManager(request);
-            String path = request.getServletContext().getRealPath("/");
-            String fullpath = path + IMG_PROF_DIR + user.getUserID() + "." + DEFAULT_EXT;
+            String path = request.getServletContext().getContextPath();
+            String fullpath = path +"/"+ IMG_PROF_DIR + user.getUserID() + "." + DEFAULT_EXT;
 
             dbm.setAvatar(user.getUserID(), fullpath);
             user.setAvatar(fullpath);
