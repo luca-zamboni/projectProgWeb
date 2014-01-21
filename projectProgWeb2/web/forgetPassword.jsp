@@ -12,13 +12,27 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <%@ include file="includes/header.jsp" %>
         <title>Forgot password?</title>
+        <style type="text/css">
+            body{
+                background: #222 url('img/login_back.jpg') no-repeat;
+            }
+        </style>
     </head>
     <body>
-        <h1>Insert your username or email</h1>
-        <jsp:include page="includes/messagedisplayer.jsp" />
-        <form action="ForgetPassword" method="POST">
-            <input type="text" name="mail" />
-            <button type="submit" class="btn-default">Confirm</button>
-        </form>
+        <div class="container">
+            <div class="row">
+                <div class="col-xs-1 col-md-2 col-lg-3">&nbsp;</div>
+                <div class="col-xs-10 col-md-8 col-lg-6" style="margin-top:40px;">
+                    <div class="bubble" style="margin-top:40px;">
+                        <p>Non preoccuparti, succede...</p>
+                        <jsp:include page="includes/messagedisplayer.jsp" />
+                        <form action="ForgetPassword" method="POST">
+                            <input type="text" name="mail" placeholder="@mail or username" />
+                            <input style="padding:10px;font-size: 14px;" class="btn btn-success" type="submit" value="Reset" />
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
     </body>
 </html>

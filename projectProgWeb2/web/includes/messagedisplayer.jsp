@@ -9,13 +9,13 @@
 <%@page import="utils.Support"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
-<p 
+<p style="padding: 5px; border-radius: 3px;"
 <%
     Message msg = Support.getMessageInRequest(request);
     if(msg!=null){
         if(msg.getType()==MessageType.ERROR){ 
 %>
-            class="btn-danger" style="padding: 5px; border-radius: 3px;">
+            class="btn-danger">
 <%      }
         else{
 %>        
