@@ -41,7 +41,7 @@
                             <input placeholder=username type=text name="<%=RequestUtils.USERNAME%>" />
                             <input placeholder=password type=password name="<%=RequestUtils.PASSWD%>" />
                             <input class="btn btn-primary" type="submit" value="Entra!" />
-                            <a class="btn btn-success" href="forgetPassword.jsp">Password dimenticata?</a>
+                            <a class="btn btn-warning" href="forgetPassword.jsp">Password dimenticata?</a>
                         </form>
                     </div>
                 </div>
@@ -49,8 +49,8 @@
         </div>
         <div class="container">
             <div class="row">
-                <div class="col-xs-2 col-md-3 col-lg-6">&nbsp;</div>
-                <div class="col-xs-8 col-md-6 col-lg-6" style="margin-top:40px;">
+                <div class="col-xs-1 col-md-2 col-lg-6">&nbsp;</div>
+                <div class="col-xs-10 col-md-8 col-lg-6" style="margin-top:40px;">
                     <div class="bubble" style="display: none;">
                         <p>
                             Il posto <strong>perfetto</strong> per discutere 
@@ -62,7 +62,7 @@
                         </p>
                         <p>Per studiare sempre al 
                             <strong>meglio</strong></p><br/>
-                        <p><a class="btn btn-warning" href="register.jsp">Iscriviti adesso!</a></p>
+                        <p><a class="btn btn-success" style="padding:15px;font-size: 25px;" href="register.jsp">Iscriviti adesso!</a></p>
                     </div>
                 </div>
             </div>

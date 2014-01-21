@@ -15,7 +15,7 @@
     if(msg!=null){
         if(msg.getType()==MessageType.ERROR){ 
 %>
-            class="btn-danger">
+            class="btn-danger" style="padding: 5px; border-radius: 3px;">
 <%      }
         else{
 %>        

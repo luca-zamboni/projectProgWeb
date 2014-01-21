@@ -25,7 +25,6 @@ body{
 .mybrand{
     font-size: 35px;
     color:#F15A0F;
-    text-shadow: 0 0 2px #333;
 }
 .bubble{
     background-color:rgba(255,255,255,0.6);
