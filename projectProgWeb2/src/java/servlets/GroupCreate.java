@@ -7,6 +7,7 @@ package servlets;
 
 import beans.Message;
 import beans.UserBean;
+import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -67,6 +68,11 @@ public class GroupCreate extends HttpServlet {
         String[] users = request.getParameterValues(RequestUtils.GROUP_USERS);
 
         int groupId = addGroup(request, title, isPrivate, users);
+        String path = request.getServletContext().getRealPath("/");
+        File a = new File(path + "/files/" + groupId + "/");
+        File b = new File(path + "/pdf/" + groupId + "/");
+        a.mkdir();
+        b.mkdir();
 
         Message msg = buildMessage(groupId, title);
         

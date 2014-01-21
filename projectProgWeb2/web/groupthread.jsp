@@ -9,11 +9,17 @@
 <html>
     <head>
         <%@ include file="includes/header.jsp" %>
+        <style type="text/css">
+        body{
+            background:#fff;
+        }
+        </style>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Create the new group</title>
     </head>
     <body>
         <div class="container">
+            <jsp:include page="includes/messagedisplayer.jsp" />
             <h1 style="text-align:center"><c:out value="${group.getTitle()}"/></h1>
             <div class="panel-group" id="accordion">
                 <div class="panel panel-default">
@@ -26,11 +32,13 @@
                   </div>
                   <div id="collapseOne" class="panel-collapse collapse">
                     <div class="panel-body">
+                        <c:if test="${group.getAllFiles().size() > 0}">
                         <ul class="list-group">
                             <c:forEach var="file" items="${group.getAllFiles()}"> 
-                                <li class="list-group-item"><a href="<c:out value="${file}" />"><c:out value="${file}" /></a></li>
+                                <li class="list-group-item"><a href="files/<c:out value="${group.getGroupid()}" />/<c:out value="${file}" />"><c:out value="${file}" /></a></li>
                             </c:forEach>
                         </ul>
+                        </c:if>
                     </div>
                   </div>
                 </div>
@@ -45,7 +53,7 @@
                                     <h5>Files:</h5>
                                     <ul class="list-group">
                                         <c:forEach var="file" items="${posts.getFiles()}"> 
-                                            <li class="list-group-item"><a href="<c:out value="${file}" />"><c:out value="${file}" /></a></li>
+                                            <li class="list-group-item"><a href="files/<c:out value="${group.getGroupid()}" />/<c:out value="${file}" />"><c:out value="${file}" /></a></li>
                                         </c:forEach>
                                     </ul>
                                 </div>
@@ -59,8 +67,17 @@
                         </div>
                     </c:forEach>
             </div>
-            <div>
-                
+            <div class="well">
+                <form enctype="multipart/form-data" action="addpost?gid=<c:out value="${group.getGroupid()}"/>" method="POST">
+                    <h3>Di la tua</h3>
+                    <div class="form-group">
+                        <label for="exampleInputFile">File input</label>
+                        <input type="file" name="files" multiple/>
+                        <p class="help-block">Insert your files</p>
+                    </div>
+                    <textarea name="post" class="form-control" rows="6"></textarea><br>
+                    <button type="submit" class="btn btn-success btn-lg">Submit</button>
+                </form>
             </div>
         </div>
     </body>

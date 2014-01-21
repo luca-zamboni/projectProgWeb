@@ -190,11 +190,11 @@ public class DBManager implements Serializable {
         return ret;
     }
 
-    public void newFile(int ownerid, int groupid, String nomeFile) throws SQLException {
-        String sql = "INSERT INTO post_file(ownerid,groupid,filename) VALUES (?,?,?)";
+    public void newFile(int ownerid, int postid, String nomeFile) throws SQLException {
+        String sql = "INSERT INTO post_file(ownerid,postid,filename) VALUES (?,?,?)";
         PreparedStatement stm = con.prepareStatement(sql);
         stm.setInt(1, ownerid);
-        stm.setInt(2, groupid);
+        stm.setInt(2, postid);
         stm.setString(3, nomeFile);
         stm.executeUpdate();
         stm.close();
@@ -280,17 +280,27 @@ public class DBManager implements Serializable {
         return false;
     }
     
-    public void insertPost(int userid, int groupid, String post) throws SQLException {
+    public int insertPost(int userid, int groupid, String post) throws SQLException {
         Date d = new Date();
         String aux = "" + d.getTime();
         String sql = "INSERT INTO post(groupid,ownerid,date,content) VALUES (?,?,?,?)";
-        PreparedStatement stm = con.prepareStatement(sql);
+        PreparedStatement stm = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
         stm.setInt(1, groupid);
         stm.setInt(2, userid);
         stm.setString(3, aux);
         stm.setString(4, post);
         stm.executeUpdate();
         stm.close();
+        PreparedStatement stmaux = con.prepareStatement("SELECT last_insert_rowid()");
+        int postid = -1;
+        ResultSet res = stmaux.executeQuery();
+        if (res.next()) {
+            postid = res.getInt(1);
+        }
+        res.close();
+        stm.close();
+        
+        return postid;
     }
 
     public boolean isKicked(int userid, int groupid) throws SQLException {

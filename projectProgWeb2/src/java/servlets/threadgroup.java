@@ -33,6 +33,8 @@ public class threadgroup extends HttpServlet {
     private int groupid;
     private Group group;
 
+    
+
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         try{
