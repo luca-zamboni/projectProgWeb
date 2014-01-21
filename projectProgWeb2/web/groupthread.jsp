@@ -39,7 +39,7 @@
                     <c:forEach var="posts" items="${group.getPosts()}">
                         <div class="well">
                             <img src="" style="width:60px;heigth:100px;" class="img-thumbnail" />
-                            <c:out value="${posts.getUserid()}"/> at <c:out value="${Support.getDateFromTime(posts.getDate())}"/> says:<br> <br> 
+                            <b><c:out value="${posts.getUserid()}"/></b> at <c:out value="${posts.getDate()}"/> says:<br> <br> 
                             <div class="row">
                                 <div class="col-md-2">
                                     <h5>Files:</h5>

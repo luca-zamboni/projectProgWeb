@@ -5,6 +5,7 @@
 package beans;
 
 import java.util.ArrayList;
+import utils.Support;
 
 /**
  *
@@ -51,8 +52,8 @@ public class Post {
         this.text = text;
     }
 
-    public long getDate() {
-        return date;
+    public String getDate() {
+        return Support.getDateFromTime(date);
     }
 
     public void setDate(long date) {
