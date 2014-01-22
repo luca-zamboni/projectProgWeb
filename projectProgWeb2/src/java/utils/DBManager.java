@@ -5,6 +5,7 @@
  */
 package utils;
 
+import beans.Group;
 import beans.Post;
 import beans.UserBean;
 import java.io.Serializable;
@@ -84,7 +85,9 @@ public class DBManager implements Serializable {
         }
     }
 
-    public void updateGroup(int group, String newTitle, String[] users, String owner) throws SQLException {
+    public int updateGroup(int group, String newTitle, String[] users, 
+            int owner, boolean type) throws SQLException {
+        int rowChanged;
         String sql = "UPDATE groups SET groupname = ? WHERE groupid = ?";
         PreparedStatement stm = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
         stm.setString(1, newTitle);
@@ -128,10 +131,11 @@ public class DBManager implements Serializable {
         String sql4 = "UPDATE user_groups SET status = 0 WHERE groupid = ? AND userid = ?";
         PreparedStatement stm4 = con.prepareStatement(sql4);
         stm4.setInt(1, group);
-        stm4.setInt(2, getIdFromUser(owner));
-        stm4.executeUpdate();
+        stm4.setInt(2, owner);
+        rowChanged = stm4.executeUpdate();
         stm4.close();
-
+        return rowChanged;
+        
     }
 
     public int newGroup(String title, String[] users, int owner,
@@ -509,51 +513,54 @@ public class DBManager implements Serializable {
 
         return ret;
     }
-//    private ArrayList<Group> getGroups(int status, String user) throws SQLException, ParseException {
-//        String sql = "select groups.groupid,groupname,creationdate,groups.ownerid,post.date "
-//                + "from groups,users,user_groups,post "
-//                + "WHERE groups.groupid = user_groups.groupid "
-//                + "AND users.userid= user_groups.userid "
-//                + "AND post.groupid= groups.groupid "
-//                + "AND username = ? and user_groups.status = ? "
-//                + "GROUP BY groups.groupid "
-//                + "ORDER by post.date DESC ";
-//        PreparedStatement stm = con.prepareStatement(sql);
-//        stm.setString(1, user);
-//        stm.setInt(2, status);
-//        ResultSet rs;
-//        rs = stm.executeQuery();
-//        ArrayList<Group> mGroups = new ArrayList<>();
-//        try {
-//            while (rs.next()) {
-//                int i1, i4;
-//                long l5;
-//                String s2, s3, s5;
-//                i1 = rs.getInt(1);
-//                s2 = rs.getString(2);
-//                s3 = rs.getString(3);
-//                i4 = rs.getInt(4);
-//                s5 = rs.getString(5);
-//                l5 = Long.parseLong(s5);
-//                Group aux = new Group(i1, i4, l5, s2, s3);
-//                aux.setOwnerName(getUserFormId(i4));
-//                mGroups.add(aux);
-//            }
-//        } finally {
-//            rs.close();
-//            stm.close();
-//        }
-//        return mGroups;
-//    }
+    
+    private ArrayList<Group> getGroups(int status, String user) throws SQLException, ParseException {
+        String sql = "select groups.groupid,groupname,creationdate,groups.ownerid,post.date "
+                + "from groups,users,user_groups,post "
+                + "WHERE groups.groupid = user_groups.groupid "
+                + "AND users.userid= user_groups.userid "
+                + "AND post.groupid= groups.groupid "
+                + "AND username = ? and user_groups.status = ? "
+                + "GROUP BY groups.groupid "
+                + "ORDER by post.date DESC ";
+        PreparedStatement stm = con.prepareStatement(sql);
+        stm.setString(1, user);
+        stm.setInt(2, status);
+        ResultSet rs;
+        rs = stm.executeQuery();
+        ArrayList<Group> mGroups = new ArrayList<>();
+        try {
+            while (rs.next()) {
+                int i1, i4;
+                long l5;
+                String s2, s3, s5;
+                i1 = rs.getInt(1);
+                s2 = rs.getString(2);
+                s3 = rs.getString(3);
+                i4 = rs.getInt(4);
+                s5 = rs.getString(5);
+                l5 = Long.parseLong(s5);
+                Group aux = new Group();
+                
+           //     aux.setOwner(getUserFormId(i4));
+                mGroups.add(aux);
+            }
+        } finally {
+            rs.close();
+            stm.close();
+        }
+        return mGroups;
+    }
 
-//    public ArrayList<Group> getAllPendingsGroups(String user) throws SQLException, ParseException {
-//        return getGroups(2, user);
-//    }
-//
-//    public ArrayList<Group> getAllGroups(String user) throws SQLException, ParseException {
-//        return getGroups(0, user);
-//
-//    }
+    public ArrayList<Group> getAllPendingsGroups(String user) throws SQLException, ParseException {
+        return getGroups(2, user);
+    }
+
+    public ArrayList<Group> getAllGroups(String user) throws SQLException, ParseException {
+        return getGroups(0, user);
+
+    }
+    
     public int getIdFromUser(String user) throws SQLException {
         String sql = "select userid from users where username = ?";
         PreparedStatement stm = con.prepareStatement(sql);
