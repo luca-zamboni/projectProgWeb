@@ -25,7 +25,7 @@ import utils.Support;
  *
  * @author luca
  */
-public class threadgroup extends HttpServlet {
+public class ThreadGroup extends HttpServlet {
     
     private HttpServletRequest req;
     private HttpServletResponse resp;
@@ -68,7 +68,7 @@ public class threadgroup extends HttpServlet {
             
             
         } catch (SQLException ex) {
-            Logger.getLogger(threadgroup.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ThreadGroup.class.getName()).log(Level.SEVERE, null, ex);
         }
         
         

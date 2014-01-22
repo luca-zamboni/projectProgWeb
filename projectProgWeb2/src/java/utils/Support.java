@@ -9,6 +9,7 @@ import beans.Message;
 import java.io.IOException;
 import java.security.MessageDigest;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Random;
 import java.util.regex.Pattern;
 import javax.servlet.RequestDispatcher;
@@ -95,5 +96,12 @@ public class Support {
     
     public static Object getInSession(HttpServletRequest req,String key){
         return req.getSession().getAttribute(key);
+    } 
+
+    public static String getDateFromTimestampLong(String timestamp) {
+        long l = Long.parseLong(timestamp);
+        String dateAsText = new SimpleDateFormat("dd-MM-yyy HH:mm:ss")
+                .format(new Date(l));
+        return dateAsText;
     }
 }
