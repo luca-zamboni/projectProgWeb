@@ -7,6 +7,7 @@ package servlets;
 import beans.Group;
 import beans.Post;
 import beans.UserBean;
+import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -58,6 +59,15 @@ public class ThreadGroup extends HttpServlet {
             
             for(Post aux :posts){
                 aux.setFiles(dbm.getAllFileInPost(aux.getPostid()));
+                String path = req.getServletContext().getRealPath("/");
+                File f = new File(path + "/files/" + groupid + "/qr/" + aux.getPostid());
+                if (f.listFiles() != null) {
+                    for (final File fileEntry : f.listFiles()) {
+                        if (!fileEntry.isDirectory()) {
+                            aux.setQrs("./files/" + groupid + "/qr/" + aux.getPostid()+"/" + fileEntry.getName());
+                        }
+                    }
+                }
                 group.setAllFiles(aux.getFiles());
             }
             

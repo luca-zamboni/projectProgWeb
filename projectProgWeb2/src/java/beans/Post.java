@@ -65,7 +65,11 @@ public class Post {
     }
 
     public void setQrs(ArrayList<String> qrs) {
-        this.qrs = qrs;
+        this.qrs.addAll(qrs);
+    }
+    
+    public void setQrs(String qr) {
+        this.qrs.add(qr);
     }
 
     public ArrayList<String> getFiles() {

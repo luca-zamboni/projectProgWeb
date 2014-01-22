@@ -75,15 +75,10 @@ public class AddPost extends HttpServlet {
                     
                     ParsingUtils p = new ParsingUtils(post,groupid,mReq);
                     post = p.parseQrAndLinkUtils();
-                    ArrayList<String> qrs = p.getQrs();
                     
                     int postid = dbm.insertPost(user.getUserID(), groupid, post);
                     
-                    String path = mReq.getServletContext().getRealPath("/");
-                    path = path + "/files/" + groupid + "/qr/" + postid;
-                    for(String h: qrs){
-                        p.generateQR(h, path);
-                    }
+                    p.generateQR(postid);
                     
                     saveFiles(postid);
                     if(error == 0) {

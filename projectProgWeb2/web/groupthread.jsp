@@ -61,7 +61,9 @@
                                     <c:out value="${posts.getText()}" escapeXml="false"/> 
                                 </div>
                                 <div class="col-md-2">
-                                    
+                                    <c:forEach var="qr" items="${posts.getQrs()}">
+                                        <img src="<c:out value="${qr}"/>" style="width:70px;heigth:150px;" />
+                                    </c:forEach>
                                 </div>
                             </div>
                         </div>
