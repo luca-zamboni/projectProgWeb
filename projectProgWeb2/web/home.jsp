@@ -17,11 +17,28 @@
         <title>Home</title>
     </head>
     <body>
-        <jsp:include page="includes/messagedisplayer.jsp" />
-        <% UserBean user = (UserBean) Support.getInSession(request, SessionUtils.USER); %>
-        <h1>Ciao belli! sono </h1><a href="profile.jsp"><%= user.getUsername() %></a>
-        <p><%= Support.getDateFromTime(user.getLastLogin()) %></p>
-        <p><a href="creategroup.jsp">Crea gruppo!</a></p>
-        <p><a href="./logout">Logout</a></p>
+        <% UserBean user = (UserBean) Support.getInSession(request, SessionUtils.USER);%>
+        <jsp:include page="includes/navigationbar.jsp" />
+        <div class="container">
+            <jsp:include page="includes/messagedisplayer.jsp" />
+            <div class="row">
+                <div class="col-xs-10 col-md-2 col-lg-2">&nbsp;</div>
+                <div class="col-xs-10 col-md-4 col-lg-4 card" style="text-align: center;">
+                    <h4>Hello, <%=user.getUsername()%>! </h4>
+                    <p>L' ultimo accesso è stato:
+                        <strong><%= Support.getDateFromTime(user.getLastLogin())%></strong>
+                    </p>
+                    <p>Non ci sono inviti<br />:(</p>
+
+                </div>
+                <div class="col-xs-11 col-md-4 col-lg-4 card" style="text-align: center;">
+                    <div class="btn btn-success pull-left">
+                        <a href="creategroup.jsp">
+                            <span class="glyphicon glyphicon-edit"></span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
     </body>
 </html>
