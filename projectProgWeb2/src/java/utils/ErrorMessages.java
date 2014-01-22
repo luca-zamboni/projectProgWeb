@@ -21,6 +21,10 @@ public class ErrorMessages {
     private static String USERINESISTENTE = "Username o email inseistenti";
     private static String LOGGED = "Sei già autenticato";
     private static String IMAGENOTVALID = "I formati accettati sono png, bitmap o jpeg";
+    
+    //Group adding errors 
+    private static String GROUPNONAME= "Impossibile inserire un gruppo senza nome nel database";
+    private static String GROUPINSERTERROR = "Impossibile inserire  nel database il gruppo ";
 
     public static String getErrorMessage(int code) {
         switch (code) {
@@ -40,6 +44,10 @@ public class ErrorMessages {
                 return LOGGED;
             case 7:
                 return IMAGENOTVALID;
+            case 10:
+                return GROUPNONAME;
+            case 11:
+                return GROUPINSERTERROR;
             default:
                 return GENERAL;
         }

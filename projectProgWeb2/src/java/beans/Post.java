@@ -12,6 +12,7 @@ import utils.Support;
  * @author luca
  */
 public class Post {
+
     private String userid;
     private String text;
     private int postid;
@@ -20,6 +21,9 @@ public class Post {
     private ArrayList<String> files = new ArrayList();
     private int groupid;
 
+    public Post() {
+    }
+
     public Post(String userid, String text, long date, int groupid, int postid) {
         this.userid = userid;
         this.text = text;
@@ -27,7 +31,7 @@ public class Post {
         this.groupid = groupid;
         this.postid = postid;
     }
-    
+
     public int getPostid() {
         return postid;
     }
@@ -87,7 +91,5 @@ public class Post {
     public void setGroupid(int groupid) {
         this.groupid = groupid;
     }
-    
-    
-    
+
 }

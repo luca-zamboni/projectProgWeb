@@ -5,6 +5,7 @@
  */
 package servlets;
 
+import beans.Group;
 import beans.Message;
 import beans.UserBean;
 import java.io.File;
@@ -15,7 +16,6 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -29,8 +29,7 @@ import utils.Support;
  *
  * @author forna
  */
-@WebServlet(name = "GroupCreate", urlPatterns = {"/groupCreate"})
-public class GroupCreate extends HttpServlet {
+public class GroupModify extends HttpServlet {
 
     private DBManager dbm;
 
@@ -46,15 +45,23 @@ public class GroupCreate extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         ArrayList<UserBean> ub = null;
+        Group grp = null;
+        Message msg = null;
         try {
             dbm = new DBManager(request);
             ub = dbm.getAllUser();
+            
         } catch (Exception e) {
             System.out.println(e.toString());
-            e.printStackTrace();
         }
         request.setAttribute(RequestUtils.USERLIST, ub);
-        Support.forward(getServletContext(), request, response, "/creategroup.jsp", null);
+        System.err.println(request.getAttribute(RequestUtils.GROUP_OWNER));
+        if (msg != null) {
+            Support.forward(getServletContext(), request, response, 
+                    "/home.jsp", msg);
+        } else {
+            Support.forward(getServletContext(), request, response, "/modifygroup.jsp", msg);
+        }
     }
 
     /**
@@ -71,40 +78,39 @@ public class GroupCreate extends HttpServlet {
         try {
             dbm = new DBManager(request);
         } catch (SQLException ex) {
-            Logger.getLogger(GroupCreate.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(GroupModify.class.getName()).log(Level.SEVERE, null, ex);
         }
-        HttpSession session = request.getSession();
-        UserBean user = (UserBean) Support.getInSession(request, SessionUtils.USER);
 
+        HttpSession session = request.getSession();
+
+        String grpString = request.getParameter(RequestUtils.GROUP_OWNER);
+        UserBean user = (UserBean) Support.getInSession(request, SessionUtils.USER);
         String title = request.getParameter(RequestUtils.GROUP_TITLE);
         String isPrivate = request.getParameter(RequestUtils.GROUP_PRIVATE);
         String[] users = request.getParameterValues(RequestUtils.GROUP_USERS);
+        int groupId =  Integer.parseInt( (grpString==null) ? "-1" : grpString);
 
-        int groupId = addGroup(title, isPrivate, users, user);
-        String path = request.getServletContext().getRealPath("/");
-        File a = new File(path + "/files/" + groupId + "/");
-        File b = new File(path + "/pdf/" + groupId + "/");
-        a.mkdir();
-        b.mkdir();
+        int rowChanged = updateGroup(groupId, title, isPrivate, users, user);
 
         Message msg = buildMessage(groupId, title);
 
         if (msg.getType() == Message.MessageType.ERROR) {
-            Support.forward(getServletContext(), request, response, "/creategroup.jsp",msg);
+            Support.forward(getServletContext(), request, response, "/modifygroup.jsp", msg);
         } else {
             Support.forward(getServletContext(), request, response, "/home.jsp", msg);
         }
     }
 
-    private int addGroup(String title, String aPrivate, String[] users, UserBean user) {
-        int ret = -1;
+    private int updateGroup(int groupId, String title, String aPrivate, String[] users, UserBean user) {
+        int ret = 0;
         boolean check = title != null && !title.equals("");
         boolean prvt = aPrivate != null;
         if (check) {
             try {
-                ret = dbm.newGroup(title, users, user.getUserID(), prvt);
+                ret = dbm.updateGroup(groupId, title, users, user.getUserID(), prvt);
             } catch (Exception e) {
                 e.printStackTrace();
+                ret = 0;
             }
         }
 
@@ -115,11 +121,17 @@ public class GroupCreate extends HttpServlet {
         Message msg;
         //qualcosa non e' andato a buon fine
         if (groupTitle == null || groupTitle.equals("")) {
-            msg = new Message(Message.MessageType.ERROR, 10);
-        } else if (groupId < 0) {
-            msg = new Message(Message.MessageType.ERROR, 11, groupTitle);
+            msg = new Message(Message.MessageType.ERROR, 21, "Impossibile "
+                    + "inserire un nome vuoto nel database.");
+        } else if (groupId == 0) {
+            msg = new Message(Message.MessageType.ERROR, 22, "Impossibile "
+                    + "modificare " + groupTitle + ".");
+        } else if (groupId > 1) {
+            msg = new Message(Message.MessageType.ERROR, 23, "Incredibile! "
+                    + "hai addirittura modificato 2 gruppi");
         } else {
-            msg = new Message(Message.MessageType.SUCCESS, 2, groupTitle);
+            msg = new Message(Message.MessageType.SUCCESS, 3, "Gruppo "
+                    + " modificato con successo!");
         }
         return msg;
     }
