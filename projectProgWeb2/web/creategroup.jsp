@@ -27,13 +27,16 @@
                 Private group?: <% out.println("<input type=\"checkbox\" name=\"" + RequestUtils.GROUP_PRIVATE + "\"/>"); %><br>
                 Title of the group: <% out.println("<input type=\"text\" name=\"" + RequestUtils.GROUP_TITLE + "\"/>");%><br>
                 <b>Scegli chi invitare:</b><br>
-                <% ArrayList<UserBean> users = (ArrayList<UserBean>) request.getAttribute(RequestUtils.USERLIST); %>
+                <%  ArrayList<UserBean> users = (ArrayList<UserBean>) request.getAttribute(RequestUtils.USERLIST); %>
+                <%  if (users == null) out.println("<h1>NULL</h1>"); %>
                 <%  if (users != null) { %>
                 <%      for (UserBean user : users) {%>
-                <%          if(us.getUserID()!=user.getUserID())out.println("<input type=\"checkbox\" name=\"" + RequestUtils.USERCHECK + "\" value=\"" 
-                        + user.getUserID() + "\"<\\input><br>"+user.toString()); %>
+                <%          if (us.getUserID() != user.getUserID()) { %>
+                <%              out.println("<input type=\"checkbox\" name=\"" + RequestUtils.USERCHECK + "\" value=\""
+                                        + user.getUserID() + "\"<\\input><br>" + user.toString()); %>
+                <%          }%>
                 <%      } %>
-                <%  } %>
+                <%  }%>
                 <input type="submit" id="regBtn" value="Aggiungi gruppo"/>
             </p>
         </form>

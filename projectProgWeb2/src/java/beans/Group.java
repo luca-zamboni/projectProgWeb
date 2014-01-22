@@ -19,6 +19,9 @@ public class Group implements Serializable{
     private ArrayList<Post> posts = new ArrayList();
     private ArrayList<UserBean> users = new ArrayList<>();
     private ArrayList<String> allFiles = new ArrayList<>();
+    
+    public Group() {
+    }
 
     public Group(int groupid, String title, int owner, boolean priva) {
         this.groupid = groupid;

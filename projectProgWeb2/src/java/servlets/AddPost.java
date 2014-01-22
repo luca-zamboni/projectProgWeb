@@ -73,7 +73,7 @@ public class AddPost extends HttpServlet {
                     post = cleanString(post);
                     post = post.replace("\n", "<br>");
                     
-                    ParsingUtils p = new ParsingUtils(post);
+                    ParsingUtils p = new ParsingUtils(post,groupid,mReq);
                     post = p.parseQrAndLinkUtils();
                     ArrayList<String> qrs = p.getQrs();
                     
@@ -157,7 +157,8 @@ public class AddPost extends HttpServlet {
                         name = name.substring(name.lastIndexOf("/"));
                     }
                     
-                    dbm.newFile(user.getUserID(), postid , name);
+                    if(part.getSize()>0)
+                        dbm.newFile(user.getUserID(), postid , name);
 
                     File outputFile = new File(path + "/files/" + groupid + "/" + name);
                     if (!outputFile.exists()) {
@@ -182,7 +183,7 @@ public class AddPost extends HttpServlet {
         
     }
     
-    public ArrayList<String> getAllFileGroup() {
+    public static ArrayList<String> getAllFileGroup(int groupid,HttpServletRequest mReq) {
         ArrayList<String> ret = new ArrayList();
         String path = mReq.getServletContext().getRealPath("/");
         File f = new File(path + "/files/" + groupid + "/");
@@ -198,7 +199,7 @@ public class AddPost extends HttpServlet {
     
     private boolean isInGroupFiles(String file) {
         file = file.replace(" ", "");
-        for (String f : getAllFileGroup()) {
+        for (String f : getAllFileGroup(groupid,mReq)) {
             if (f.equals(file)) {
                 return true;
             }

@@ -6,7 +6,7 @@
     </filter>
     <filter>
         <filter-name>GetFilter</filter-name>
-        <filter-class>filters.FIleAccess</filter-class>
+        <filter-class>filters.FileAccess</filter-class>
     </filter>
     <filter>
         <filter-name>AlreadyLogged</filter-name>
@@ -66,7 +66,7 @@
     </servlet>
     <servlet>
         <servlet-name>threadgroup</servlet-name>
-        <servlet-class>servlets.threadgroup</servlet-class>
+        <servlet-class>servlets.ThreadGroup</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>AddPost</servlet-name>
@@ -77,6 +77,14 @@
             <max-request-size>418018841</max-request-size>
             <file-size-threshold>1048576</file-size-threshold>
         </multipart-config>
+    </servlet>
+    <servlet>
+        <servlet-name>PdfCreator</servlet-name>
+        <servlet-class>servlets.PdfCreator</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>GroupModify</servlet-name>
+        <servlet-class>servlets.GroupModify</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>login</servlet-name>
@@ -113,6 +121,14 @@
     <servlet-mapping>
         <servlet-name>AddPost</servlet-name>
         <url-pattern>/addpost</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>PdfCreator</servlet-name>
+        <url-pattern>/PdfCreator</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>GroupModify</servlet-name>
+        <url-pattern>/GroupModify</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

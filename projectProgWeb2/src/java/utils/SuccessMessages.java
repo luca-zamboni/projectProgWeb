@@ -13,6 +13,7 @@ package utils;
 public class SuccessMessages {
     private static String REGISTRATION = "Ottimo, adesso puoi effettuare il Log-in!";
     private static String PASSWORDCHANGE = "Password aggiornata con success!";
+    private static String GROUPSUCCESS = "Inserito con successo il gruppo ";
 
     public static String getSuccessMessage(int code) {
         switch (code) {
@@ -20,6 +21,8 @@ public class SuccessMessages {
                 return REGISTRATION;
             case 1:
                 return PASSWORDCHANGE;
+            case 2:
+                return GROUPSUCCESS;
             default:
                 return "";
         }
