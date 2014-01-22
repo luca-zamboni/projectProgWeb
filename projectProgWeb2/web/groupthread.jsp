@@ -58,7 +58,7 @@
                                     </ul>
                                 </div>
                                 <div class="col-md-8">
-                                    <c:out value="${posts.getText()}"/> 
+                                    <c:out value="${posts.getText()}" escapeXml="false"/> 
                                 </div>
                                 <div class="col-md-2">
                                     

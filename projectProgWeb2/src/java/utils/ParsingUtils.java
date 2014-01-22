@@ -13,6 +13,8 @@ import java.util.ArrayList;
 import java.net.MalformedURLException;
 import java.net.URL;
 import javax.servlet.http.HttpServletRequest;
+import servlets.AddPost;
+import static servlets.AddPost.getAllFileGroup;
 
 /**
  *
@@ -25,10 +27,14 @@ public class ParsingUtils {
     private static final String FOLDER = "./files/";
     
     private String text;
-    ArrayList<String> qrs = new ArrayList<>();
+    private int groupid;
+    private ArrayList<String> qrs = new ArrayList<>();
+    private HttpServletRequest mReq;
 
-    public ParsingUtils(String text){
+    public ParsingUtils(String text,int grouid,HttpServletRequest mReq){
         this.text = text;
+        this.groupid = grouid;
+        this.mReq = mReq;
     }
     
     public ArrayList<String> getQrs(){
@@ -123,6 +129,17 @@ public class ParsingUtils {
             URL url = new URL(into);
             into = "<a href='" + into + "'>" + into + "</a>";
         } catch (MalformedURLException e) {
+            boolean g = false;
+            into = into.replace(" ", "");
+            for (String f : getAllFileGroup(groupid,mReq)) {
+                if (f.equals(into)) {
+                    g = true;
+                }
+            }
+            if(g){
+                String path = mReq.getServletContext().getContextPath();
+                into = "<a href=\"" + path + "/files/" + groupid + "/" + into + "\">" + into + "</a>";
+            }
         }
         return into;
     }
