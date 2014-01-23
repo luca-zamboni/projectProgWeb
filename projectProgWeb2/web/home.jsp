@@ -41,14 +41,4 @@
             </div>
         </div>
     </body>
-    <script type="text/javascript" >
-        $(document).ready(function() {
-            var loadCard = function() {
-                $(".card ").each(function(index) {
-                    $(this).toggle("drop", {direction: "down"});
-                });
-            };
-            setTimeout(loadCard,500);
-        });
-    </script>
 </html>
