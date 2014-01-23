@@ -63,6 +63,7 @@ body{
 }
 
 .card{
+    display: none;
     background-color: white;
     box-shadow: 0 0 5px darkgray;
     padding: 10px;

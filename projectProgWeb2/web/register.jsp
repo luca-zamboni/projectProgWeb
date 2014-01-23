@@ -25,14 +25,14 @@
                 display:block;
                 margin: 0 auto 10px;
             }
-        </style>
+        </style> 
     </head>
     <body>
         <div class="container">
             <div class="row">
                 <div class="col-xs-1 col-md-2 col-lg-3">&nbsp;</div>
                 <div class="col-xs-10 col-md-8 col-lg-6" style="margin-top:40px;">
-                    <div class="bubble" style="margin-top:40px;">
+                    <div class="bubble" style=" display:none;margin-top:40px;">
                         <jsp:include page="includes/messagedisplayer.jsp" />
                         <p><strong>Presto</strong> sarai dentro, scrivi qui le tue informazioni</p>
                         <form action="register" method="POST" id="regform">
@@ -46,5 +46,9 @@
             </div>
         </div>
     </body>
-
+    <script type="text/javascript" >
+        $(document).ready(function(){
+           $(".bubble").fadeIn('slow'); 
+        });
+    </script>
 </html>

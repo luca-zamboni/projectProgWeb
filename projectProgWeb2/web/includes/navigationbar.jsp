@@ -8,7 +8,7 @@
 <%@page import="beans.UserBean"%>
 <%@page import="utils.Support"%>
 <% UserBean user = (UserBean) Support.getInSession(request, SessionUtils.USER);%>
-<div class="navbar mynavbar" style="background-color: white;" >
+<div class="navbar mynavbar" style="display:none;background-color: white;" >
     <div class="container">
         <div class="row">
             <div class="col-xs-5 col-md-6 col-lg-7"><a href ="home.jsp" class="mybrand">StudyTalk</a></div>
@@ -27,3 +27,8 @@
         </div>
     </div>
 </div>
+<script type="text/javascript" >
+    $(document).ready(function(){
+        $(".navbar").slideDown();
+    });
+</script>
