@@ -32,6 +32,12 @@ body{
     font-size: 35px;
     color:#F15A0F;
 }
+.mybrand:hover{
+    cursor: pointer;
+    color:#F15A0F;
+    text-decoration: none;
+}
+
 .bubble{
     background-color:rgba(255,255,255,0.6);
     text-align: center;
@@ -49,6 +55,7 @@ body{
     font-size: 30px;
 }
 .nav-prof img{
+    width: 60px;
     height: 60px;
     border-radius: 50%;
     border: 1px solid #333;
@@ -56,9 +63,17 @@ body{
 }
 
 .card{
+    display: none;
     background-color: white;
     box-shadow: 0 0 5px darkgray;
-    padding: 5px;
+    padding: 10px;
     margin:5px;
 }
-
+.card h4{
+    margin-bottom: 5px;
+}
+.card img{
+    width: 60%;
+    margin-top:10px;
+    margin-bottom: 15px;
+}
