@@ -44,42 +44,31 @@
                 </div>
             </div><br>
             <div>
-                    <c:forEach var="posts" items="${group.getPosts()}">
-                        <div class="well">
-                            <img src="" style="width:60px;heigth:100px;" class="img-thumbnail" />
-                            <b><c:out value="${posts.getUserid()}"/></b> at <c:out value="${posts.getDate()}"/> says:<br> <br> 
-                            <div class="row">
-                                <div class="col-md-2">
-                                    <h5>Files:</h5>
-                                    <ul class="list-group">
-                                        <c:forEach var="file" items="${posts.getFiles()}"> 
-                                            <li class="list-group-item"><a href="files/<c:out value="${group.getGroupid()}" />/<c:out value="${file}" />"><c:out value="${file}" /></a></li>
-                                        </c:forEach>
-                                    </ul>
-                                </div>
-                                <div class="col-md-8">
-                                    <c:out value="${posts.getText()}" escapeXml="false"/> 
-                                </div>
-                                <div class="col-md-2">
-                                    <c:forEach var="qr" items="${posts.getQrs()}">
-                                        <img src="<c:out value="${qr}"/>" style="width:70px;heigth:150px;" />
+                <c:forEach var="posts" items="${group.getPosts()}">
+                    <div class="well">
+                        <img src="" style="width:60px;heigth:100px;" class="img-thumbnail" />
+                        <b><c:out value="${posts.getUserid()}"/></b> at <c:out value="${posts.getDate()}"/> says:<br> <br> 
+                        <div class="row">
+                            <div class="col-md-2">
+                                <h5>Files:</h5>
+                                <ul class="list-group">
+                                    <c:forEach var="file" items="${posts.getFiles()}"> 
+                                        <li class="list-group-item"><a href="files/<c:out value="${group.getGroupid()}" />/<c:out value="${file}" />"><c:out value="${file}" /></a></li>
                                     </c:forEach>
-                                </div>
+                                </ul>
+                            </div>
+                            <div class="col-md-8">
+                                <c:out value="${posts.getText()}" escapeXml="false"/> 
+                            </div>
+                            <div class="col-md-2">
+                                <c:forEach var="qr" items="${posts.getQrs()}">
+                                    <img src="<c:out value="${qr}"/>" style="width:70px;heigth:150px;" />
+                                </c:forEach>
                             </div>
                         </div>
-                    </c:forEach>
-            </div>
-            <div class="well">
-                <form enctype="multipart/form-data" action="addpost?gid=<c:out value="${group.getGroupid()}"/>" method="POST">
-                    <h3>Di la tua</h3>
-                    <div class="form-group">
-                        <label for="exampleInputFile">File input</label>
-                        <input type="file" name="files" multiple/>
-                        <p class="help-block">Insert your files</p>
                     </div>
-                    <textarea name="post" class="form-control" rows="6"></textarea><br>
-                    <button type="submit" class="btn btn-success btn-lg">Submit</button>
-                </form>
+                </c:forEach>
+                <c:import url="includes/addpost.jsp" />
             </div>
         </div>
     </body>
