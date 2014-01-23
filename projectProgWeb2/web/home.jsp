@@ -31,7 +31,7 @@
                     <p>Non ci sono inviti<br />:(</p>
 
                 </div>
-                <div class="col-xs-11 col-md-4 col-lg-4 card" style="text-align: center;">
+                <div class="col-xs-10 col-md-4 col-lg-4 card" style="text-align: center;">
                     <div class="btn btn-success pull-left">
                         <a href="creategroup.jsp">
                             <span class="glyphicon glyphicon-edit"></span>
