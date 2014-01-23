@@ -9,7 +9,7 @@
 <%@page import="java.util.ArrayList"%>
 <%@page import="beans.UserBean"%>
 <%@page import="utils.RequestUtils"%>
-<%@taglib uri="http://java.sun.com/jstl/core" prefix="c"%>
+<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -28,8 +28,12 @@
                 Private group?: <% out.println("<input type=\"checkbox\" name=\"" + RequestUtils.GROUP_PRIVATE + "\"/>"); %><br>
                 Title of the group: <% out.println("<input type=\"text\" name=\"" + RequestUtils.GROUP_TITLE + "\"/>");%><br>
                 <b>Scegli chi invitare:</b><br>
-                
-                <%  ArrayList<UserBean> users = (ArrayList<UserBean>) request.getAttribute(RequestUtils.USERLIST); %>
+                <c:forEach items="${userlist}" var="userb" >
+                    <c:if test="${userb.userID!=sessionScope.user.userID}">
+                    <input type="checkbox" name="usercheckboxes" value="<c:out value="${userb.userID}"/>"<\input><c:out value="${userb.username}"/><br>
+                    </c:if>
+                </c:forEach>
+<%--                <%  ArrayList<UserBean> users = (ArrayList<UserBean>) request.getAttribute(RequestUtils.USERLIST); %>
                 <%  if (users == null) out.println("<h1>NULL</h1>"); %>
                 <%  if (users != null) { %>
                 <%      for (UserBean user : users) {%>
@@ -38,7 +42,7 @@
                                         + user.getUserID() + "\"<\\input><br>" + user.toString()); %>
                 <%          }%>
                 <%      } %>
-                <%  }%>
+                <%  }%>--%>
                 <input type="submit" id="regBtn" value="Aggiungi gruppo"/>
             </p>
         </form>
