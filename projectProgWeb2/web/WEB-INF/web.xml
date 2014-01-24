@@ -5,6 +5,10 @@
         <filter-class>filters.LoginFilter</filter-class>
     </filter>
     <filter>
+        <filter-name>FilterNotOwner</filter-name>
+        <filter-class>filters.FilterNotOwner</filter-class>
+    </filter>
+    <filter>
         <filter-name>GetFilter</filter-name>
         <filter-class>filters.FileAccess</filter-class>
     </filter>
@@ -26,16 +30,21 @@
         <url-pattern>/index.jsp</url-pattern>
     </filter-mapping>
     <filter-mapping>
+        <filter-name>FilterNotOwner</filter-name>
+        <url-pattern>/modifygroup.jsp</url-pattern>
+        <url-pattern>/GroupModify</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
         <filter-name>GetFilter</filter-name>
         <url-pattern>/database/*</url-pattern>
     </filter-mapping>
     <filter-mapping>
         <filter-name>LoginFilter</filter-name>
         <url-pattern>/home.jsp</url-pattern>
-    </filter-mapping>
-    <filter-mapping>
-        <filter-name>LoginFilter</filter-name>
-        <url-pattern>/profile.jsp</url-pattern>
+        <url-pattern>/GroupModify</url-pattern>
+        <url-pattern>/GroupCreate</url-pattern>
+        <url-pattern>/modifygroup.jsp</url-pattern>
+        <url-pattern>/creategroup.jsp</url-pattern>
     </filter-mapping>
     <servlet>
         <servlet-name>login</servlet-name>

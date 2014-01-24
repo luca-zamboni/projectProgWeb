@@ -47,19 +47,23 @@ public class GroupModify extends HttpServlet {
         ArrayList<UserBean> ub = null;
         ArrayList<UserBean> members = null;
         Message msg = null;
+        int groupId = Integer.parseInt(request.
+                getParameter(RequestUtils.GROUP_ID));
+        int ownerId = -1;
+        Group group = null;
         try {
             dbm = new DBManager(request);
             ub = dbm.getAllUser();
-            members = dbm.getAllUserInGroup(Integer.parseInt(request.
-                    getParameter(RequestUtils.GROUP_ID)));
+            group = dbm.fillGroupById(groupId, true, false, false);
+            request.setAttribute(RequestUtils.GROUP, group);
         } catch (Exception e) {
             System.out.println(e.toString());
+            e.printStackTrace(System.err);
         }
         request.setAttribute(RequestUtils.USERLIST, ub);
         request.setAttribute(RequestUtils.GROUP_USERS, members);
-        System.err.println(request.getAttribute(RequestUtils.GROUP_OWNER));
         if (msg != null) {
-            Support.forward(getServletContext(), request, response, 
+            Support.forward(getServletContext(), request, response,
                     "/home.jsp", msg);
         } else {
             Support.forward(getServletContext(), request, response, "/modifygroup.jsp", msg);
@@ -90,7 +94,7 @@ public class GroupModify extends HttpServlet {
         String title = request.getParameter(RequestUtils.GROUP_TITLE);
         String isPrivate = request.getParameter(RequestUtils.GROUP_PRIVATE);
         String[] users = request.getParameterValues(RequestUtils.GROUP_USERS);
-        int groupId =  Integer.parseInt( (grpString==null) ? "-1" : grpString);
+        int groupId = Integer.parseInt((grpString == null) ? "-1" : grpString);
 
         int rowChanged = updateGroup(groupId, title, isPrivate, users, user);
 

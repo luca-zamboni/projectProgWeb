@@ -79,10 +79,6 @@ public class GroupCreate extends HttpServlet {
         String title = request.getParameter(RequestUtils.GROUP_TITLE);
         String isPrivate = request.getParameter(RequestUtils.GROUP_PRIVATE);
         String[] users = request.getParameterValues(RequestUtils.GROUP_USERS);
-        
-        for (int i = 0; i < users.length; i++) {
-            System.err.println(users[i]);
-        }
 
         int groupId = addGroup(title, isPrivate, users, user);
         String path = request.getServletContext().getRealPath("/");

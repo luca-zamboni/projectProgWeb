@@ -790,4 +790,47 @@ public class DBManager implements Serializable {
         stm.setInt(2, id);
         stm.executeUpdate();
     }
+
+    public Group fillGroupById(int groupId, boolean users, boolean posts, boolean files) throws SQLException {
+        Group ret = new Group();
+        ret.setGroupid(groupId);
+        
+        String sql = "SELECT ownerid, groupname, creationdate, private FROM groups WHERE groupid=?";
+        PreparedStatement stm = con.prepareStatement(sql);
+        stm.setInt(1, groupId);
+        ResultSet rs = stm.executeQuery();
+        if (rs.next()) {
+            ret.setOwner(rs.getInt(1));
+            ret.setTitle(rs.getString(2));
+            ret.setDate(rs.getString(3));
+            ret.setPriva(rs.getBoolean(4));
+        }
+        
+        if (users) {
+            ret.setUsers(this.getAllUserInGroup(groupId));
+        }
+        
+        if (posts) {
+            ret.setPosts(this.getAllPost(groupId));
+            
+            sql = "SELECT date FROM post WHERE groupid=? ORDER BY date LIMIT 1";
+            stm = con.prepareStatement(sql);
+            stm.setInt(1, groupId);
+            rs = stm.executeQuery();
+            if (rs.next()) {
+                ret.setLastPostDate(Long.parseLong(rs.getString(1)));
+            }
+        }
+        
+        if (files) {
+            ArrayList<String> file = new ArrayList();
+            ArrayList<Post> pstal = this.getAllPost(groupId);
+            for (Post post:pstal) {
+                file.addAll(this.getAllFileInPost(post.getPostid()));
+            }
+            ret.setAllFiles(file);
+        }
+                
+        return ret;
+    }
 }
