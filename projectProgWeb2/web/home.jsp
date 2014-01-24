@@ -32,6 +32,13 @@
                     <p>Non ci sono inviti<br />:(</p>
 
                 </div>
+                <%-- template jstl
+                
+                <c:forEach item=${varname} var="group">
+                
+                </c:forEach>
+                --%>
+
                 <div class="col-xs-10 col-md-4 col-lg-4 card" style="text-align: center;">
                     <div class="btn btn-success pull-left">
                         <a href="groupCreate">
