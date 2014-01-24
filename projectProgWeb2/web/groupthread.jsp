@@ -32,13 +32,18 @@
                   </div>
                   <div id="collapseOne" class="panel-collapse collapse">
                     <div class="panel-body">
-                        <c:if test="${group.getAllFiles().size() > 0}">
                         <ul class="list-group">
-                            <c:forEach var="file" items="${group.getAllFiles()}"> 
-                                <li class="list-group-item"><a href="files/<c:out value="${group.getGroupid()}" />/<c:out value="${file}" />"><c:out value="${file}" /></a></li>
-                            </c:forEach>
+                            <c:choose>
+                                <c:when test="${group.getAllFiles().size()>0}">
+                                    <c:forEach var="file" items="${group.getAllFiles()}"> 
+                                        <li class="list-group-item"><a href="files/<c:out value="${group.getGroupid()}" />/<c:out value="${file}" />"><c:out value="${file}" /></a></li>
+                                    </c:forEach>
+                                </c:when>
+                                <c:otherwise>
+                                    <li class="list-group-item">No files added</li>
+                                </c:otherwise>
+                            </c:choose>
                         </ul>
-                        </c:if>
                     </div>
                   </div>
                 </div>
@@ -50,12 +55,19 @@
                         <b><c:out value="${posts.getUserid()}"/></b> at <c:out value="${posts.getDate()}"/> says:<br> <br> 
                         <div class="row">
                             <div class="col-md-2">
+                            <c:choose>
+                                <c:when test="${posts.getFiles().size()>0}">
                                 <h5>Files:</h5>
                                 <ul class="list-group">
                                     <c:forEach var="file" items="${posts.getFiles()}"> 
                                         <li class="list-group-item"><a href="files/<c:out value="${group.getGroupid()}" />/<c:out value="${file}" />"><c:out value="${file}" /></a></li>
                                     </c:forEach>
                                 </ul>
+                                </c:when>
+                                <c:otherwise>
+                                    
+                                </c:otherwise>
+                            </c:choose>
                             </div>
                             <div class="col-md-8">
                                 <c:out value="${posts.getText()}" escapeXml="false"/> 
