@@ -45,16 +45,18 @@ public class GroupModify extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         ArrayList<UserBean> ub = null;
-        Group grp = null;
+        ArrayList<UserBean> members = null;
         Message msg = null;
         try {
             dbm = new DBManager(request);
             ub = dbm.getAllUser();
-            
+            members = dbm.getAllUserInGroup(Integer.parseInt(request.
+                    getParameter(RequestUtils.GROUP_ID)));
         } catch (Exception e) {
             System.out.println(e.toString());
         }
         request.setAttribute(RequestUtils.USERLIST, ub);
+        request.setAttribute(RequestUtils.GROUP_USERS, members);
         System.err.println(request.getAttribute(RequestUtils.GROUP_OWNER));
         if (msg != null) {
             Support.forward(getServletContext(), request, response, 

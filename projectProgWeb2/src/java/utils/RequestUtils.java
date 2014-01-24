@@ -24,6 +24,7 @@ public class RequestUtils {
     public static final String USERLIST = "userlist";
     public static final String USERCHECK = "usercheckboxes";
     
+    public static final String GROUP = "group";
     public static final String GROUP_ID = "gid";
     public static final String GROUP_OWNER = "gidowner";
     public static final String GROUP_TITLE = "gtitle";

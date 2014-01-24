@@ -8,6 +8,7 @@
 <%@page import="beans.UserBean" %>
 <%@page import="utils.RequestUtils"%>
 <%@page import="utils.SessionUtils"%>
+<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -24,7 +25,7 @@
             <div class="row">
                 <div class="col-xs-10 col-md-2 col-lg-2">&nbsp;</div>
                 <div class="col-xs-10 col-md-4 col-lg-4 card" style="text-align: center;">
-                    <h4>Hello, <%=user.getUsername()%>! </h4>
+                    <h4>Hello, <c:out value="${user.username}"/>! </h4>
                     <p>L' ultimo accesso è stato:
                         <strong><%= Support.getDateFromTime(user.getLastLogin())%></strong>
                     </p>
