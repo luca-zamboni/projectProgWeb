@@ -85,7 +85,7 @@ public class DBManager implements Serializable {
         }
     }
 
-    public int updateGroup(int group, String newTitle, String[] users, 
+    public int updateGroup(int group, String newTitle, String[] users,
             int owner, boolean type) throws SQLException {
         int rowChanged;
         String sql = "UPDATE groups SET groupname = ? WHERE groupid = ?";
@@ -135,7 +135,7 @@ public class DBManager implements Serializable {
         rowChanged = stm4.executeUpdate();
         stm4.close();
         return rowChanged;
-        
+
     }
 
     public int newGroup(String title, String[] users, int owner,
@@ -160,9 +160,9 @@ public class DBManager implements Serializable {
         String sql2;
 
         if (users != null) {
+            sql2 = "INSERT INTO user_groups(userid,groupid,status) VALUES (?,?,2)";
             for (String mUser : users) {
                 int aux = getIdFromUser(mUser);
-                sql2 = "INSERT INTO user_groups(userid,groupid,status) VALUES (?,?,2)";
                 PreparedStatement stm2 = con.prepareStatement(sql2);
                 stm2.setInt(1, aux);
                 stm2.setInt(2, groupid);
@@ -182,12 +182,12 @@ public class DBManager implements Serializable {
         return groupid;
 
     }
-    
-    public ArrayList<UserBean> getAllUserInGroup(int groupid) throws SQLException{
+
+    public ArrayList<UserBean> getAllUserInGroup(int groupid) throws SQLException {
         ArrayList<UserBean> us = getAllUser();
         ArrayList<UserBean> ret = new ArrayList<>();
-        for(UserBean a : us){
-            if(isInGroup(a.getUserID(), groupid)){
+        for (UserBean a : us) {
+            if (isInGroup(a.getUserID(), groupid)) {
                 ret.add(a);
             }
         }
@@ -224,8 +224,8 @@ public class DBManager implements Serializable {
         }
         return ownerA;
     }
-    
-    public ArrayList<String> getAllFileInPost(int postid) throws SQLException{
+
+    public ArrayList<String> getAllFileInPost(int postid) throws SQLException {
         ArrayList<String> ret = new ArrayList<>();
         String sql = "select filename from post_file where postid=?";
         PreparedStatement stm = con.prepareStatement(sql);
@@ -258,7 +258,7 @@ public class DBManager implements Serializable {
                 long date = Long.parseLong(d);
                 String content = rs.getString(3);
                 int postid = rs.getInt(4);
-                p.add(new Post(own,content,date,group,postid));
+                p.add(new Post(own, content, date, group, postid));
             }
         } finally {
             rs.close();
@@ -266,8 +266,8 @@ public class DBManager implements Serializable {
         }
         return p;
     }
-    
-    public boolean isPrivateGroup(int groupid) throws SQLException{
+
+    public boolean isPrivateGroup(int groupid) throws SQLException {
         String sql = "select private from groups where groupid=?";
         PreparedStatement stm = con.prepareStatement(sql);
         stm.setInt(1, groupid);
@@ -283,7 +283,7 @@ public class DBManager implements Serializable {
         }
         return false;
     }
-    
+
     public int insertPost(int userid, int groupid, String post) throws SQLException {
         Date d = new Date();
         String aux = "" + d.getTime();
@@ -303,7 +303,7 @@ public class DBManager implements Serializable {
         }
         res.close();
         stm.close();
-        
+
         return postid;
     }
 
@@ -416,7 +416,7 @@ public class DBManager implements Serializable {
         return avatarStr;
     }
 
-    public void setAvatar(int userID,String path) throws SQLException {
+    public void setAvatar(int userID, String path) throws SQLException {
         String sql = "UPDATE users SET " + AVATAR + " = ? WHERE userid = ?";
         PreparedStatement stm = con.prepareStatement(sql);
         stm.setString(1, path);
@@ -513,7 +513,7 @@ public class DBManager implements Serializable {
 
         return ret;
     }
-    
+
     private ArrayList<Group> getGroups(int status, String user) throws SQLException, ParseException {
         String sql = "select groups.groupid,groupname,creationdate,groups.ownerid,post.date "
                 + "from groups,users,user_groups,post "
@@ -540,9 +540,14 @@ public class DBManager implements Serializable {
                 i4 = rs.getInt(4);
                 s5 = rs.getString(5);
                 l5 = Long.parseLong(s5);
+
                 Group aux = new Group();
-                
-           //     aux.setOwner(getUserFormId(i4));
+                aux.setGroupid(i1);
+                aux.setTitle(s2);
+                aux.setDate(s3);
+                aux.setOwner(i4);
+                aux.setLastPostDate(l5);
+
                 mGroups.add(aux);
             }
         } finally {
@@ -560,7 +565,7 @@ public class DBManager implements Serializable {
         return getGroups(0, user);
 
     }
-    
+
     public int getIdFromUser(String user) throws SQLException {
         String sql = "select userid from users where username = ?";
         PreparedStatement stm = con.prepareStatement(sql);

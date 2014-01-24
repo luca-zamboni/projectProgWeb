@@ -30,19 +30,9 @@
                 <b>Scegli chi invitare:</b><br>
                 <c:forEach items="${userlist}" var="userb" >
                     <c:if test="${userb.userID!=sessionScope.user.userID}">
-                    <input type="checkbox" name="usercheckboxes" value="<c:out value="${userb.userID}"/>"<\input><c:out value="${userb.username}"/><br>
+                        <input type="checkbox" name="usercheckboxes" value="<c:out value="${userb.userID}"/>"/><c:out value="${userb.username}"/><br>
                     </c:if>
                 </c:forEach>
-<%--                <%  ArrayList<UserBean> users = (ArrayList<UserBean>) request.getAttribute(RequestUtils.USERLIST); %>
-                <%  if (users == null) out.println("<h1>NULL</h1>"); %>
-                <%  if (users != null) { %>
-                <%      for (UserBean user : users) {%>
-                <%          if (us.getUserID() != user.getUserID()) { %>
-                <%              out.println("<input type=\"checkbox\" name=\"" + RequestUtils.USERCHECK + "\" value=\""
-                                        + user.getUserID() + "\"<\\input><br>" + user.toString()); %>
-                <%          }%>
-                <%      } %>
-                <%  }%>--%>
                 <input type="submit" id="regBtn" value="Aggiungi gruppo"/>
             </p>
         </form>

@@ -16,6 +16,8 @@ public class Group implements Serializable{
     private String title;
     private int owner;
     private boolean priva;
+    private long lastPostDate;
+    private String date;
     private ArrayList<Post> posts = new ArrayList();
     private ArrayList<UserBean> users = new ArrayList<>();
     private ArrayList<String> allFiles = new ArrayList<>();
@@ -75,6 +77,7 @@ public class Group implements Serializable{
     }
 
     public void setPosts(ArrayList<Post> posts) {
+        this.posts.clear();
         this.posts.addAll(posts);
     }
 
@@ -84,6 +87,14 @@ public class Group implements Serializable{
 
     public void setUsers(ArrayList<UserBean> users) {
         this.users.addAll(users);
+    }
+
+    public void setDate(String date) {
+        this.date=date;
+    }
+
+    public void setLastPostDate(long lastPostDate) {
+        this.lastPostDate=lastPostDate;
     }
     
     
