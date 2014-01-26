@@ -63,7 +63,7 @@ public class Login extends HttpServlet {
         Message msg = null;
         if (login.getUserID() >= 0) {
             Support.addToSession(request, SessionUtils.USER, login);
-            page = "/home.jsp";
+            page = "/home";
         } else {
             msg = new Message(Message.MessageType.ERROR, 0);
             request.setAttribute(RequestUtils.MESSAGE, msg);
