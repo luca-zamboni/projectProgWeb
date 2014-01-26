@@ -287,6 +287,7 @@ public class DBManager implements Serializable {
     public int insertPost(int userid, int groupid, String post) throws SQLException {
         Date d = new Date();
         String aux = "" + d.getTime();
+        System.err.println(post);
         String sql = "INSERT INTO post(groupid,ownerid,date,content) VALUES (?,?,?,?)";
         PreparedStatement stm = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
         stm.setInt(1, groupid);

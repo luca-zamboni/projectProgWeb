@@ -18,6 +18,7 @@
         <title>Create the new group</title>
     </head>
     <body>
+        <jsp:include page="includes/navigationbar.jsp" />
         <div class="container">
             <jsp:include page="includes/messagedisplayer.jsp" />
             <h1 style="text-align:center"><c:out value="${group.getTitle()}"/></h1>
@@ -54,7 +55,10 @@
                         <img src="" style="width:60px;heigth:100px;" class="img-thumbnail" />
                         <b><c:out value="${posts.getUserid()}"/></b> at <c:out value="${posts.getDate()}"/> says:<br> <br> 
                         <div class="row">
-                            <div class="col-md-2">
+                            <div class="col-md-6">
+                                <c:out value="${posts.getText()}" escapeXml="false"/> 
+                            </div>
+                            <div class="col-md-4">
                             <c:choose>
                                 <c:when test="${posts.getFiles().size()>0}">
                                 <h5>Files:</h5>
@@ -68,9 +72,6 @@
                                     
                                 </c:otherwise>
                             </c:choose>
-                            </div>
-                            <div class="col-md-8">
-                                <c:out value="${posts.getText()}" escapeXml="false"/> 
                             </div>
                             <div class="col-md-2">
                                 <c:forEach var="qr" items="${posts.getQrs()}">

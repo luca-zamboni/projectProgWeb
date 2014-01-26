@@ -46,7 +46,7 @@ public class ParsingUtils {
 
     public String parseQrAndLinkUtils() {
         String ret = "";
-        int bstring = -1;
+        int bstring = 0;
         int prev = 0;
         int state = 0;
         boolean ok = false;
@@ -59,7 +59,8 @@ public class ParsingUtils {
         }
 
         if (is.size() <= 0) {
-            System.err.println("asddsaasddsa");
+            System.err.println("no $");
+            ret = text;
         } else {
             // 0:begin 1:$ 2:$$ 3:$$ $ 4:$QR$ 5:$QR$ $
             for (Integer i : is) {
@@ -92,6 +93,7 @@ public class ParsingUtils {
                 }
                 if (state == 2) {
                     if (prev + 2 <= index) {
+                        System.err.println("s2");
                         state = 3;
                         prev = index;
                         ok = true;
@@ -99,6 +101,7 @@ public class ParsingUtils {
                 }
                 if (state == 1) {
                     if (prev + 1 == index) {
+                        System.err.println("s1");
                         state = 2;
                         bstring = index;
                         prev = index;
@@ -113,14 +116,17 @@ public class ParsingUtils {
                     }
                 }
                 if (!ok) {
-                    ret += replaceWithLink(text, prev+1, index - 1);
+                    System.err.println("non ok");
+                    System.err.println(bstring +" " + index + " " + text);
+                    ret += text.substring(bstring, index );
                     prev = index;
+                    bstring = index;
                     state = 1;
-                    bstring = -1;
                 }
 
             }
         }
+        ret = ret.replaceAll("[$]", " ");
         return ret;
 
     }

@@ -80,14 +80,13 @@
         </init-param>
     </servlet>
     <servlet>
-        <servlet-name>threadgroup</servlet-name>
+        <servlet-name>Threadgroup</servlet-name>
         <servlet-class>servlets.ThreadGroup</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>AddPost</servlet-name>
         <servlet-class>servlets.AddPost</servlet-class>
         <multipart-config>
-            <location>/tmp</location>
             <max-file-size>20848820</max-file-size>
             <max-request-size>418018841</max-request-size>
             <file-size-threshold>1048576</file-size-threshold>
@@ -134,7 +133,7 @@
         <url-pattern>/modprofile</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>threadgroup</servlet-name>
+        <servlet-name>Threadgroup</servlet-name>
         <url-pattern>/threadgroup</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
