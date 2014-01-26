@@ -101,13 +101,8 @@
         <servlet-class>servlets.GroupModify</servlet-class>
     </servlet>
     <servlet>
-<<<<<<< HEAD
         <servlet-name>Home</servlet-name>
         <servlet-class>servlets.Home</servlet-class>
-        =======
-        <servlet-name>FrontController</servlet-name>
-        <servlet-class>servlets.FrontController</servlet-class>
-        >>>>>>> 537d478e564ea6ec75dfc347f425c7895e7d0046
     </servlet>
     <servlet-mapping>
         <servlet-name>login</servlet-name>
