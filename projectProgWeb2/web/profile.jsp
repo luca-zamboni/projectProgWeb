@@ -25,7 +25,7 @@
                     <div class="col-xs-8 col-md-10 col-lg-10"><a href ="home.jsp" class="mybrand">StudyTalk</a></div>
                     <div class="col-xs-2 col-md-2 col-lg-2" style="margin-top:10px;">
                         <div class="btn btn-default">
-                            <a href="home.jsp" class="glyphicon glyphicon-home"></a>
+                            <a href="./home" class="glyphicon glyphicon-home"></a>
                         </div>
                         <div class="btn btn-default">
                             <a href="./logout" class="glyphicon glyphicon-log-out"></a>

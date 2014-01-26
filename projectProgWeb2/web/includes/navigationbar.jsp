@@ -11,7 +11,7 @@
 <div class="navbar mynavbar" style="display:none;background-color: white;" >
     <div class="container">
         <div class="row">
-            <div class="col-xs-5 col-md-6 col-lg-7"><a href ="home.jsp" class="mybrand">StudyTalk</a></div>
+            <div class="col-xs-5 col-md-6 col-lg-7"><a href ="./home" class="mybrand">StudyTalk</a></div>
             <div class="col-xs-5 col-md-3 col-lg-3 nav-prof" style="text-align: center" >
                 <a href="profile.jsp">
                     <img src="<%=user.getAvatar()%>" />  
