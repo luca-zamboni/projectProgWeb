@@ -17,7 +17,6 @@ import java.util.logging.Logger;
 import javax.servlet.http.HttpServletRequest;
 import servlets.AddPost;
 import static servlets.AddPost.getAllFileGroup;
-import servlets.Login;
 
 /**
  *
@@ -179,7 +178,6 @@ public class ParsingUtils {
                 ins.close();
 
             } catch (Exception e) {
-                Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, e);
             }
         }
     }

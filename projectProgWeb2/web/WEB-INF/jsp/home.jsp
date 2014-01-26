@@ -14,14 +14,14 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <%@ include file="includes/header.jsp" %>
+        <%@ include file="/includes/header.jsp" %>
         <title>Home</title>
     </head>
     <body>
         <% UserBean user = (UserBean) Support.getInSession(request, SessionUtils.USER);%>
-        <jsp:include page="includes/navigationbar.jsp" />
+        <jsp:include page="/includes/navigationbar.jsp" />
         <div class="container">
-            <jsp:include page="includes/messagedisplayer.jsp" />
+            <jsp:include page="/includes/messagedisplayer.jsp" />
             <div class="row">
                 <div class="col-xs-10 col-md-2 col-lg-2">&nbsp;</div>
                 <div class="col-xs-10 col-md-4 col-lg-4 card" style="text-align: center;">

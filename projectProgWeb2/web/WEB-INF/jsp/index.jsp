@@ -15,10 +15,10 @@
 <html>
     <head>  
         <title>Login</title>
-        <%@ include file="includes/header.jsp" %>
+        <%@ include file="/includes/header.jsp" %>
         <style type="text/css">
             body{
-                background: #222 url('img/login_back.jpg') no-repeat;
+                background: #222 url('/projectProgWeb2/img/login_back.jpg') no-repeat;
             }
             p,a{
                 font-weight: bold;
@@ -36,8 +36,9 @@
                 <div class="row">
                     <div class="col-xs-12 col-md-6 col-lg-6"><p class="mybrand">StudyTalk</p></div>
                     <div class="col-xs-12 col-md-6 col-lg-6">
-                        <jsp:include page="includes/messagedisplayer.jsp" />
-                        <form  action="login" method="POST" >
+                        <jsp:include page="/includes/messagedisplayer.jsp" />
+                        <form  action="FrontController" method="POST" >
+                            <input type="hidden" value="login" name="opcode"/>
                             <input placeholder=username type=text name="<%=RequestUtils.USERNAME%>" />
                             <input placeholder=password type=password name="<%=RequestUtils.PASSWD%>" />
                             <input class="btn btn-primary" type="submit" value="Entra!" />
@@ -62,7 +63,7 @@
                         </p>
                         <p>Per studiare sempre al 
                             <strong>meglio</strong></p><br/>
-                        <p><a class="btn btn-success" style="padding:15px;font-size: 25px;" href="register.jsp">Iscriviti adesso!</a></p>
+                        <p><a class="btn btn-success" style="padding:15px;font-size: 25px;" href="/ProjectProgWeb2/pages/reg?opcode=register">Iscriviti adesso!</a></p>
                     </div>
                 </div>
             </div>

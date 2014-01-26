@@ -36,12 +36,15 @@ public class AlreadyLogged implements Filter {
 
         HttpServletRequest httpRequest = (HttpServletRequest) request;
         String url = ((HttpServletRequest) request).getRequestURI();
+        String op = request.getParameter("opcode");
+        
+        boolean condition = op!=null && (op.equals("login") || op.equals("register") || op.equals("forgot"));
 
-        if (bean == null) { // non e' loggato
+        if (bean == null && condition) { // non e' loggato
             chain.doFilter(request, response);
         } else {
             request.setAttribute(RequestUtils.MESSAGE, new Message(Message.MessageType.ERROR,6));
-            ((HttpServletResponse) response).sendRedirect(url + "/home.jsp");
+            ((HttpServletResponse) response).sendRedirect("/ProjectProgWeb2/pages/al?opcode=index");
         }
     }
 

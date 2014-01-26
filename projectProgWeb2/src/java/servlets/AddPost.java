@@ -95,7 +95,6 @@ public class AddPost extends HttpServlet {
         } catch (Exception e) {
             PrintWriter pw = resp.getWriter();
             pw.print("Error -- Something goes wrong -- Tips: Format your PC\n");
-            Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, e);
         }
 
     }
@@ -206,7 +205,6 @@ public class AddPost extends HttpServlet {
         try {
             dbm = new DBManager(mReq);
         } catch (SQLException ex) {
-            Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     

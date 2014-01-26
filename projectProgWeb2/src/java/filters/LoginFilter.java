@@ -31,27 +31,18 @@ public class LoginFilter implements Filter {
 
         HttpServletRequest httpRequest = (HttpServletRequest) request;
         String url = ((HttpServletRequest)request).getRequestURI();
+        String op = request.getParameter("opcode");
+        
+        boolean condition = !(op!=null && (op.equals("login") || !op.equals("register") || !op.equals("forgot")));
 
         //System.out.print("url " + url );
         if (httpRequest.getMethod().equalsIgnoreCase("GET")) {
-            if (bean == null) {
-                ((HttpServletResponse) response).sendRedirect("./");
+            if (bean == null && condition) {
+                ((HttpServletResponse) response).sendRedirect("/ProjectProgWeb2/pages/lf?opcode=login");
             }else{
                 chain.doFilter(request, response);
             }
         }
-//        } else {
-//            String path = request.getServletContext().getContextPath();
-//            if(url.equals(path+"/home.jsp")){
-//                chain.doFilter(request, response);
-//            }else{
-//                if (bean == null) {
-//                    ((HttpServletResponse) response).sendRedirect("./");
-//                }else{
-//                    chain.doFilter(request, response);
-//                }
-//            }
-//        }
     }
 
     @Override

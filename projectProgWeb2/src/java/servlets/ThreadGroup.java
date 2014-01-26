@@ -88,7 +88,6 @@ public class ThreadGroup extends HttpServlet {
         try {
             dbm = new DBManager(req);
         } catch (SQLException ex) {
-            Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     

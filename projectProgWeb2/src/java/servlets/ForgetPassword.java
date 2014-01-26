@@ -62,7 +62,6 @@ public class ForgetPassword extends HttpServlet {
         try {
             dbm = new DBManager(request);
         } catch (SQLException ex) {
-            Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 }
