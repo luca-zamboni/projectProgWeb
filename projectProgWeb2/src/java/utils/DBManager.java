@@ -254,12 +254,12 @@ public class DBManager implements Serializable {
         try {
             while (rs.next()) {
                 int ow = rs.getInt(1);
-                String own = getUserFormId(ow);
+                String us = getUserFormId(ow);
                 String d = rs.getString(2);
                 long date = Long.parseLong(d);
                 String content = rs.getString(3);
                 int postid = rs.getInt(4);
-                p.add(new Post(own, content, date, group, postid));
+                p.add(new Post(ow,us, content, date, group, postid));
             }
         } finally {
             rs.close();
