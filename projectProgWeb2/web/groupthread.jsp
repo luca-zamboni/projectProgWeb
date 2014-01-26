@@ -27,7 +27,7 @@
                   <div class="panel-heading">
                     <h4 class="panel-title">
                       <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne">
-                        All files
+                        All files <span class="badge"> <c:out value="${group.getAllFiles().size()}" /></span>
                       </a>
                     </h4>
                   </div>
@@ -63,7 +63,7 @@
                                     <c:when test="${posts.getFiles().size()>0}">
                                       <div class="btn-group">
                                         <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
-                                          File Uploaded <span class="caret"></span>
+                                          File Uploaded <span class="badge"><c:out value="${posts.getFiles().size()}" /></span> <span class="caret"></span>
                                         </button>
                                         <ul class="dropdown-menu" role="menu">
                                           <c:forEach var="file" items="${posts.getFiles()}"> 
