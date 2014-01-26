@@ -39,7 +39,7 @@
                         </a>
                     </div>
                     <c:forEach items="${groups}" var="group">
-                        <p><a href="#"><c:out value="${group.title}" /></a></p>
+                        <p><a href="threadgroup?gid=<c:out value="${group.groupid}" />"><c:out value="${group.title}" /></a></p>
                     </c:forEach>
                 </div>
             </div>
