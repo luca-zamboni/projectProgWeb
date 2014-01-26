@@ -13,10 +13,12 @@ import utils.Support;
  */
 public class Post {
 
-    private String userid;
+    private int userid;
+    private String user;
     private String text;
     private int postid;
     private long date;
+    private String avatar;
     private ArrayList<String> qrs = new ArrayList();
     private ArrayList<String> files = new ArrayList();
     private int groupid;
@@ -24,12 +26,29 @@ public class Post {
     public Post() {
     }
 
-    public Post(String userid, String text, long date, int groupid, int postid) {
+    public Post(int userid,String user, String text, long date, int groupid, int postid) {
         this.userid = userid;
+        this.user = user;
         this.text = text;
         this.date = date;
         this.groupid = groupid;
         this.postid = postid;
+    }
+
+    public String getUser() {
+        return user;
+    }
+
+    public void setUser(String user) {
+        this.user = user;
+    }
+    
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
     }
 
     public int getPostid() {
@@ -40,11 +59,11 @@ public class Post {
         this.postid = postid;
     }
 
-    public String getUserid() {
+    public int getUserid() {
         return userid;
     }
 
-    public void setUserid(String userid) {
+    public void setUserid(int userid) {
         this.userid = userid;
     }
 

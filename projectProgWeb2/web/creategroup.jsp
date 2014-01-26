@@ -30,7 +30,7 @@
                 <b>Scegli chi invitare:</b><br>
                 <c:forEach items="${userlist}" var="userb" >
                     <c:if test="${userb.userID!=sessionScope.user.userID}">
-                        <input type="checkbox" name="usercheckboxes" value="<c:out value="${userb.userID}"/>"/><c:out value="${userb.username}"/><br>
+                        <input type="checkbox" name="usercheckboxes" value="<c:out value="${userb.username}"/>"/><c:out value="${userb.username}"/><br>
                     </c:if>
                 </c:forEach>
                 <input type="submit" id="regBtn" value="Aggiungi gruppo"/>
