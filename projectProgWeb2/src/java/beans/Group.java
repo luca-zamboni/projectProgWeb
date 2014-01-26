@@ -5,6 +5,9 @@
 package beans;
 
 import java.io.Serializable;
+import java.util.Date;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 /**
@@ -17,7 +20,7 @@ public class Group implements Serializable{
     private int owner;
     private boolean priva;
     private long lastPostDate;
-    private String date;
+    private Date date;
     private ArrayList<Post> posts = new ArrayList();
     private ArrayList<UserBean> users = new ArrayList<>();
     private ArrayList<String> allFiles = new ArrayList<>();
@@ -89,12 +92,16 @@ public class Group implements Serializable{
         this.users.addAll(users);
     }
 
-    public void setDate(String date) {
+    public void setDate(Date date) {
         this.date=date;
     }
 
     public void setLastPostDate(long lastPostDate) {
         this.lastPostDate=lastPostDate;
+    }
+
+    public Date getDate() {
+        return date;
     }
     
     

@@ -17,18 +17,16 @@
                     <img src="<%=user.getAvatar()%>" />  
                     <%= user.getUsername()%>
                 </a>
-
             </div>
             <div class="col-xs-2 col-md-2 col-lg-2" style="margin-top:10px;">
                 <div class="btn btn-default">
-                    <a href="./logout" class="glyphicon glyphicon-log-out"></a>
+                    <a href="./home" class="glyphicon glyphicon-home"></a>
                 </div>
+                <div class="btn btn-default">
+                    <a href="./logout" class="glyphicon glyphicon-log-out"></a>
+                </div>                
             </div>
         </div>
     </div>
 </div>
-<script type="text/javascript" >
-    $(document).ready(function(){
-        $(".navbar").slideDown();
-    });
-</script>
+<script type="text/javascript" src="js/navbar.js"></script>

@@ -142,11 +142,12 @@ public class DBManager implements Serializable {
             boolean isPrivate) throws SQLException {
 
         String sql = "INSERT into GROUPS(ownerid,groupname,creationdate,private)"
-                + "VALUES (?,?,strftime('%s', 'now'),?)";
+                + "VALUES (?,?,?,?)";
         PreparedStatement stm = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
         stm.setInt(1, owner);
         stm.setString(2, title);
-        stm.setInt(3, isPrivate ? 1 : 0); //se e' privato setta a 1 altrimenti 0
+        stm.setDate(3, new java.sql.Date(new Date().getTime()));
+        stm.setInt(4, isPrivate ? 1 : 0); //se e' privato setta a 1 altrimenti 0
         stm.executeUpdate();
         PreparedStatement stmaux = con.prepareStatement("SELECT last_insert_rowid()");
         int groupid = -1;
@@ -534,10 +535,11 @@ public class DBManager implements Serializable {
             while (rs.next()) {
                 int i1, i4;
                 long l5;
-                String s2, s3, s5;
+                String s2, s5;
+                Date s3;
                 i1 = rs.getInt(1);
                 s2 = rs.getString(2);
-                s3 = rs.getString(3);
+                s3 = new Date(rs.getDate(3).getTime());
                 i4 = rs.getInt(4);
                 s5 = rs.getString(5);
                 l5 = Long.parseLong(s5);
@@ -803,7 +805,7 @@ public class DBManager implements Serializable {
         if (rs.next()) {
             ret.setOwner(rs.getInt(1));
             ret.setTitle(rs.getString(2));
-            ret.setDate(rs.getString(3));
+            ret.setDate(rs.getDate(3));
             ret.setPriva(rs.getBoolean(4));
         }
         

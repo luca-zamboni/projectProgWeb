@@ -10,19 +10,19 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <p style="padding: 5px; border-radius: 3px;"
-<%
-    Message msg = Support.getMessageInRequest(request);
-    if(msg!=null){
-        if(msg.getType()==MessageType.ERROR){ 
-%>
-            class="btn-danger">
-<%      }
-        else{
-%>        
-            class="btn-success">
-<%
+   <%
+       Message msg = Support.getMessageInRequest(request);
+       if (msg != null) {
+           if (msg.getType() == MessageType.ERROR) {
+   %>
+   class="btn-danger"
+   <%      } else {
+   %>        
+   class="btn-success"
+   >
+    <%
+            }
+            out.print(msg.toString());
         }
-        out.print(msg.toString());
-    }
-%>
+    %>
 </p>
