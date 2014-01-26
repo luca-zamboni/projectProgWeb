@@ -78,7 +78,7 @@ public class GroupCreate extends HttpServlet {
 
         String title = request.getParameter(RequestUtils.GROUP_TITLE);
         String isPrivate = request.getParameter(RequestUtils.GROUP_PRIVATE);
-        String[] users = request.getParameterValues(RequestUtils.GROUP_USERS);
+        String[] users = request.getParameterValues(RequestUtils.USERCHECK);
 
         int groupId = addGroup(title, isPrivate, users, user);
         String path = request.getServletContext().getRealPath("/");
@@ -92,7 +92,7 @@ public class GroupCreate extends HttpServlet {
         if (msg.getType() == Message.MessageType.ERROR) {
             Support.forward(getServletContext(), request, response, "/creategroup.jsp",msg);
         } else {
-            Support.forward(getServletContext(), request, response, "/home.jsp", msg);
+            Support.forward(getServletContext(), request, response, "/home", msg);
         }
     }
 

@@ -45,6 +45,7 @@
         <url-pattern>/GroupCreate</url-pattern>
         <url-pattern>/modifygroup.jsp</url-pattern>
         <url-pattern>/creategroup.jsp</url-pattern>
+        <url-pattern>/home</url-pattern>
     </filter-mapping>
     <servlet>
         <servlet-name>login</servlet-name>

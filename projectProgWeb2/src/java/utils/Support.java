@@ -104,4 +104,13 @@ public class Support {
                 .format(new Date(l));
         return dateAsText;
     }
+    
+    public static void putDBMangaer(HttpServletRequest request, DBManager dbm){
+        addToSession(request, SessionUtils.DBM, dbm);
+    }
+    
+    public static DBManager getDBMangaer(HttpServletRequest request){
+        return (DBManager) request.getSession().getAttribute(SessionUtils.DBM);
+    }
+    
 }
