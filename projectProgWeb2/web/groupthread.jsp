@@ -27,7 +27,7 @@
                   <div class="panel-heading">
                     <h4 class="panel-title">
                       <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne">
-                        All files
+                        All files <span class="badge"> <c:out value="${group.getAllFiles().size()}" /></span>
                       </a>
                     </h4>
                   </div>
@@ -58,22 +58,23 @@
                             <div class="col-md-6">
                                 <c:out value="${posts.getText()}" escapeXml="false"/> 
                             </div>
-                            <div class="col-md-4">
-                            <c:choose>
-                                <c:when test="${posts.getFiles().size()>0}">
-                                <h5>Files:</h5>
-                                <ul class="list-group">
-                                    <c:forEach var="file" items="${posts.getFiles()}"> 
-                                        <li class="list-group-item"><a href="files/<c:out value="${group.getGroupid()}" />/<c:out value="${file}" />"><c:out value="${file}" /></a></li>
-                                    </c:forEach>
-                                </ul>
-                                </c:when>
-                                <c:otherwise>
-                                    
-                                </c:otherwise>
-                            </c:choose>
+                            <div class="col-md-3">
+                                <c:choose>
+                                    <c:when test="${posts.getFiles().size()>0}">
+                                      <div class="btn-group">
+                                        <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+                                          File Uploaded <span class="badge"><c:out value="${posts.getFiles().size()}" /></span> <span class="caret"></span>
+                                        </button>
+                                        <ul class="dropdown-menu" role="menu">
+                                          <c:forEach var="file" items="${posts.getFiles()}"> 
+                                            <li><a href="files/<c:out value="${group.getGroupid()}" />/<c:out value="${file}" />"><c:out value="${file}" /></a></li>
+                                        </c:forEach>
+                                        </ul>
+                                      </div>
+                                    </c:when>
+                                </c:choose>
                             </div>
-                            <div class="col-md-2">
+                            <div class="col-md-3">
                                 <c:forEach var="qr" items="${posts.getQrs()}">
                                     <img src="<c:out value="${qr}"/>" style="width:70px;heigth:150px;" />
                                 </c:forEach>

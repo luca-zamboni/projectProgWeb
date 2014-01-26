@@ -33,7 +33,6 @@ public class AddPostFilter implements Filter {
         HttpServletRequest httpRequest = (HttpServletRequest) request;
         String url = ((HttpServletRequest) request).getRequestURI();
         
-        System.err.println("asldkppppppppppppansd");
         if (bean == null) {
             
         } else {
