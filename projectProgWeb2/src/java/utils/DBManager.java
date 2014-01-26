@@ -517,7 +517,7 @@ public class DBManager implements Serializable {
     }
 
     private ArrayList<Group> getGroups(int status, String user) throws SQLException, ParseException {
-        String sql = "select groups.groupid,groupname,creationdate,groups.ownerid,post.date "
+        String sql = "select groups.groupid,groupname,creationdate,groups.ownerid,post.date,groups.private "
                 + "from groups,users,user_groups,post "
                 + "WHERE groups.groupid = user_groups.groupid "
                 + "AND users.userid= user_groups.userid "
@@ -533,7 +533,7 @@ public class DBManager implements Serializable {
         ArrayList<Group> mGroups = new ArrayList<>();
         try {
             while (rs.next()) {
-                int i1, i4;
+                int i1, i4,i6;
                 long l5;
                 String s2, s5;
                 Date s3;
@@ -542,6 +542,7 @@ public class DBManager implements Serializable {
                 s3 = new Date(rs.getDate(3).getTime());
                 i4 = rs.getInt(4);
                 s5 = rs.getString(5);
+                i6 = rs.getInt(6);
                 l5 = Long.parseLong(s5);
 
                 Group aux = new Group();
@@ -550,6 +551,7 @@ public class DBManager implements Serializable {
                 aux.setDate(s3);
                 aux.setOwner(i4);
                 aux.setLastPostDate(l5);
+                aux.setPriva(i6!=0);
 
                 mGroups.add(aux);
             }

@@ -6,7 +6,7 @@
 $(document).ready(function() {
     var loadCard = function() {
         $(".card ").each(function(index) {
-            $(this).toggle("drop", {direction: "down"},index*350);
+            $(this).toggle("drop", {direction: "down"},1+index*70);
         });
     };
     setTimeout(loadCard, 500);
