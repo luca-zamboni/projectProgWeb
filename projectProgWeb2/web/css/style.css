@@ -16,6 +16,12 @@ body{
     min-height: 100%;
     background-color: #ebebeb;
 }
+input{
+    background-color: rgba(255, 255, 255,0.7);
+    border-radius: 3px;
+    border: solid 2px #ccc;
+    font-size: 20px;
+}
 .btn a{
     text-align: center;
     color: #333;
@@ -90,8 +96,20 @@ body{
 .card h4{
     margin-bottom: 5px;
 }
+
 .card img{
     width: 60%;
     margin-top:10px;
     margin-bottom: 15px;
 }
+
+.card .prof{
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    border: 1px solid #333;
+    margin-bottom: 3px;
+}
+
+
+

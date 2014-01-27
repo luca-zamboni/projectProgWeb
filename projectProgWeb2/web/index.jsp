@@ -34,10 +34,10 @@
         <div class="navbar mynavbar" >
             <div class="container">
                 <div class="row">
-                    <div class="col-xs-12 col-md-6 col-lg-6"><p class="mybrand">StudyTalk</p></div>
-                    <div class="col-xs-12 col-md-6 col-lg-6">
+                    <div class="col-xs-12 col-md-2 col-lg-2"><p class="mybrand">StudyTalk</p></div>
+                    <div class="col-xs-12 col-md-10 col-lg-10">
                         <jsp:include page="includes/messagedisplayer.jsp" />
-                        <form  action="login" method="POST" >
+                        <form  action="login" method="POST" class="pull-right">
                             <input placeholder=username type=text name="<%=RequestUtils.USERNAME%>" />
                             <input placeholder=password type=password name="<%=RequestUtils.PASSWD%>" />
                             <input class="btn btn-primary" type="submit" value="Entra!" />

@@ -9,11 +9,6 @@
 <html>
     <head>
         <%@ include file="includes/header.jsp" %>
-        <style type="text/css">
-        body{
-            background:#fff;
-        }
-        </style>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Create the new group</title>
     </head>
@@ -51,8 +46,8 @@
             </div><br>
             <div>
                 <c:forEach var="posts" items="${group.getPosts()}">
-                    <div class="well">
-                        <img src="<c:out value="${posts.getAvatar()}"/>" style="width:60px;heigth:100px;" class="img-thumbnail" />
+                    <div class="card">
+                        <img src="<c:out value="${posts.getAvatar()}"/>"  class="img-thumbnail prof" />
                         <b><c:out value="${posts.getUser()}"/></b> at <c:out value="${posts.getDate()}"/> says:<br> <br> 
                         <div class="row">
                             <div class="col-md-6">
