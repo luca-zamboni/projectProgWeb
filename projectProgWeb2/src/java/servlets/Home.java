@@ -49,7 +49,15 @@ public class Home extends HttpServlet {
             
             ArrayList<Group> groups= dbm.getAllGroups(user.getUsername());
             
+            ArrayList<Group> inv = dbm.getAllPendingsGroups(user.getUsername());
+            
+            for(Group p : inv){
+                System.err.println(p.getDate().getTime());
+                p.setNameOwner(dbm.getUserFormId(p.getOwner()));
+            }
+            
             request.setAttribute(RequestUtils.GROUPS, groups);
+            request.setAttribute("inv", inv);
             
             Support.forward(getServletContext(), request, response, "/home.jsp", null);
         } catch (SQLException ex) {

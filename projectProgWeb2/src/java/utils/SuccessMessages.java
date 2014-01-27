@@ -14,6 +14,7 @@ public class SuccessMessages {
     private static String REGISTRATION = "Ottimo, adesso puoi effettuare il Log-in!";
     private static String PASSWORDCHANGE = "Password aggiornata con success!";
     private static String GROUPSUCCESS = "Inserito con successo il gruppo ";
+    private static String DECLINEGROUPSUCCESS = "Declinato l'invito nel gruppo";
 
     public static String getSuccessMessage(int code) {
         switch (code) {
@@ -23,6 +24,8 @@ public class SuccessMessages {
                 return PASSWORDCHANGE;
             case 2:
                 return GROUPSUCCESS;
+            case 3:
+                return DECLINEGROUPSUCCESS;
             default:
                 return "";
         }

@@ -539,7 +539,9 @@ public class DBManager implements Serializable {
                 Date s3;
                 i1 = rs.getInt(1);
                 s2 = rs.getString(2);
-                s3 = new Date(rs.getDate(3).getTime());
+                long d = Long.parseLong(rs.getString(3));
+                s3 = new Date();
+                s3.setTime(d);
                 i4 = rs.getInt(4);
                 s5 = rs.getString(5);
                 i6 = rs.getInt(6);

@@ -78,6 +78,15 @@ body{
     color:black;
     font-weight: bold;
 }
+.card td a{
+    width : auto;
+    height: auto;
+    position: relative;
+    top:0;
+    left: 0;
+    color:white;
+    font-weight: bold;
+}
 .card h4{
     margin-bottom: 5px;
 }

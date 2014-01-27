@@ -18,6 +18,7 @@ public class Group implements Serializable{
     private int groupid;
     private String title;
     private int owner;
+    private String nameOwner;
     private boolean priva;
     private long lastPostDate;
     private Date date;
@@ -33,6 +34,14 @@ public class Group implements Serializable{
         this.title = title;
         this.owner = owner;
         this.priva = priva;
+    }
+    
+    public String getNameOwner() {
+        return nameOwner;
+    }
+
+    public void setNameOwner(String nameOwner) {
+        this.nameOwner = nameOwner;
     }
 
     public ArrayList<String> getAllFiles() {

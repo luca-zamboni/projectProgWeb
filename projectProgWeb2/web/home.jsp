@@ -54,6 +54,32 @@
                     <p>L' ultimo accesso è stato:
                         <strong><%= Support.getDateFromTime(user.getLastLogin())%></strong>
                     </p>
+                    <c:choose>
+                        <c:when test="${inv.size() > 0}" >
+                            <table class="table table-condensed table-hover">
+                                <tr>
+                                    <td><b>Owner</b></td>
+                                    <td><b>Group Name</b></td>
+                                    <td><b>Creation Date</b></td>
+                                    <td><b>Accept/Decline</b></td>
+                                </tr>
+                                <c:forEach items="${inv}" var="inv">
+                                    <tr>
+                                        <td><c:out value="${inv.getNameOwner()}"/></td>
+                                        <td><c:out value="${inv.getTitle()}"/></td>
+                                        <td><fmt:formatDate pattern="dd-MM-yyyy" value="${inv.getDate()}" /></td>
+                                        <td>
+                                            <a href="./acceptinvitation?gid=<c:out value="${inv.getGroupid()}"/>" class="btn btn-success">Accept</button></a>
+                                            <a href="./acceptinvitation?gid=<c:out value="${inv.getGroupid()}"/>&dec=1" class="btn btn-danger">Decline</button></a>
+                                        </td>
+                                    <tr>
+                                </c:forEach>
+                            </table>
+                        </c:when>
+                        <c:otherwise >
+                            <p>Non ci sono nuovi inviti</p>
+                        </c:otherwise>
+                    </c:choose>
                     <p>Non ci sono inviti<br />:(</p>
 
                 </div>
