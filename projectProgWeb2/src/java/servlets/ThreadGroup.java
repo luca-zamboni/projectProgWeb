@@ -7,6 +7,7 @@ package servlets;
 import beans.Group;
 import beans.Post;
 import beans.UserBean;
+import static beans.UserBean.DEFAULT_IMG_PATH;
 import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
@@ -48,6 +49,19 @@ public class ThreadGroup extends HttpServlet {
             String title = dbm.getGroupTitleById(groupid);
             int owner = dbm.getGroupOwnerById(groupid);
             ArrayList<Post> posts = dbm.getAllPost(groupid);
+            for(Post a: posts){
+                
+                String path = req.getServletContext().getRealPath("/");
+                File f = new File(path + "/imgs_profiles/" + a.getUserid() + ".png");
+                if (f.exists()) {
+                    a.setAvatar(ModProfile.IMG_PROF_DIR + a.getUserid() + ".png");
+                }else{
+                    a.setAvatar(DEFAULT_IMG_PATH + "img.jpg" );
+                }
+                
+                
+                
+            }
             
             boolean isPrivate = dbm.isPrivateGroup(groupid);
             

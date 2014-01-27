@@ -4,10 +4,6 @@
  * and open the template in the editor.
  */
 $(document).ready(function() {
-    var loadCard = function() {
-        $(".card ").each(function(index) {
-            $(this).toggle("drop", {direction: "down"},1+index*70);
-        });
-    };
-    setTimeout(loadCard, 500);
+    $(".navbar").slideDown();
 });
+

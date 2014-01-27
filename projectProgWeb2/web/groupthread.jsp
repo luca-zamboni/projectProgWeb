@@ -52,8 +52,8 @@
             <div>
                 <c:forEach var="posts" items="${group.getPosts()}">
                     <div class="well">
-                        <img src="" style="width:60px;heigth:100px;" class="img-thumbnail" />
-                        <b><c:out value="${posts.getUserid()}"/></b> at <c:out value="${posts.getDate()}"/> says:<br> <br> 
+                        <img src="<c:out value="${posts.getAvatar()}"/>" style="width:60px;heigth:100px;" class="img-thumbnail" />
+                        <b><c:out value="${posts.getUser()}"/></b> at <c:out value="${posts.getDate()}"/> says:<br> <br> 
                         <div class="row">
                             <div class="col-md-6">
                                 <c:out value="${posts.getText()}" escapeXml="false"/> 

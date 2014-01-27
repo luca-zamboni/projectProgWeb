@@ -11,23 +11,22 @@
 <div class="navbar mynavbar" style="display:none;background-color: white;" >
     <div class="container">
         <div class="row">
-            <div class="col-xs-5 col-md-6 col-lg-7"><a href ="./home" class="mybrand">StudyTalk</a></div>
+            <div class="col-xs-5 col-md-6 col-lg-7"><a href ="/projectProgWeb2/pages/home?opcode=index" class="mybrand">StudyTalk</a></div>
             <div class="col-xs-5 col-md-3 col-lg-3 nav-prof" style="text-align: center" >
                 <a href="/projectProgWeb2/pages/pr?opcode=profile">
                     <img src="/projectProgWeb2/<%=user.getAvatar()%>" />  
                     <%= user.getUsername()%>
                 </a>
-
             </div>
             <div class="col-xs-2 col-md-2 col-lg-2" style="margin-top:10px;">
                 <div class="btn btn-default">
+                    <a href="/projectProgWeb2/pages/home?opcode=index" class="glyphicon glyphicon-home"></a>
+                </div>
+                <div class="btn btn-default">
                     <a href="/projectProgWeb2/pages/logout?opcode=logout" class="glyphicon glyphicon-log-out"></a>
+                </div>       
             </div>
         </div>
     </div>
 </div>
-<script type="text/javascript" >
-    $(document).ready(function() {
-        $(".navbar").slideDown();
-    });
-</script>
+<script type="text/javascript" src="/projectProgWeb2/js/navbar.js"></script>

@@ -143,11 +143,12 @@ public class DBManager implements Serializable {
             boolean isPrivate) throws SQLException {
 
         String sql = "INSERT into GROUPS(ownerid,groupname,creationdate,private)"
-                + "VALUES (?,?,strftime('%s', 'now'),?)";
+                + "VALUES (?,?,?,?)";
         PreparedStatement stm = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
         stm.setInt(1, owner);
         stm.setString(2, title);
-        stm.setInt(3, isPrivate ? 1 : 0); //se e' privato setta a 1 altrimenti 0
+        stm.setDate(3, new java.sql.Date(new Date().getTime()));
+        stm.setInt(4, isPrivate ? 1 : 0); //se e' privato setta a 1 altrimenti 0
         stm.executeUpdate();
         PreparedStatement stmaux = con.prepareStatement("SELECT last_insert_rowid()");
         int groupid = -1;
@@ -254,12 +255,12 @@ public class DBManager implements Serializable {
         try {
             while (rs.next()) {
                 int ow = rs.getInt(1);
-                String own = getUserFormId(ow);
+                String us = getUserFormId(ow);
                 String d = rs.getString(2);
                 long date = Long.parseLong(d);
                 String content = rs.getString(3);
                 int postid = rs.getInt(4);
-                p.add(new Post(own, content, date, group, postid));
+                p.add(new Post(ow,us, content, date, group, postid));
             }
         } finally {
             rs.close();
@@ -517,7 +518,7 @@ public class DBManager implements Serializable {
     }
 
     private ArrayList<Group> getGroups(int status, String user) throws SQLException, ParseException {
-        String sql = "select groups.groupid,groupname,creationdate,groups.ownerid,post.date "
+        String sql = "select groups.groupid,groupname,creationdate,groups.ownerid,post.date,groups.private "
                 + "from groups,users,user_groups,post "
                 + "WHERE groups.groupid = user_groups.groupid "
                 + "AND users.userid= user_groups.userid "
@@ -533,14 +534,16 @@ public class DBManager implements Serializable {
         ArrayList<Group> mGroups = new ArrayList<>();
         try {
             while (rs.next()) {
-                int i1, i4;
+                int i1, i4,i6;
                 long l5;
-                String s2, s3, s5;
+                String s2, s5;
+                Date s3;
                 i1 = rs.getInt(1);
                 s2 = rs.getString(2);
-                s3 = rs.getString(3);
+                s3 = new Date(rs.getDate(3).getTime());
                 i4 = rs.getInt(4);
                 s5 = rs.getString(5);
+                i6 = rs.getInt(6);
                 l5 = Long.parseLong(s5);
 
                 Group aux = new Group();
@@ -549,6 +552,7 @@ public class DBManager implements Serializable {
                 aux.setDate(s3);
                 aux.setOwner(i4);
                 aux.setLastPostDate(l5);
+                aux.setPriva(i6!=0);
 
                 mGroups.add(aux);
             }
@@ -804,7 +808,7 @@ public class DBManager implements Serializable {
         if (rs.next()) {
             ret.setOwner(rs.getInt(1));
             ret.setTitle(rs.getString(2));
-            ret.setDate(rs.getString(3));
+            ret.setDate(rs.getDate(3));
             ret.setPriva(rs.getBoolean(4));
         }
         
