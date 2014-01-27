@@ -52,7 +52,6 @@ public class Home extends HttpServlet {
             ArrayList<Group> inv = dbm.getAllPendingsGroups(user.getUsername());
             
             for(Group p : inv){
-                System.err.println(p.getDate().getTime());
                 p.setNameOwner(dbm.getUserFormId(p.getOwner()));
             }
             

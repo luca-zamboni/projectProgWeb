@@ -16,6 +16,9 @@ body{
     min-height: 100%;
     background-color: #ebebeb;
 }
+h1{
+    text-align: center;
+}
 .btn a{
     text-align: center;
     color: #333;
