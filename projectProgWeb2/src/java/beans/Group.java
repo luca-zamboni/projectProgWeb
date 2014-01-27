@@ -6,8 +6,6 @@ package beans;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 /**
