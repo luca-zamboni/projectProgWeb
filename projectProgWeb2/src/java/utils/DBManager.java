@@ -79,6 +79,7 @@ public class DBManager implements Serializable {
             Class.forName("org.sqlite.JDBC", true,
                     getClass().getClassLoader());
             String path = request.getServletContext().getRealPath("/");
+            System.err.println(URL_PREFIX + path + DB_URL);
             DBManager.con = DriverManager.getConnection(URL_PREFIX + path + DB_URL);
         } catch (ClassNotFoundException | SQLException e) {
             //throw new RuntimeException(e.toString(), e);

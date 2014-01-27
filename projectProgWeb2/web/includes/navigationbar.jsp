@@ -21,14 +21,13 @@
             </div>
             <div class="col-xs-2 col-md-2 col-lg-2" style="margin-top:10px;">
                 <div class="btn btn-default">
-                    <a href="/ProjectProgWeb2/pages/logout?opcode=logout" class="glyphicon glyphicon-log-out"></a>
-                </div>
+                    <a href="/projectProgWeb2/pages/logout?opcode=logout" class="glyphicon glyphicon-log-out"></a>
             </div>
         </div>
     </div>
 </div>
 <script type="text/javascript" >
-    $(document).ready(function(){
+    $(document).ready(function() {
         $(".navbar").slideDown();
     });
 </script>

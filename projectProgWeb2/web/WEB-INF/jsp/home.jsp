@@ -34,7 +34,7 @@
                 </div>
                 <div class="col-xs-10 col-md-4 col-lg-4 card" style="text-align: center;">
                     <div class="btn btn-success pull-left">
-                        <a href="groupCreate">
+                        <a href="hm?opcode=creategroup">
                             <span class="glyphicon glyphicon-edit"></span>
                         </a>
                     </div>

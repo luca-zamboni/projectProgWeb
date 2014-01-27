@@ -23,7 +23,7 @@
         <% UserBean us = (UserBean) Support.getInSession(request, SessionUtils.USER); %>
         <a href="home.jsp">home</a>
         <h1>Modify the group <c:out value="${group.name}"/></h1><br>
-        <form action="groupCreate" method="POST" >
+        <form action="FrontController" method="POST" >
             <p>
                 Private group?: <% out.println("<input type=\"checkbox\" name=\"" + RequestUtils.GROUP_PRIVATE + "\"/>"); %><br>
                 Title of the group: <% out.println("<input type=\"text\" name=\"" + RequestUtils.GROUP_TITLE + "\"/>");%><br>
