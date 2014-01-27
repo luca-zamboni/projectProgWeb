@@ -25,13 +25,16 @@
         <jsp:include page="includes/navigationbar.jsp" />
         <div class="container">
             <h1> Admin page :) </h1>
+            <jsp:include page="includes/messagedisplayer.jsp" />
             <table id="tablegroups">
                 <thead>
                     <tr>
-                        <th>Group name</th>
+                        <th>Nome gruppo</th>
                         <th>Owner</th>
-                        <th>Creation date</th>
-                        <th>Admin</th>
+                        <th>Tipo</th>
+                        <th>Numero partecipanti</th>
+                        <th>Numero post</th>
+                        <th>Chiudi</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -39,10 +42,26 @@
                         <c:when test="${groups.size()>0}">
                             <c:forEach var="gr" items="${groups}"> 
                                  <tr>
-                                    <td><c:out value="${gr.getTitle()}" /></td>
-                                    <td><c:out value="${gr.getNameOwner()}" /></td>
-                                    <td><fmt:formatDate pattern="dd-MM-yyyy" value="${gr.getDate()}" /></td>
-                                    <td>E tu vorresti amministare?</td>
+                                    <td>
+                                        <a href="threadgroup?gid=<c:out value="${gr.getGroupid()}" />">
+                                            <c:out value="${gr.getTitle()}" />
+                                        </a>
+                                    </td>
+                                    <td>
+                                        <img src="<c:out value="${gr.getAvatarOwner()}"/>" style="width:60px;heigth:100px;" class="img-thumbnail" />
+                                        <c:out value="${gr.getNameOwner()}" />
+                                    </td>
+                                    <c:choose>
+                                        <c:when test="${gr.isPriva()}">
+                                            <td><span style="color:red"><strong>Privato</strong></div></td>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <td><span style="color:green"><strong>Publico</strong></div></td>
+                                        </c:otherwise>
+                                    </c:choose>
+                                    <td><c:out value="${gr.getNumPartecipanti()}" /></td>
+                                    <td><c:out value="${gr.getNumPost()}" /></td>
+                                    <td>Chiuditi!!</td>
                                  </tr>
                             </c:forEach>
                         </c:when>
@@ -53,5 +72,6 @@
                 </tbody>
             </table>
         </div>
+        <br><br><br>
     </body>
 </html>
