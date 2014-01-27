@@ -15,15 +15,12 @@
 <html>
     <head>
         <%@ include file="includes/header.jsp" %>
-        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <%@ include file="includes/header.jsp" %>
         <title>Create the new group</title>
     </head>
     <body>
         <jsp:include page="includes/navigationbar.jsp" />
-        
-        <% UserBean us = (UserBean) Support.getInSession(request, SessionUtils.USER);%>
         <div class="container">
             <div class="row">
                 <div class="col-xs-1 col-md-3 col-lg-3">&nbsp;</div>

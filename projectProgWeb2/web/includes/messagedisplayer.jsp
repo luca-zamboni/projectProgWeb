@@ -19,9 +19,11 @@
    <%      } else {
    %>        
    class="btn-success"
+   <%
+       }
+   %>
    >
     <%
-            }
             out.print(msg.toString());
         }
     %>
