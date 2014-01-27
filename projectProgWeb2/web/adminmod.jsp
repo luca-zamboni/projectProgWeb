@@ -61,12 +61,21 @@
                                     </c:choose>
                                     <td><c:out value="${gr.getNumPartecipanti()}" /></td>
                                     <td><c:out value="${gr.getNumPost()}" /></td>
-                                    <td>Chiuditi!!</td>
+                                    <td>
+                                        <a href="">
+                                            <button type="button" class="btn btn-danger">Chiudi</button>
+                                        </a>
+                                    </td>
                                  </tr>
                             </c:forEach>
                         </c:when>
                         <c:otherwise>
-                                <tr><td> No groups </td></tr>
+                                <td>NO grouppi</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
                         </c:otherwise>
                     </c:choose>
                 </tbody>
