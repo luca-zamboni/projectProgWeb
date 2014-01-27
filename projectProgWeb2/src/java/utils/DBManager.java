@@ -146,7 +146,7 @@ public class DBManager implements Serializable {
         PreparedStatement stm = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
         stm.setInt(1, owner);
         stm.setString(2, title);
-        stm.setDate(3, new java.sql.Date(new Date().getTime()));
+        stm.setString(3,"" + new Date().getTime());
         stm.setInt(4, isPrivate ? 1 : 0); //se e' privato setta a 1 altrimenti 0
         stm.executeUpdate();
         PreparedStatement stmaux = con.prepareStatement("SELECT last_insert_rowid()");
