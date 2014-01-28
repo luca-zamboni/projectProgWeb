@@ -147,7 +147,7 @@ public class DBManager implements Serializable {
         stm.setInt(1, owner);
         stm.setString(2, title);
         stm.setString(3,"" + new Date().getTime());
-        stm.setInt(4, isPrivate ? 1 : 0); //se e' privato setta a 1 altrimenti 0
+        stm.setInt(4, isPrivate ? 0 : 1); //se e' privato setta a 1 altrimenti 0
         stm.executeUpdate();
         PreparedStatement stmaux = con.prepareStatement("SELECT last_insert_rowid()");
         int groupid = -1;
