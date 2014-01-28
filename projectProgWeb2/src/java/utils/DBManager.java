@@ -548,14 +548,16 @@ public class DBManager implements Serializable {
                 i6 = rs.getInt(6);
 
                 Group aux = new Group();
+                
                 aux.setGroupid(i1);
                 aux.setTitle(s2);
                 aux.setDate(s3);
                 aux.setOwner(i4);
                 aux.setLastPostDate(s5);
                 aux.setPriva(i6%2==0);
+                aux.setNumPost(getNumPost(i1));
+                aux.setNumPartecipanti(getNumPartecipanti(i1));
                 
-                System.err.println("dsasd");
 
                 mGroups.add(aux);
             }

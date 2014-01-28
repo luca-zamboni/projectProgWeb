@@ -78,9 +78,9 @@
                                 </div>
                         </div>
                     </div>
-                </div>
-            </c:forEach>
-            <div class="row">
+
+                </c:forEach>
+
                 <c:forEach items="${groups}" var="group">
                     <div class="col-xs-12 col-md-3 col-lg-3">
                         <div class="card">
@@ -97,9 +97,9 @@
                                 </span>
                                 <p style="text-align:center;">
                                     <img src="img/img.jpg" class="prof" >
-                                        <span class="badge" style="position:relative;left:-5%;top:-20%"><
-                                            c:out value="${group.numPartecipanti}" />
-                                        </span>
+                                    <span class="badge" style="position:relative;left:-5%;top:-20%"><
+                                        c:out value="${group.numPartecipanti}" />
+                                    </span>
                                     </img>
                                 </p>
                                 <p>Numero di post: <c:out value="${group.numPost}"/></p>
