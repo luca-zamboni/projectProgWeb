@@ -86,11 +86,18 @@ public class DBManager implements Serializable {
     }
 
     public int updateGroup(int group, String newTitle, String[] users,
-            int owner, boolean type) throws SQLException {
+            int owner, boolean chiuso, boolean privato) throws SQLException {
         int rowChanged;
         String sql = "UPDATE groups SET groupname = ? WHERE groupid = ?";
         PreparedStatement stm = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
         stm.setString(1, newTitle);
+        stm.setInt(2, group);
+        stm.executeUpdate();
+        
+        sql = "UPDATE groups SET private = ? WHERE groupid = ?";
+        stm = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+        int priv = calculatePrivateColumnInt(chiuso,privato);
+        stm.setInt(1, priv);
         stm.setInt(2, group);
         stm.executeUpdate();
 
@@ -137,6 +144,7 @@ public class DBManager implements Serializable {
         return rowChanged;
 
     }
+
 
     public int newGroup(String title, String[] users, int owner,
             boolean isPrivate) throws SQLException {
@@ -897,6 +905,16 @@ public class DBManager implements Serializable {
         stm.setInt(1, groupId);
         stm.executeUpdate();
         stm.close();
+    }
+
+    public static int calculatePrivateColumnInt(boolean chiuso, boolean privato){
+        return (chiuso?2:0)+(privato?0:1);
+    }
+    
+    //arr[0] = true se e' privato
+    //arr[1] = true se e' chiuso
+    public static boolean[] getPrivateAndClose(int i){
+        return new boolean[]{i==0||i==2,i==2||i==3};
     }
     
 }

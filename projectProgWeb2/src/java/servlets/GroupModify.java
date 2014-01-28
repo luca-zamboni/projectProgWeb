@@ -95,8 +95,9 @@ public class GroupModify extends HttpServlet {
         String isPrivate = request.getParameter(RequestUtils.GROUP_PRIVATE);
         String[] users = request.getParameterValues(RequestUtils.GROUP_USERS);
         int groupId = Integer.parseInt((grpString == null) ? "-1" : grpString);
-
-        int rowChanged = updateGroup(groupId, title, isPrivate, users, user);
+        
+        
+        int rowChanged = updateGroup(groupId, title, isPrivate,null, users, user);
 
         Message msg = buildMessage(groupId, title);
 
@@ -107,13 +108,13 @@ public class GroupModify extends HttpServlet {
         }
     }
 
-    private int updateGroup(int groupId, String title, String aPrivate, String[] users, UserBean user) {
+    private int updateGroup(int groupId, String title, String aPrivate, String chiuso, String[] users, UserBean user) {
         int ret = 0;
         boolean check = title != null && !title.equals("");
         boolean prvt = aPrivate != null;
         if (check) {
             try {
-                ret = dbm.updateGroup(groupId, title, users, user.getUserID(), prvt);
+                ret = dbm.updateGroup(groupId, title, users, user.getUserID(), prvt,chiuso!=null);
             } catch (Exception e) {
                 e.printStackTrace();
                 ret = 0;

@@ -47,17 +47,17 @@
     </filter-mapping>
     <filter-mapping>
         <filter-name>LoginFilter</filter-name>
-        <servlet-name>GroupCreate</servlet-name>
+<!--        <servlet-name>GroupCreate</servlet-name>
         <servlet-name>ChangePass</servlet-name>
         <servlet-name>Logout</servlet-name>
         <servlet-name>ForgetPassword</servlet-name>
         <servlet-name>ModProfile</servlet-name>
         <servlet-name>PdfCreator</servlet-name>
-        <servlet-name>GroupModify</servlet-name>
+        <servlet-name>GroupModify</servlet-name>-->
         <servlet-name>Home</servlet-name>
-        <servlet-name>AcceptInvitation</servlet-name>
+<!--        <servlet-name>AcceptInvitation</servlet-name>
         <servlet-name>AdminModeratori</servlet-name>
-        <servlet-name>CloseGroup</servlet-name>
+        <servlet-name>CloseGroup</servlet-name>-->
     </filter-mapping>
     <servlet>
         <servlet-name>login</servlet-name>
