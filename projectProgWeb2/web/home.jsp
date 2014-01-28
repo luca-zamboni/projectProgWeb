@@ -35,7 +35,12 @@
                             <a href="groupCreate">
                                 <span class="glyphicon glyphicon-edit"></span>
                             </a>
-                        </div>
+                        </div>&nbsp;
+                        <c:if test="${user.getTypeToInt() == 0}">
+                            <div class="btn btn-primary">
+                                 <a href="./adminmoderatori"> Admin</a>
+                            </div>
+                        </c:if>
                     </div>
                     <div class="col-xs-2 col-md-2 col-lg-2 pull-right" style="margin-top:10px;">
                         <div class="btn btn-default">

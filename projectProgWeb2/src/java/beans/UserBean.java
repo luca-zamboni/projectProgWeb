@@ -82,13 +82,23 @@ public class UserBean {
         this.type = convertToType(type);
     }
 
-    private UserType convertToType(int type) {
+    public UserType convertToType(int type) {
         switch (type) {
             case 1:
                 return UserType.MODERATOR;
             default:
                 return UserType.SIMPLE;
         }
+    }
+    
+    public int getTypeToInt() {
+        
+        if(type == UserType.MODERATOR){
+            return 1;
+        }else{
+            return 0;
+        }
+        
     }
 
     @Override
