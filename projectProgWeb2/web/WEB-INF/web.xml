@@ -5,10 +5,6 @@
         <filter-class>filters.LoginFilter</filter-class>
     </filter>
     <filter>
-        <filter-name>FilterNotOwner</filter-name>
-        <filter-class>filters.FilterNotOwner</filter-class>
-    </filter>
-    <filter>
         <filter-name>GetFilter</filter-name>
         <filter-class>filters.FileAccess</filter-class>
     </filter>
@@ -24,6 +20,14 @@
         <filter-name>IsInGroupFilter</filter-name>
         <filter-class>filters.IsInGroupFilter</filter-class>
     </filter>
+    <filter>
+        <filter-name>OwnerFilter</filter-name>
+        <filter-class>filters.OwnerFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>OwnerFilter</filter-name>
+        <servlet-name>GroupCreate</servlet-name>
+    </filter-mapping>
     <filter-mapping>
         <filter-name>IsInGroupFilter</filter-name>
         <servlet-name>Threadgroup</servlet-name>
@@ -38,25 +42,23 @@
         <url-pattern>/index.jsp</url-pattern>
     </filter-mapping>
     <filter-mapping>
-        <filter-name>FilterNotOwner</filter-name>
-        <url-pattern>/modifygroup.jsp</url-pattern>
-    </filter-mapping>
-    <filter-mapping>
         <filter-name>GetFilter</filter-name>
         <url-pattern>/database/*</url-pattern>
     </filter-mapping>
     <filter-mapping>
         <filter-name>LoginFilter</filter-name>
-        <url-pattern>/home</url-pattern>
-        <url-pattern>/profile</url-pattern>
-        <url-pattern>/groupCreate</url-pattern>
-        <url-pattern>/addpost</url-pattern>
-        <url-pattern>/closegroup</url-pattern>
-        <url-pattern>/logout</url-pattern>
-        <url-pattern>/modprofile</url-pattern>
-        <url-pattern>/PdfCreator</url-pattern>
-        <url-pattern>/GroupModify</url-pattern>
-        <url-pattern>/adminmoderatori</url-pattern>
+        <servlet-name>GroupCreate</servlet-name>
+        <servlet-name>ChangePass</servlet-name>
+        <servlet-name>Logout</servlet-name>
+        <servlet-name>ForgetPassword</servlet-name>
+        <servlet-name>ModProfile</servlet-name>
+        <servlet-name>AddPost</servlet-name>
+        <servlet-name>PdfCreator</servlet-name>
+        <servlet-name>GroupModify</servlet-name>
+        <servlet-name>Home</servlet-name>
+        <servlet-name>AcceptInvitation</servlet-name>
+        <servlet-name>AdminModeratori</servlet-name>
+        <servlet-name>CloseGroup</servlet-name>
     </filter-mapping>
     <servlet>
         <servlet-name>login</servlet-name>
