@@ -89,7 +89,7 @@ public class GroupModify extends HttpServlet {
 
         HttpSession session = request.getSession();
 
-        String grpString = request.getParameter(RequestUtils.GROUP_OWNER);
+        String grpString = request.getParameter(RequestUtils.GROUP_ID);
         UserBean user = (UserBean) Support.getInSession(request, SessionUtils.USER);
         String title = request.getParameter(RequestUtils.GROUP_TITLE);
         String isPrivate = request.getParameter(RequestUtils.GROUP_PRIVATE);
@@ -102,9 +102,9 @@ public class GroupModify extends HttpServlet {
         Message msg = buildMessage(groupId, title);
 
         if (msg.getType() == Message.MessageType.ERROR) {
-            Support.forward(getServletContext(), request, response, "./modgroup?gid"+groupId, msg);
+            Support.forward(getServletContext(), request, response, "modgroup?gid"+groupId, msg);
         } else {
-            Support.forward(getServletContext(), request, response, "./home", msg);
+            Support.forward(getServletContext(), request, response, "/home", msg);
         }
     }
 
@@ -114,7 +114,7 @@ public class GroupModify extends HttpServlet {
         boolean prvt = aPrivate != null;
         if (check) {
             try {
-                ret = dbm.updateGroup(groupId, title, users, user.getUserID(), prvt,chiuso!=null);
+                ret = dbm.updateGroup(groupId, title, users, user.getUserID(), chiuso!=null,prvt);
             } catch (Exception e) {
                 e.printStackTrace();
                 ret = 0;
@@ -137,7 +137,7 @@ public class GroupModify extends HttpServlet {
             msg = new Message(Message.MessageType.ERROR, 23, "Incredibile! "
                     + "hai addirittura modificato 2 gruppi");
         } else {
-            msg = new Message(Message.MessageType.SUCCESS, 3, "Gruppo "
+            msg = new Message(Message.MessageType.SUCCESS, -1, "Gruppo "
                     + " modificato con successo!");
         }
         return msg;

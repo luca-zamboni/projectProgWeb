@@ -12,8 +12,8 @@ $(document).ready(function() {
             $("#inviti").slideUp();
         }
     };
-    $("input[type='checkbox']").on('change', function() {
+    $("#ckpriv").on('change', function() {
         toggleInviti($(this));
     });
-    toggleInviti($("input[type='checkbox']"));
+    toggleInviti($("#ckpriv"));
 });

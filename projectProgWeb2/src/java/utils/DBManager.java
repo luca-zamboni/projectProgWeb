@@ -94,12 +94,16 @@ public class DBManager implements Serializable {
         stm.setInt(2, group);
         stm.executeUpdate();
         
+        stm.close();
+        
         sql = "UPDATE groups SET private = ? WHERE groupid = ?";
         stm = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
         int priv = calculatePrivateColumnInt(chiuso,privato);
         stm.setInt(1, priv);
         stm.setInt(2, group);
         stm.executeUpdate();
+        
+        stm.close();
 
         ArrayList<UserBean> usersInDb = getAllUser();
         PreparedStatement stm2;

@@ -26,15 +26,18 @@
                     <jsp:include page="includes/messagedisplayer.jsp" />
                     <form action="groupCreate" method="POST">
                         <p><input type="text" placeholder="Titolo" name="<%=RequestUtils.GROUP_TITLE%>" style="width:100%" /></p>
-                        <p>Privato?<input type="checkbox" name="<%= RequestUtils.GROUP_PRIVATE%>"/></p>
-                        <p><b>Invita:</b></p>
-                        <c:forEach items="${userlist}" var="userb" >
-                            <c:if test="${userb.userID!=sessionScope.user.userID}">
-                                <input type="checkbox" name="usercheckboxes" value="<c:out value="${userb.username}"/>">
-                                <c:out value="${userb.username}"/>
-                                </input>
-                            </c:if>
-                        </c:forEach><br>
+                        <p>Privato?<input id="ckpriv" type="checkbox" name="<%= RequestUtils.GROUP_PRIVATE%>"/></p>
+                        <div id="inviti">
+                            <p><b>Invita:</b></p>
+
+                            <c:forEach items="${userlist}" var="userb" >
+                                <c:if test="${userb.userID!=sessionScope.user.userID}">
+                                    <input type="checkbox" name="usercheckboxes" value="<c:out value="${userb.username}"/>">
+                                    <c:out value="${userb.username}"/>
+                                    </input>
+                                </c:if>
+                            </c:forEach><br>
+                        </div>
                         <p><br/><input class="btn btn-success pull-right" type="submit" id="regBtn" value="Aggiungi gruppo"/></p>
                     </form>
                 </div>
