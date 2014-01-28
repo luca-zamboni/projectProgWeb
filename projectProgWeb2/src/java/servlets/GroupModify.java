@@ -64,9 +64,9 @@ public class GroupModify extends HttpServlet {
         request.setAttribute(RequestUtils.GROUP_USERS, members);
         if (msg != null) {
             Support.forward(getServletContext(), request, response,
-                    "/home.jsp", msg);
+                    "./home", msg);
         } else {
-            Support.forward(getServletContext(), request, response, "/modifygroup.jsp", msg);
+            Support.forward(getServletContext(), request, response, "/modgroup.jsp", msg);
         }
     }
 
@@ -101,9 +101,9 @@ public class GroupModify extends HttpServlet {
         Message msg = buildMessage(groupId, title);
 
         if (msg.getType() == Message.MessageType.ERROR) {
-            Support.forward(getServletContext(), request, response, "/modifygroup.jsp", msg);
+            Support.forward(getServletContext(), request, response, "./modgroup?gid"+groupId, msg);
         } else {
-            Support.forward(getServletContext(), request, response, "/home.jsp", msg);
+            Support.forward(getServletContext(), request, response, "./home", msg);
         }
     }
 

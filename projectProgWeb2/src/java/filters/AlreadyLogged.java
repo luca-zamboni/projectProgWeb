@@ -41,7 +41,7 @@ public class AlreadyLogged implements Filter {
             chain.doFilter(request, response);
         } else {
             request.setAttribute(RequestUtils.MESSAGE, new Message(Message.MessageType.ERROR,6));
-            ((HttpServletResponse) response).sendRedirect(url + "/home.jsp");
+            ((HttpServletResponse) response).sendRedirect(url + "./home");
         }
     }
 

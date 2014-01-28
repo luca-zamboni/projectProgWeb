@@ -15,6 +15,7 @@ public class RequestUtils {
     public static final String PARAM = "param";
 
     public static final String USERNAME = "username";
+    public static final String USERID = "userID";
     public static final String PASSWD = "passwd";
     public static final String CONFERMAPASSWD = "confpasswd";
     public static final String PASSWORDMOD = "modpassword";

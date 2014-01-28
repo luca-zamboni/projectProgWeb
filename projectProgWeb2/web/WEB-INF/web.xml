@@ -26,7 +26,7 @@
     </filter>
     <filter-mapping>
         <filter-name>OwnerFilter</filter-name>
-        <servlet-name>GroupCreate</servlet-name>
+        <servlet-name>GroupModify</servlet-name>
     </filter-mapping>
     <filter-mapping>
         <filter-name>IsInGroupFilter</filter-name>
@@ -52,7 +52,6 @@
         <servlet-name>Logout</servlet-name>
         <servlet-name>ForgetPassword</servlet-name>
         <servlet-name>ModProfile</servlet-name>
-        <servlet-name>AddPost</servlet-name>
         <servlet-name>PdfCreator</servlet-name>
         <servlet-name>GroupModify</servlet-name>
         <servlet-name>Home</servlet-name>
@@ -170,10 +169,6 @@
         <url-pattern>/PdfCreator</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>GroupModify</servlet-name>
-        <url-pattern>/GroupModify</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
         <servlet-name>Home</servlet-name>
         <url-pattern>/home</url-pattern>
     </servlet-mapping>
@@ -188,6 +183,10 @@
     <servlet-mapping>
         <servlet-name>CloseGroup</servlet-name>
         <url-pattern>/closegroup</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>GroupModify</servlet-name>
+        <url-pattern>/modgroup</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

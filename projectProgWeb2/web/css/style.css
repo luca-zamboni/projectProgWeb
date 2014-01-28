@@ -97,6 +97,18 @@ h1{
     color:white;
 
 }
+.card .mod{
+    display:none;
+    width : 22px;
+    height: 22px;
+    border-radius: 11px;
+    position: absolute;
+    top:-5px;
+    left:5px;
+    padding:3.5px;
+    color:white;
+    background-color: #333;
+}
 .card h4{
     margin-bottom: 5px;
 }

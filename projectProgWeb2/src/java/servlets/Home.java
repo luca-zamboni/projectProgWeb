@@ -55,6 +55,7 @@ public class Home extends HttpServlet {
                 p.setNameOwner(dbm.getUserFormId(p.getOwner()));
             }
             
+            request.setAttribute(RequestUtils.USERID, user.getUserID());
             request.setAttribute(RequestUtils.GROUPS, groups);
             request.setAttribute(RequestUtils.GROUPS_INVITES, inv);
             

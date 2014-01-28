@@ -85,6 +85,9 @@
                     <div class="col-xs-12 col-md-3 col-lg-3">
                         <div class="card">
                             <a href="threadgroup?gid=<c:out value="${group.groupid}" />"></a>
+                            <c:if test="${userID==group.owner}" >
+                                <a class="mod glyphicon glyphicon-edit" href="modgroup?gid=<c:out value="${group.groupid}" />"></a>
+                            </c:if>
                             <strong><c:out value="${group.title}" /></strong>
                             <c:choose>
                                 <c:when test="${group.priva}" >
@@ -114,5 +117,12 @@
         </div>
     </div>
     <script type="text/javascript" src="js/navbar.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function(){
+           $(".card").hover(function(){
+             $(this).children(".mod").fadeToggle();  
+           });
+        });
+    </script>
 </body>
 </html>
