@@ -30,34 +30,37 @@ import utils.Support;
  * @author luca
  */
 public class IsInGroupFilter implements Filter {
-    
+
     private FilterConfig filterConfig = null;
 
     public void doFilter(ServletRequest request, ServletResponse response,
             FilterChain chain)
             throws IOException, ServletException {
-        
-         UserBean bean = (UserBean) ((HttpServletRequest) request).getSession().getAttribute(SessionUtils.USER);
-
         HttpServletRequest req = (HttpServletRequest) request;
         HttpServletResponse resp = (HttpServletResponse) response;
         String url = ((HttpServletRequest) request).getRequestURI();
-        DBManager dbm = Support.getDBMangaer(req);
+
         int groupid = Integer.parseInt((String) req.getParameter(RequestUtils.GROUP_ID));
         try {
-            if(dbm.isPrivateGroup(groupid)){
+            DBManager dbm = Support.getDBMangaer(req);
+            if (dbm == null) {
+                dbm = new DBManager(req);
+                Support.putDBMangaer(req, dbm);
+            }
+            if (dbm.isPrivateGroup(groupid)) {
+                UserBean bean = (UserBean) Support.getInSession(req, SessionUtils.USER);
                 if (bean != null && dbm.isInGroup(bean.getUserID(), groupid)) {
                     chain.doFilter(request, response);
-                }else{
+                } else {
                     Support.forward(req.getServletContext(), req, resp, "/home", null);
                 }
-            }else{
+            } else {
                 chain.doFilter(request, response);
             }
         } catch (SQLException ex) {
             Logger.getLogger(AddPostFilter.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
     }
 
     @Override
@@ -70,5 +73,4 @@ public class IsInGroupFilter implements Filter {
         this.filterConfig = null;
     }
 
-    
 }

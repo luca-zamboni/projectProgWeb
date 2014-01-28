@@ -100,7 +100,9 @@ public class ThreadGroup extends HttpServlet {
     
     private void connectToDatabase(HttpServletRequest req) {
         try {
-            dbm = new DBManager(req);
+            dbm = Support.getDBMangaer(req);
+            if(dbm==null)
+                dbm = new DBManager(req);
         } catch (SQLException ex) {
             Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
         }
