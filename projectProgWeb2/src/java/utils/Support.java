@@ -50,6 +50,10 @@ public class Support {
     public static void removeFromSession(HttpServletRequest request, String name) {
         request.getSession(true).setAttribute(name, null);
     }
+    
+    public static void cleanSession(HttpServletRequest request){
+        request.getSession().invalidate();
+    }
 
     public static boolean isInputValid(String s) {
         return s != null && s.length() > 0;

@@ -4,6 +4,7 @@
  */
 package filters;
 
+import beans.Message;
 import beans.UserBean;
 import java.io.IOException;
 import java.io.PrintStream;
@@ -43,7 +44,7 @@ public class IsInGroupFilter implements Filter {
         int groupid = Integer.parseInt((String) req.getParameter(RequestUtils.GROUP_ID));
         try {
             DBManager dbm = Support.getDBMangaer(req);
-            if (dbm == null) {
+            if (dbm == null || DBManager.con==null) {
                 dbm = new DBManager(req);
                 Support.putDBMangaer(req, dbm);
             }
@@ -52,7 +53,7 @@ public class IsInGroupFilter implements Filter {
                 if (bean != null && dbm.isInGroup(bean.getUserID(), groupid)) {
                     chain.doFilter(request, response);
                 } else {
-                    Support.forward(req.getServletContext(), req, resp, "/home", null);
+                    Support.forward(req.getServletContext(), req, resp, "/login", new Message(Message.MessageType.ERROR, 6));
                 }
             } else {
                 chain.doFilter(request, response);

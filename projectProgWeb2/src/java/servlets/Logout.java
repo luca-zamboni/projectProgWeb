@@ -21,13 +21,13 @@ public class Logout extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        Support.removeFromSession(req, SessionUtils.USER);
+        Support.cleanSession(req);
         resp.sendRedirect("./");
     }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        Support.removeFromSession(req, SessionUtils.USER);
+        Support.cleanSession(req);
         resp.sendRedirect("./");
     }
     
