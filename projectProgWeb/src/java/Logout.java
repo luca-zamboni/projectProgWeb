@@ -55,6 +55,7 @@ public class Logout extends HttpServlet {
         HttpSession session = request.getSession();
         session.removeAttribute(Login.SESSION_USER);
         session.removeAttribute(Login.SESSION_DATA);
+        session.removeAttribute(Login.SESSION_COOKIE);
     }
 
 }

@@ -35,6 +35,7 @@ public class Login extends HttpServlet {
     //Session variables
     public static final String SESSION_USER = "username";
     public static final String SESSION_DATA = "data";
+    public static final String SESSION_COOKIE = "cookie";
 
     private final String CAMPOSUSER = "username";
     private final String CAMPOPASS = "password";
@@ -332,7 +333,9 @@ public class Login extends HttpServlet {
         String ret = "";
         Cookie userCookie = getCookie(request, user);
         if (userCookie != null) {
-            ret = userCookie.getValue();
+            HttpSession session = request.getSession();
+            ret = (String) session.getAttribute(SESSION_COOKIE);
+            //ret = userCookie.getValue();
         }
         return ret;
     }
@@ -349,6 +352,9 @@ public class Login extends HttpServlet {
         userCookie = new Cookie(user, a.getTime() + "");
         userCookie.setMaxAge(3600 * 24 * 30 * 6);
         response.addCookie(userCookie);
+        
+        HttpSession session = request.getSession();
+        session.setAttribute(SESSION_COOKIE, a.getTime() + "");
 
     }
 
