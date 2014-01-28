@@ -56,7 +56,7 @@ public class Home extends HttpServlet {
             }
             
             request.setAttribute(RequestUtils.GROUPS, groups);
-            request.setAttribute("inv", inv);
+            request.setAttribute(RequestUtils.GROUPS_INVITES, inv);
             
             Support.forward(getServletContext(), request, response, "/home.jsp", null);
         } catch (SQLException ex) {

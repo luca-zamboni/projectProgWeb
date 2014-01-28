@@ -48,45 +48,41 @@
         <div class="container">
             <jsp:include page="includes/messagedisplayer.jsp" />
             <div class="row">
-                <div class="col-xs-10 col-md-3 col-lg-3">&nbsp;</div>
-                <div class="col-xs-10 col-md-6 col-lg-6 card" style="text-align: center;">
-                    <h4>Hello, <c:out value="${user.username}"/>! </h4>
-                    <p>L' ultimo accesso è stato:
-                        <strong><%= Support.getDateFromTime(user.getLastLogin())%></strong>
-                    </p>
-                    <c:choose>
-                        <c:when test="${inv.size() > 0}" >
-                            <table class="table table-condensed table-hover">
-                                <tr>
-                                    <td><b>Owner</b></td>
-                                    <td><b>Group Name</b></td>
-                                    <td><b>Creation Date</b></td>
-                                    <td><b>Accept/Decline</b></td>
-                                </tr>
-                                <c:forEach items="${inv}" var="inv">
-                                    <tr>
-                                        <td><c:out value="${inv.getNameOwner()}"/></td>
-                                        <td><c:out value="${inv.getTitle()}"/></td>
-                                        <td><fmt:formatDate pattern="dd-MM-yyyy" value="${inv.getDate()}" /></td>
-                                        <td>
-                                            <a href="./acceptinvitation?gid=<c:out value="${inv.getGroupid()}"/>" class="btn btn-success">Accept</button></a>
-                                            <a href="./acceptinvitation?gid=<c:out value="${inv.getGroupid()}"/>&dec=1" class="btn btn-danger">Decline</button></a>
-                                        </td>
-                                    <tr>
-                                </c:forEach>
-                            </table>
-                        </c:when>
-                        <c:otherwise >
-                            <p>Non ci sono nuovi inviti</p>
-                        </c:otherwise>
-                    </c:choose>
-                    <p>Non ci sono inviti<br />:(</p>
-
+                <div class="col-xs-12 col-md-3 col-lg-3" style="text-align: center;">
+                    <div class="card">
+                        <h4>Hello, <c:out value="${user.username}"/>! </h4>
+                        <p>L' ultimo accesso è stato:
+                            <strong><%= Support.getDateFromTime(user.getLastLogin())%></strong>
+                        </p>
+                    </div>
                 </div>
-            </div>
+                <c:forEach items="${invites}" var="inv">
+                    <div class="col-xs-12 col-md-3 col-lg-3">
+                        <div class="card">
+                            <strong><c:out value="${inv.getTitle()}"/></strong>
+                            <c:choose>
+                                <c:when test="${inv.priva}" >
+                                    <span class="label label-danger pull-right">Privato
+                                    </c:when>
+                                    <c:otherwise >
+                                        <span class="label label-primary pull-right">Publico
+                                        </c:otherwise>
+                                    </c:choose>
+                                </span>
+                                <p class="text-muted"><c:out value="${inv.getNameOwner()}"/></p>
+
+                                <p class="text-muted"><fmt:formatDate pattern="dd-MM-yyyy" value="${inv.getDate()}" /></p>
+                                <div style="text-align:center">
+                                <a href="./acceptinvitation?gid=<c:out value="${inv.getGroupid()}"/>" class="inv btn btn-success">Unisciti!</a>
+                                <a href="./acceptinvitation?gid=<c:out value="${inv.getGroupid()}"/>&dec=1" class="inv btn btn-danger">Rifiuta!</a>
+                                </div>
+                        </div>
+                    </div>
+                </div>
+            </c:forEach>
             <div class="row">
                 <c:forEach items="${groups}" var="group">
-                    <div class="col-xs-10 col-md-3 col-lg-3">
+                    <div class="col-xs-12 col-md-3 col-lg-3">
                         <div class="card">
                             <a href="threadgroup?gid=<c:out value="${group.groupid}" />"></a>
                             <strong><c:out value="${group.title}" /></strong>
@@ -99,7 +95,7 @@
                                         </c:otherwise>
                                     </c:choose>
                                 </span>
-                                <p><fmt:formatDate pattern="dd-MM-yyyy" value="${group.date}" /></p>
+                                <p class="text-muted"><fmt:formatDate pattern="dd-MM-yyyy" value="${group.date}" /></p>
                         </div>
                     </div>
                 </c:forEach> 

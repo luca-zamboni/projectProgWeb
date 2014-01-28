@@ -58,7 +58,7 @@ h1{
     font-size: 20px;
 }
 .bubble p{
-  font-weight: normal;  
+    font-weight: normal;  
 }
 .bubble strong{
     font-weight: normal;
@@ -88,14 +88,14 @@ h1{
     color:black;
     font-weight: bold;
 }
-.card td a{
+.card .inv{
     width : auto;
     height: auto;
     position: relative;
     top:0;
-    left: 0;
+    right:0;
     color:white;
-    font-weight: bold;
+
 }
 .card h4{
     margin-bottom: 5px;

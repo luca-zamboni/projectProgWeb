@@ -31,6 +31,7 @@ public class RequestUtils {
     public static final String GROUP_PRIVATE = "gflag";
     public static final String GROUP_USERS = "usercheckboxes";
     public static final String GROUPS = "groups";
+    public static final String GROUPS_INVITES = "invites";
     
     
     public static final String AVATAR = "avatar";
