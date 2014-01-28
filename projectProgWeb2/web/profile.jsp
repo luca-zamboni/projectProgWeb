@@ -24,22 +24,27 @@
             <jsp:include page="includes/messagedisplayer.jsp" />
             <div class="row">
                 <div class="col-xs-1 col-md-1 col-lg-1">&nbsp;</div>
-                <div class="col-xs-10 col-md-6 col-lg-6 card" style="text-align: center;">
-                    <h4>Imagine profilo</h4>
-                    <img src="<%=user.getAvatar()%>" />
-                    <form action="modprofile" enctype="multipart/form-data" method="POST">
-                        <input name="<%= RequestUtils.PARAM%>" type="hidden" value="<%=RequestUtils.AVATARMOD%>" />
-                        <input style="display: inline" required type="file" name="<%= RequestUtils.AVATAR%>" accept="image/*" />
-                        <input style="display: inline" id="avatarBtn" type="submit" value="Aggiorna!" disabled />
-                    </form>
+                <div class="col-xs-12 col-md-7 col-lg-7" style="text-align: center;">
+                    <div class="card">
+                        <h4>Imagine profilo</h4>
+                        <img src="<%=user.getAvatar()%>" />
+                        <form action="modprofile" enctype="multipart/form-data" method="POST">
+                            <input name="<%= RequestUtils.PARAM%>" type="hidden" value="<%=RequestUtils.AVATARMOD%>" />
+                            <input required type="file" name="<%= RequestUtils.AVATAR%>" accept="image/*" style="width:100%" />
+                            <input style="display: inline;margin-top:5px;" id="avatarBtn" class="btn btn-success" type="submit" value="Aggiorna!" disabled />
+                        </form>
+                    </div>
                 </div>
-                <div class="col-xs-10 col-md-4 col-lg-4 card" style="text-align: center;">
-                    <h4>Cambio password</h4><br/>
-                    <form action="modprofile"  method="POST">
+                <div class="col-xs-12 col-md-4 col-lg-4" style="text-align: center;">
+                    <div class="card">
+
+                        <h4>Cambio password</h4><br/>
+                        <form action="modprofile"  method="POST">
                             <input name="<%=RequestUtils.PARAM%>" type="hidden" value="<%=RequestUtils.PASSWORDMOD%>"/>
                             <input required placeholder="nuova password" type="password" pattern=".{6,}" title="Almeno 6 caratteri" name="<%=RequestUtils.PASSWD%>" />
-                            <input type="submit" value="Esegui!" />
-                    </form> 
+                            <br/><input style="margin-top:5px;" type="submit" class="btn btn-danger" value="Esegui!" />
+                        </form> 
+                    </div>
                 </div>
             </div>
         </div>
