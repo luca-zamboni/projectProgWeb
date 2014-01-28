@@ -73,8 +73,8 @@
 
                                 <p class="text-muted"><fmt:formatDate pattern="dd-MM-yyyy" value="${inv.getDate()}" /></p>
                                 <div style="text-align:center">
-                                <a href="./acceptinvitation?gid=<c:out value="${inv.getGroupid()}"/>" class="inv btn btn-success">Unisciti!</a>
-                                <a href="./acceptinvitation?gid=<c:out value="${inv.getGroupid()}"/>&dec=1" class="inv btn btn-danger">Rifiuta!</a>
+                                    <a href="./acceptinvitation?gid=<c:out value="${inv.getGroupid()}"/>" class="inv btn btn-success">Unisciti!</a>
+                                    <a href="./acceptinvitation?gid=<c:out value="${inv.getGroupid()}"/>&dec=1" class="inv btn btn-danger">Rifiuta!</a>
                                 </div>
                         </div>
                     </div>
@@ -95,7 +95,18 @@
                                         </c:otherwise>
                                     </c:choose>
                                 </span>
-                                <p class="text-muted"><fmt:formatDate pattern="dd-MM-yyyy" value="${group.date}" /></p>
+                                <p style="text-align:center;">
+                                    <img src="img/img.jpg" class="prof" >
+                                        <span class="badge" style="position:relative;left:-5%;top:-20%"><
+                                            c:out value="${group.numPartecipanti}" />
+                                        </span>
+                                    </img>
+                                </p>
+                                <p>Numero di post: <c:out value="${group.numPost}"/></p>
+                                <p style="margin-top:3px;">
+                                    Ultima risposta: 
+                                    <fmt:formatDate pattern="dd-MM-yyyy hh:mm" value="${group.lastPostDate}" />
+                                </p>
                         </div>
                     </div>
                 </c:forEach> 

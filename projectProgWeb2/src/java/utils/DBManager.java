@@ -534,25 +534,25 @@ public class DBManager implements Serializable {
         try {
             while (rs.next()) {
                 int i1, i4,i6;
-                long l5;
-                String s2, s5;
-                Date s3;
+                String s2;
+                Date s3,s5;
                 i1 = rs.getInt(1);
                 s2 = rs.getString(2);
                 long d = Long.parseLong(rs.getString(3));
                 s3 = new Date();
                 s3.setTime(d);
                 i4 = rs.getInt(4);
-                s5 = rs.getString(5);
+                d=Long.parseLong(rs.getString(5));
+                s5= new Date();
+                s5.setTime(d);
                 i6 = rs.getInt(6);
-                l5 = Long.parseLong(s5);
 
                 Group aux = new Group();
                 aux.setGroupid(i1);
                 aux.setTitle(s2);
                 aux.setDate(s3);
                 aux.setOwner(i4);
-                aux.setLastPostDate(l5);
+                aux.setLastPostDate(s5);
                 aux.setPriva(i6%2==0);
                 
                 System.err.println("dsasd");
@@ -827,7 +827,9 @@ public class DBManager implements Serializable {
             stm.setInt(1, groupId);
             rs = stm.executeQuery();
             if (rs.next()) {
-                ret.setLastPostDate(Long.parseLong(rs.getString(1)));
+                Date d = new Date();
+                d.setTime(Long.parseLong(rs.getString(1)));
+                ret.setLastPostDate(d);
             }
         }
         

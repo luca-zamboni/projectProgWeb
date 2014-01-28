@@ -20,7 +20,7 @@ public class Group implements Serializable{
     private String nameOwner;
     private boolean priva;
     private boolean chiuso;
-    private long lastPostDate;
+    private Date lastPostDate;
     private Date date;
     private int numPartecipanti;
     private int numPost;
@@ -139,12 +139,16 @@ public class Group implements Serializable{
         this.date=date;
     }
 
-    public void setLastPostDate(long lastPostDate) {
+    public void setLastPostDate(Date lastPostDate) {
         this.lastPostDate=lastPostDate;
     }
 
     public Date getDate() {
         return date;
+    }
+
+    public Date getLastPostDate() {
+        return lastPostDate;
     }
     
     
