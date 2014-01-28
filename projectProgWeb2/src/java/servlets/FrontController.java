@@ -66,6 +66,9 @@ public class FrontController extends HttpServlet {
         System.err.println(op != null ? op : "null");
 
         if (op != null) {
+            
+            Action action;
+            
             switch (op) {
                 case "login":
                     Support.forward(getServletContext(), request, response, JSPPATH + "index.jsp", null);
