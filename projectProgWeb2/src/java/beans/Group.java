@@ -15,11 +15,14 @@ import java.util.ArrayList;
 public class Group implements Serializable{
     private int groupid;
     private String title;
+    private String avatarOwner;
     private int owner;
     private String nameOwner;
     private boolean priva;
     private long lastPostDate;
     private Date date;
+    private int numPartecipanti;
+    private int numPost;
     private ArrayList<Post> posts = new ArrayList();
     private ArrayList<UserBean> users = new ArrayList<>();
     private ArrayList<String> allFiles = new ArrayList<>();
@@ -32,6 +35,30 @@ public class Group implements Serializable{
         this.title = title;
         this.owner = owner;
         this.priva = priva;
+    }
+
+    public String getAvatarOwner() {
+        return avatarOwner;
+    }
+
+    public void setAvatarOwner(String avatarOwner) {
+        this.avatarOwner = avatarOwner;
+    }
+
+    public int getNumPartecipanti() {
+        return numPartecipanti;
+    }
+
+    public void setNumPartecipanti(int numPartecipanti) {
+        this.numPartecipanti = numPartecipanti;
+    }
+
+    public int getNumPost() {
+        return numPost;
+    }
+
+    public void setNumPost(int numPost) {
+        this.numPost = numPost;
     }
     
     public String getNameOwner() {

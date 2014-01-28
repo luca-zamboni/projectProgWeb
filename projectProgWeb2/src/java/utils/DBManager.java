@@ -837,7 +837,38 @@ public class DBManager implements Serializable {
             }
             ret.setAllFiles(file);
         }
+        rs.close();
+        stm.close();
                 
         return ret;
     }
+    
+    public int getNumPartecipanti(int groupId) throws SQLException{
+        int ret = 0;
+        String sql = "SELECT count(*) FROM user_groups WHERE groupid=? AND status = 0";
+        PreparedStatement stm = con.prepareStatement(sql);
+        stm.setInt(1, groupId);
+        ResultSet rs = stm.executeQuery();
+        if (rs.next()) {
+            ret = rs.getInt(1);
+        }
+        rs.close();
+        stm.close();
+        return ret;
+    }
+    
+    public int getNumPost(int groupId) throws SQLException{
+        int ret = 0;
+        String sql = "SELECT count(*) FROM post WHERE groupid=?";
+        PreparedStatement stm = con.prepareStatement(sql);
+        stm.setInt(1, groupId);
+        ResultSet rs = stm.executeQuery();
+        if (rs.next()) {
+            ret = rs.getInt(1);
+        }
+        rs.close();
+        stm.close();
+        return ret;
+    }
+    
 }

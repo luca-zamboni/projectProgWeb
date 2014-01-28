@@ -6,6 +6,8 @@ package servlets;
 
 import beans.Group;
 import beans.UserBean;
+import static beans.UserBean.DEFAULT_IMG_PATH;
+import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
@@ -36,7 +38,17 @@ public class AdminModeratori extends HttpServlet {
             ArrayList<Group> groups= dbm.getAllGroups(user.getUsername());
             
             for(Group p : groups){
+                p.setNumPost(dbm.getNumPost(p.getGroupid()));
+                p.setNumPartecipanti(dbm.getNumPartecipanti(p.getGroupid()));
                 p.setNameOwner(dbm.getUserFormId(p.getOwner()));
+                
+                String path = req.getServletContext().getRealPath("/");
+                File f = new File(path + "/imgs_profiles/" + p.getOwner() + ".png");
+                if (f.exists()) {
+                    p.setAvatarOwner(ModProfile.IMG_PROF_DIR + p.getOwner() + ".png");
+                }else{
+                    p.setAvatarOwner(DEFAULT_IMG_PATH + "img.jpg" );
+                }
             }
 
             req.setAttribute(RequestUtils.GROUPS, groups);
