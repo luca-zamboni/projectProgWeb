@@ -13,6 +13,8 @@ import java.io.PrintWriter;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -41,6 +43,7 @@ public class AdminModeratori extends HttpServlet {
                 p.setNumPost(dbm.getNumPost(p.getGroupid()));
                 p.setNumPartecipanti(dbm.getNumPartecipanti(p.getGroupid()));
                 p.setNameOwner(dbm.getUserFormId(p.getOwner()));
+                p.setChiuso(dbm.isClosedGroup(p.getGroupid()));
                 
                 String path = req.getServletContext().getRealPath("/");
                 File f = new File(path + "/imgs_profiles/" + p.getOwner() + ".png");
@@ -55,8 +58,8 @@ public class AdminModeratori extends HttpServlet {
             
             Support.forward(getServletContext(), req, resp, "/adminmod.jsp", null);
         
-        }catch(SQLException | ParseException e){
-            
+        }catch(SQLException | ParseException ex){
+            Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
         }
         
     }

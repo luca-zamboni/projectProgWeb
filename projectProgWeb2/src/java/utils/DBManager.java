@@ -553,7 +553,9 @@ public class DBManager implements Serializable {
                 aux.setDate(s3);
                 aux.setOwner(i4);
                 aux.setLastPostDate(l5);
-                aux.setPriva(i6!=0);
+                aux.setPriva(i6%2==0);
+                
+                System.err.println("dsasd");
 
                 mGroups.add(aux);
             }
@@ -810,7 +812,7 @@ public class DBManager implements Serializable {
             ret.setOwner(rs.getInt(1));
             ret.setTitle(rs.getString(2));
             ret.setDate(rs.getDate(3));
-            ret.setPriva(rs.getBoolean(4));
+            ret.setPriva(rs.getInt(4) % 2 == 0);
         }
         
         if (users) {
@@ -869,6 +871,28 @@ public class DBManager implements Serializable {
         rs.close();
         stm.close();
         return ret;
+    }
+    
+    public boolean isClosedGroup(int groupId) throws SQLException{
+        boolean ret = false;
+        String sql = "SELECT private FROM groups WHERE groupid=?";
+        PreparedStatement stm = con.prepareStatement(sql);
+        stm.setInt(1, groupId);
+        ResultSet rs = stm.executeQuery();
+        if (rs.next()) {
+            ret = rs.getInt(1) > 1;
+        }
+        rs.close();
+        stm.close();
+        return ret;
+    }
+    
+    public void closeGroup(int groupId) throws SQLException{
+        String sql = "UPDATE groups SET private = (private+2) WHERE groupid=?";
+        PreparedStatement stm = con.prepareStatement(sql);
+        stm.setInt(1, groupId);
+        stm.executeUpdate();
+        stm.close();
     }
     
 }

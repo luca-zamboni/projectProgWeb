@@ -62,9 +62,16 @@
                                     <td><c:out value="${gr.getNumPartecipanti()}" /></td>
                                     <td><c:out value="${gr.getNumPost()}" /></td>
                                     <td>
-                                        <a href="">
-                                            <button type="button" class="btn btn-danger">Chiudi</button>
-                                        </a>
+                                        <c:choose>
+                                            <c:when test="${gr.isChiuso()}">
+                                                <span style="color:red"><strong>Chiuso</strong></div>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <a href="./closegroup?gid=<c:out value="${gr.getGroupid()}" />">
+                                                    <button type="button" class="btn btn-danger">Chiudi</button>
+                                                </a>
+                                            </c:otherwise>
+                                        </c:choose>
                                     </td>
                                  </tr>
                             </c:forEach>

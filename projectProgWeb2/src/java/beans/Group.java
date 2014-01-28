@@ -19,6 +19,7 @@ public class Group implements Serializable{
     private int owner;
     private String nameOwner;
     private boolean priva;
+    private boolean chiuso;
     private long lastPostDate;
     private Date date;
     private int numPartecipanti;
@@ -35,6 +36,14 @@ public class Group implements Serializable{
         this.title = title;
         this.owner = owner;
         this.priva = priva;
+    }
+
+    public boolean isChiuso() {
+        return chiuso;
+    }
+
+    public void setChiuso(boolean chiuso) {
+        this.chiuso = chiuso;
     }
 
     public String getAvatarOwner() {
