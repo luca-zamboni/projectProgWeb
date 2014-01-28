@@ -1,6 +1,5 @@
 package filters;
 
-
 import utils.SessionUtils;
 import beans.UserBean;
 import java.io.IOException;
@@ -16,6 +15,7 @@ import utils.Support;
 
 /**
  * filtro che si occupa di proteggere il sito da utenti non loggati
+ *
  * @author luca
  */
 public class LoginFilter implements Filter {
@@ -27,17 +27,15 @@ public class LoginFilter implements Filter {
             FilterChain chain)
             throws IOException, ServletException {
 
-        UserBean bean = (UserBean) Support.getInSession((HttpServletRequest)request, SessionUtils.USER);
+        UserBean bean = (UserBean) Support.getInSession((HttpServletRequest) request, SessionUtils.USER);
 
         HttpServletRequest httpRequest = (HttpServletRequest) request;
-        String url = ((HttpServletRequest)request).getRequestURI();
+        String url = ((HttpServletRequest) request).getRequestURI();
 
         //System.out.print("url " + url );
         if (httpRequest.getMethod().equalsIgnoreCase("GET")) {
             if (bean == null) {
                 ((HttpServletResponse) response).sendRedirect("./");
-            }else{
-                chain.doFilter(request, response);
             }
         }
 //        } else {
@@ -52,6 +50,7 @@ public class LoginFilter implements Filter {
 //                }
 //            }
 //        }
+        chain.doFilter(request, response);
     }
 
     @Override
