@@ -47,7 +47,16 @@
     </filter-mapping>
     <filter-mapping>
         <filter-name>LoginFilter</filter-name>
-        <url-pattern>/home.jsp</url-pattern>
+        <url-pattern>/home</url-pattern>
+        <url-pattern>/profile</url-pattern>
+        <url-pattern>/groupCreate</url-pattern>
+        <url-pattern>/addpost</url-pattern>
+        <url-pattern>/closegroup</url-pattern>
+        <url-pattern>/logout</url-pattern>
+        <url-pattern>/modprofile</url-pattern>
+        <url-pattern>/PdfCreator</url-pattern>
+        <url-pattern>/GroupModify</url-pattern>
+        <url-pattern>/adminmoderatori</url-pattern>
     </filter-mapping>
     <servlet>
         <servlet-name>login</servlet-name>
