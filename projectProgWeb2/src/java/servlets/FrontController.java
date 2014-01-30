@@ -7,9 +7,11 @@ package servlets;
 
 import beans.Message;
 import beans.UserBean;
+import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -17,6 +19,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import utils.Action;
 import utils.DBManager;
 import utils.RequestUtils;
 import utils.SessionUtils;
@@ -66,9 +70,9 @@ public class FrontController extends HttpServlet {
         System.err.println(op != null ? op : "null");
 
         if (op != null) {
-            
+
             Action action;
-            
+
             switch (op) {
                 case "login":
                     Support.forward(getServletContext(), request, response, JSPPATH + "index.jsp", null);
@@ -86,7 +90,7 @@ public class FrontController extends HttpServlet {
                     Support.forward(getServletContext(), request, response, JSPPATH + "profile.jsp", null);
                     break;
                 case "creategroup":
-                    Support.forward(getServletContext(), request, response, JSPPATH+"", null);
+                    Support.forward(getServletContext(), request, response, JSPPATH + "creategroup.jsp", null);
                 case "forgot":
                 //todo
                 default:
@@ -118,6 +122,10 @@ public class FrontController extends HttpServlet {
                 break;
             case "register":
                 this.register(request, response);
+                break;
+            case "groupcreate":
+                this.createGroup(request, response);
+                break;
         }
     }
 
@@ -140,12 +148,12 @@ public class FrontController extends HttpServlet {
     // <editor-fold defaultstate="collapsed" desc="LOGIN CODE HERE">
     private void login(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         connectDatabase(req);
-        
+
         String[] credentials = getCredentials(req);
         String page = "/WEB-INF/jsp/index.jsp";
         UserBean login = getUser(req, credentials[0], credentials[1]);
         Message msg = null;
-        
+
         if (login.getUserID() >= 0) {
             Support.addToSession(req, SessionUtils.USER, login);
             Support.addToSession(req, SessionUtils.DBM, dbm);
@@ -186,12 +194,15 @@ public class FrontController extends HttpServlet {
      */
     private UserBean getUser(HttpServletRequest request, String username, String password) {
 
-        try {
-            dbm = new DBManager(request);
-            UserBean out = dbm.login(username, password);
-            out.setAvatar(dbm.getAvatar(out.getUserID()));
-            return out;
-        } catch (SQLException ex) {
+        dbm = (DBManager) request.getSession().getAttribute(SessionUtils.DBM);
+        if (dbm == null) {
+            try {
+                dbm = new DBManager(request);
+                UserBean out = dbm.login(username, password);
+                out.setAvatar(dbm.getAvatar(out.getUserID()));
+                return out;
+            } catch (SQLException ex) {
+            }
         }
         return new UserBean(-1, 0, "", 0);
     }
@@ -221,7 +232,7 @@ public class FrontController extends HttpServlet {
         if (sanitized) {
             isInserted = insertUser(request, params);
         }
-        Message msg = buildMessage(code, isInserted);
+        Message msg = buildRegistrationMessage(code, isInserted);
         if (msg.getType() == Message.MessageType.ERROR) {
             Support.forward(getServletContext(), request, response, "/WEB-INF/jsp/register.jsp", msg);
         } else {
@@ -269,7 +280,7 @@ public class FrontController extends HttpServlet {
         return true;
     }
 
-    private Message buildMessage(int code, boolean inserted) {
+    private Message buildRegistrationMessage(int code, boolean inserted) {
 
         //non e' riuscito perche' la mail/username gia' esiste
         if (!inserted) {
@@ -288,5 +299,77 @@ public class FrontController extends HttpServlet {
         }
         return false;
     }//</editor-fold>
+
+    //<editor-fold defaultstate="collapsed" desc="GROUP CREATION CODE HERE">
+    private ArrayList parseRequestGroupCreate(HttpServletRequest request) {
+
+        ArrayList list = new ArrayList();
+
+        dbm = (DBManager) request.getAttribute(SessionUtils.DBM);
+        
+        try {
+            list.add(1, dbm.getAllUser());
+        } catch (SQLException ex) {
+            Logger.getLogger(FrontController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return list;
+
+    }
+
+    private void createGroup(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+
+        dbm = (DBManager) request.getAttribute(SessionUtils.DBM);
+        HttpSession session = request.getSession();
+        UserBean user = (UserBean) Support.getInSession(request, SessionUtils.USER);
+
+        String title = request.getParameter(RequestUtils.GROUP_TITLE);
+        String isPrivate = request.getParameter(RequestUtils.GROUP_PRIVATE);
+        String[] users = request.getParameterValues(RequestUtils.USERCHECK);
+
+        int groupId = addGroup(title, isPrivate, users, user);
+        String path = request.getServletContext().getRealPath("/");
+        File a = new File(path + "/files/" + groupId + "/");
+        File b = new File(path + "/pdf/" + groupId + "/");
+        a.mkdir();
+        b.mkdir();
+
+        Message msg = buildGrpCreateMessage(groupId, title);
+
+        if (msg.getType() == Message.MessageType.ERROR) {
+            Support.forward(getServletContext(), request, response, JSPPATH + "creategroup.jsp", msg);
+        } else {
+            Support.forward(getServletContext(), request, response, JSPPATH + "home.jsp", msg);
+        }
+    }
+
+    private int addGroup(String title, String aPrivate, String[] users, UserBean user) {
+        int ret = -1;
+        boolean check = title != null && !title.equals("");
+        boolean prvt = aPrivate != null;
+        if (check) {
+            try {
+                ret = dbm.newGroup(title, users, user.getUserID(), prvt);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        return ret;
+    }
+
+    private Message buildGrpCreateMessage(int groupId, String groupTitle) {
+        Message msg;
+        //qualcosa non e' andato a buon fine
+        if (groupTitle == null || groupTitle.equals("")) {
+            msg = new Message(Message.MessageType.ERROR, 10);
+        } else if (groupId < 0) {
+            msg = new Message(Message.MessageType.ERROR, 11, groupTitle);
+        } else {
+            msg = new Message(Message.MessageType.SUCCESS, 2, groupTitle);
+        }
+        return msg;
+    }
+    //</editor-fold>
 
 }

@@ -14,12 +14,12 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <%@ include file="includes/header.jsp" %>
+        <%@ include file="/includes/header.jsp" %>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Create the new group</title>
     </head>
     <body>
-        <jsp:include page="includes/messagedisplayer.jsp" />
+        <jsp:include page="/includes/messagedisplayer.jsp" />
         <% UserBean us = (UserBean) Support.getInSession(request, SessionUtils.USER); %>
         <a href="home.jsp">home</a>
         <h1>Create the new Group</h1><br>
