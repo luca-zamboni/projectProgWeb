@@ -30,12 +30,14 @@ public class LoginFilter implements Filter {
         UserBean bean = (UserBean) Support.getInSession((HttpServletRequest) request, SessionUtils.USER);
 
         HttpServletRequest httpRequest = (HttpServletRequest) request;
+        HttpServletResponse httpResponse = (HttpServletResponse) response;
         String url = ((HttpServletRequest) request).getRequestURI();
 
         //System.out.print("url " + url );
         if (httpRequest.getMethod().equalsIgnoreCase("GET")) {
             if (bean == null) {
-                ((HttpServletResponse) response).sendRedirect("./");
+                httpResponse.sendRedirect("");
+                return;
             }
         }
 //        } else {

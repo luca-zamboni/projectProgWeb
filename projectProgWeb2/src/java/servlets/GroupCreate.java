@@ -117,9 +117,9 @@ public class GroupCreate extends HttpServlet {
         if (groupTitle == null || groupTitle.equals("")) {
             msg = new Message(Message.MessageType.ERROR, 10);
         } else if (groupId < 0) {
-            msg = new Message(Message.MessageType.ERROR, 11, groupTitle);
+            msg = new Message(Message.MessageType.ERROR, 11);
         } else {
-            msg = new Message(Message.MessageType.SUCCESS, 2, groupTitle);
+            msg = new Message(Message.MessageType.SUCCESS, 2);
         }
         return msg;
     }

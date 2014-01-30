@@ -20,6 +20,7 @@
     </head>
     <body>
         <% UserBean user = (UserBean) Support.getInSession(request, SessionUtils.USER);%>
+        <% String date =  (user.getLastLogin()==-1?"Never":Support.getDateFromTime(user.getLastLogin())); %>
         <div class="navbar mynavbar" style="display:none;background-color: white;" >
             <div class="container">
                 <div class="row">
@@ -57,7 +58,7 @@
                     <div class="card">
                         <h4>Hello, <c:out value="${user.username}"/>! </h4>
                         <p>L' ultimo accesso è stato:
-                            <strong><%= Support.getDateFromTime(user.getLastLogin())%></strong>
+                            <strong><%= date %></strong>
                         </p>
                     </div>
                 </div>
@@ -70,7 +71,7 @@
                                     <span class="label label-danger pull-right">Privato
                                     </c:when>
                                     <c:otherwise >
-                                        <span class="label label-primary pull-right">Publico
+                                        <span class="label label-primary pull-right">Pubblico
                                         </c:otherwise>
                                     </c:choose>
                                 </span>
@@ -99,7 +100,7 @@
                                     <span class="label label-danger pull-right">Privato
                                     </c:when>
                                     <c:otherwise >
-                                        <span class="label label-primary pull-right">Publico
+                                        <span class="label label-primary pull-right">Pubblico
                                         </c:otherwise>
                                     </c:choose>
                                 </span>

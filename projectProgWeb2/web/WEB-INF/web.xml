@@ -57,7 +57,12 @@
         <servlet-name>Home</servlet-name>
 <!--        <servlet-name>AcceptInvitation</servlet-name>
         <servlet-name>AdminModeratori</servlet-name>
+<<<<<<< Updated upstream
         <servlet-name>CloseGroup</servlet-name>-->
+=======
+        <servlet-name>CloseGroup</servlet-name>
+        <url-pattern>/home</url-pattern>
+>>>>>>> Stashed changes
     </filter-mapping>
     <servlet>
         <servlet-name>login</servlet-name>

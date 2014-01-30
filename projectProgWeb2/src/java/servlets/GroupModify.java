@@ -102,7 +102,7 @@ public class GroupModify extends HttpServlet {
         Message msg = buildMessage(groupId, title);
 
         if (msg.getType() == Message.MessageType.ERROR) {
-            Support.forward(getServletContext(), request, response, "modgroup?gid"+groupId, msg);
+            Support.forward(getServletContext(), request, response, "/modgroup?gid="+groupId, msg);
         } else {
             Support.forward(getServletContext(), request, response, "/home", msg);
         }
@@ -132,11 +132,8 @@ public class GroupModify extends HttpServlet {
                     + "inserire un nome vuoto nel database.");
         } else if (groupId == 0) {
             msg = new Message(Message.MessageType.ERROR, 22, "Impossibile "
-                    + "modificare " + groupTitle + ".");
-        } else if (groupId > 1) {
-            msg = new Message(Message.MessageType.ERROR, 23, "Incredibile! "
-                    + "hai addirittura modificato 2 gruppi");
-        } else {
+                    + "modificare.");
+        }  else {
             msg = new Message(Message.MessageType.SUCCESS, -1, "Gruppo "
                     + " modificato con successo!");
         }

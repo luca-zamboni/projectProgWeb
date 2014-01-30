@@ -51,7 +51,7 @@ public class Index extends HttpServlet {
 "-->\n" +
 "<html>\n" +
 "    <head>\n" +
-"        <title>TODO supply a title</title>\n" +
+"        <title>Login</title>\n" +
 "        <meta charset=\"UTF-8\">\n" +
 "        <link href=\"./css/bootstrap.min.css\" rel=\"stylesheet\">\n" +
 "        <script src=\"js/jquery.js\"></script>\n" +
