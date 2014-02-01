@@ -57,6 +57,7 @@ public class MailUtils {
         // — Set the FROM and TO fields –
 
         try {
+            System.err.println(dest);
             msg.setFrom(new InternetAddress(USERNAME + ""));
             msg.setRecipients(Message.RecipientType.TO,
                     InternetAddress.parse(dest, false));

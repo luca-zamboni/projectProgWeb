@@ -21,6 +21,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import utils.DBManager;
+import utils.MailUtils;
 import utils.RequestUtils;
 import utils.SessionUtils;
 import utils.Support;
@@ -81,11 +82,28 @@ public class GroupCreate extends HttpServlet {
         String[] users = request.getParameterValues(RequestUtils.USERCHECK);
 
         int groupId = addGroup(title, isPrivate, users, user);
+        System.err.println(groupId);
         String path = request.getServletContext().getRealPath("/");
         File a = new File(path + "/files/" + groupId + "/");
         File b = new File(path + "/pdf/" + groupId + "/");
         a.mkdir();
         b.mkdir();
+        
+        for(String us : users){
+            String link ="http://localhost:8080/projectProgWeb2/accinvmail.jsp?gid="+groupId;
+            String subject ="Invito a un gruppo";
+            String mail = "Sei stato invitato al gruppo " + title
+                    + " clicca sul link per accettare l'invito.\n"
+                    + link;
+            String to = "";
+            try {
+                to = dbm.getEmail(dbm.getIdFromUser(us));
+            } catch (SQLException ex) {
+                Logger.getLogger(GroupCreate.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            MailUtils.sendMail(to, subject, mail);
+            
+        }
 
         Message msg = buildMessage(groupId, title);
 

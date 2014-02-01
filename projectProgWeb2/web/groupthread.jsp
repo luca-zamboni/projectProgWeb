@@ -46,7 +46,7 @@
             </div><br>
             <div>
                 <c:forEach var="posts" items="${group.getPosts()}">
-                    <div class="card">
+                    <div class="thcard">
                         <img src="<c:out value="${posts.getAvatar()}"/>"  class="img-thumbnail prof" />
                         <b><c:out value="${posts.getUser()}"/></b> at <c:out value="${posts.getDate()}"/> says:<br> <br> 
                         <div class="row">

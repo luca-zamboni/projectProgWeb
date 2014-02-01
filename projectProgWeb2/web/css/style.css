@@ -71,7 +71,12 @@ h1{
     border: 1px solid #333;
     margin-bottom: 3px;
 }
-
+.thcard{
+    background-color: white;
+    box-shadow: 0 0 5px darkgray;
+    padding: 10px;
+    margin:5px;
+}
 .card{
     display: none;
     background-color: white;
