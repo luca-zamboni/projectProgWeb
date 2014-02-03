@@ -534,7 +534,7 @@ public class DBManager implements Serializable {
                 + "WHERE groups.groupid = user_groups.groupid "
                 + "AND users.userid= user_groups.userid "
                 + "AND post.groupid= groups.groupid "
-                + "AND username = ? and user_groups.status = ? "
+                + "AND username = ? AND user_groups.status = ? AND groups.private = 0 "
                 + "GROUP BY groups.groupid "
                 + "ORDER by post.date DESC ";
         PreparedStatement stm = con.prepareStatement(sql);
@@ -545,7 +545,7 @@ public class DBManager implements Serializable {
         ArrayList<Group> mGroups = new ArrayList<>();
         try {
             while (rs.next()) {
-                int i1, i4,i6;
+                int i1,i4,i6;
                 String s2;
                 Date s3,s5;
                 i1 = rs.getInt(1);
@@ -573,6 +573,47 @@ public class DBManager implements Serializable {
 
                 mGroups.add(aux);
             }
+            
+            sql = "SELECT groups.groupid,groupname,creationdate,groups.ownerid,post.date,groups.private "
+                + "FROM groups,post "
+                + "WHERE post.groupid = groups.groupid "
+                + "AND groups.private = 1 "
+                + "GROUP BY groups.groupid "
+                + "ORDER by post.date DESC ";
+            
+            stm = con.prepareStatement(sql);
+            rs = stm.executeQuery();
+            
+            while (rs.next()) {
+                int i1,i4,i6;
+                String s2;
+                Date s3,s5;
+                i1 = rs.getInt(1);
+                s2 = rs.getString(2);
+                long d = Long.parseLong(rs.getString(3));
+                s3 = new Date();
+                s3.setTime(d);
+                i4 = rs.getInt(4);
+                d=Long.parseLong(rs.getString(5));
+                s5= new Date();
+                s5.setTime(d);
+                i6 = rs.getInt(6); 
+                
+                Group aux = new Group();
+                
+                aux.setGroupid(i1);
+                aux.setTitle(s2);
+                aux.setDate(s3);
+                aux.setOwner(i4);
+                aux.setLastPostDate(s5);
+                aux.setPriva(i6%2==0);
+                aux.setNumPost(getNumPost(i1));
+                aux.setNumPartecipanti(getNumPartecipanti(i1));
+                
+
+                mGroups.add(aux);
+            }
+            
         } finally {
             rs.close();
             stm.close();
