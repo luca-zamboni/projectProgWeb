@@ -93,16 +93,16 @@ public class DBManager implements Serializable {
         stm.setString(1, newTitle);
         stm.setInt(2, group);
         stm.executeUpdate();
-        
+
         stm.close();
-        
+
         sql = "UPDATE groups SET private = ? WHERE groupid = ?";
         stm = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-        int priv = calculatePrivateColumnInt(chiuso,privato);
+        int priv = calculatePrivateColumnInt(chiuso, privato);
         stm.setInt(1, priv);
         stm.setInt(2, group);
         stm.executeUpdate();
-        
+
         stm.close();
 
         ArrayList<UserBean> usersInDb = getAllUser();
@@ -149,7 +149,6 @@ public class DBManager implements Serializable {
 
     }
 
-
     public int newGroup(String title, String[] users, int owner,
             boolean isPrivate) throws SQLException {
 
@@ -158,7 +157,7 @@ public class DBManager implements Serializable {
         PreparedStatement stm = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
         stm.setInt(1, owner);
         stm.setString(2, title);
-        stm.setString(3,"" + new Date().getTime());
+        stm.setString(3, "" + new Date().getTime());
         stm.setInt(4, isPrivate ? 0 : 1); //se e' privato setta a 1 altrimenti 0
         stm.executeUpdate();
         PreparedStatement stmaux = con.prepareStatement("SELECT last_insert_rowid()");
@@ -271,7 +270,7 @@ public class DBManager implements Serializable {
                 long date = Long.parseLong(d);
                 String content = rs.getString(3);
                 int postid = rs.getInt(4);
-                p.add(new Post(ow,us, content, date, group, postid));
+                p.add(new Post(ow, us, content, date, group, postid));
             }
         } finally {
             rs.close();
@@ -545,75 +544,75 @@ public class DBManager implements Serializable {
         ArrayList<Group> mGroups = new ArrayList<>();
         try {
             while (rs.next()) {
-                int i1,i4,i6;
+                int i1, i4, i6;
                 String s2;
-                Date s3,s5;
+                Date s3, s5;
                 i1 = rs.getInt(1);
                 s2 = rs.getString(2);
                 long d = Long.parseLong(rs.getString(3));
                 s3 = new Date();
                 s3.setTime(d);
                 i4 = rs.getInt(4);
-                d=Long.parseLong(rs.getString(5));
-                s5= new Date();
+                d = Long.parseLong(rs.getString(5));
+                s5 = new Date();
                 s5.setTime(d);
                 i6 = rs.getInt(6);
 
                 Group aux = new Group();
-                
+
                 aux.setGroupid(i1);
                 aux.setTitle(s2);
                 aux.setDate(s3);
                 aux.setOwner(i4);
                 aux.setLastPostDate(s5);
-                aux.setPriva(i6%2==0);
+                aux.setPriva(i6 % 2 == 0);
                 aux.setNumPost(getNumPost(i1));
                 aux.setNumPartecipanti(getNumPartecipanti(i1));
-                
 
                 mGroups.add(aux);
             }
-            
-            sql = "SELECT groups.groupid,groupname,creationdate,groups.ownerid,post.date,groups.private "
-                + "FROM groups,post "
-                + "WHERE post.groupid = groups.groupid "
-                + "AND groups.private = 1 "
-                + "GROUP BY groups.groupid "
-                + "ORDER by post.date DESC ";
-            
-            stm = con.prepareStatement(sql);
-            rs = stm.executeQuery();
-            
-            while (rs.next()) {
-                int i1,i4,i6;
-                String s2;
-                Date s3,s5;
-                i1 = rs.getInt(1);
-                s2 = rs.getString(2);
-                long d = Long.parseLong(rs.getString(3));
-                s3 = new Date();
-                s3.setTime(d);
-                i4 = rs.getInt(4);
-                d=Long.parseLong(rs.getString(5));
-                s5= new Date();
-                s5.setTime(d);
-                i6 = rs.getInt(6); 
-                
-                Group aux = new Group();
-                
-                aux.setGroupid(i1);
-                aux.setTitle(s2);
-                aux.setDate(s3);
-                aux.setOwner(i4);
-                aux.setLastPostDate(s5);
-                aux.setPriva(i6%2==0);
-                aux.setNumPost(getNumPost(i1));
-                aux.setNumPartecipanti(getNumPartecipanti(i1));
-                
 
-                mGroups.add(aux);
+            if (status != 2) {
+                sql = "SELECT groups.groupid,groupname,creationdate,groups.ownerid,post.date,groups.private "
+                        + "FROM groups,post "
+                        + "WHERE post.groupid = groups.groupid "
+                        + "AND groups.private = 1 "
+                        + "GROUP BY groups.groupid "
+                        + "ORDER by post.date DESC ";
+
+                stm = con.prepareStatement(sql);
+                rs = stm.executeQuery();
+
+                while (rs.next()) {
+                    int i1, i4, i6;
+                    String s2;
+                    Date s3, s5;
+                    i1 = rs.getInt(1);
+                    s2 = rs.getString(2);
+                    long d = Long.parseLong(rs.getString(3));
+                    s3 = new Date();
+                    s3.setTime(d);
+                    i4 = rs.getInt(4);
+                    d = Long.parseLong(rs.getString(5));
+                    s5 = new Date();
+                    s5.setTime(d);
+                    i6 = rs.getInt(6);
+
+                    Group aux = new Group();
+
+                    aux.setGroupid(i1);
+                    aux.setTitle(s2);
+                    aux.setDate(s3);
+                    aux.setOwner(i4);
+                    aux.setLastPostDate(s5);
+                    aux.setPriva(i6 % 2 == 0);
+                    aux.setNumPost(getNumPost(i1));
+                    aux.setNumPartecipanti(getNumPartecipanti(i1));
+
+                    mGroups.add(aux);
+                }
             }
-            
+
         } finally {
             rs.close();
             stm.close();
@@ -858,7 +857,7 @@ public class DBManager implements Serializable {
     public Group fillGroupById(int groupId, boolean users, boolean posts, boolean files) throws SQLException {
         Group ret = new Group();
         ret.setGroupid(groupId);
-        
+
         String sql = "SELECT ownerid, groupname, creationdate, private FROM groups WHERE groupid=?";
         PreparedStatement stm = con.prepareStatement(sql);
         stm.setInt(1, groupId);
@@ -869,14 +868,14 @@ public class DBManager implements Serializable {
             ret.setDate(rs.getDate(3));
             ret.setPriva(rs.getInt(4) % 2 == 0);
         }
-        
+
         if (users) {
             ret.setUsers(this.getAllUserInGroup(groupId));
         }
-        
+
         if (posts) {
             ret.setPosts(this.getAllPost(groupId));
-            
+
             sql = "SELECT date FROM post WHERE groupid=? ORDER BY date LIMIT 1";
             stm = con.prepareStatement(sql);
             stm.setInt(1, groupId);
@@ -887,22 +886,22 @@ public class DBManager implements Serializable {
                 ret.setLastPostDate(d);
             }
         }
-        
+
         if (files) {
             ArrayList<String> file = new ArrayList();
             ArrayList<Post> pstal = this.getAllPost(groupId);
-            for (Post post:pstal) {
+            for (Post post : pstal) {
                 file.addAll(this.getAllFileInPost(post.getPostid()));
             }
             ret.setAllFiles(file);
         }
         rs.close();
         stm.close();
-                
+
         return ret;
     }
-    
-    public int getNumPartecipanti(int groupId) throws SQLException{
+
+    public int getNumPartecipanti(int groupId) throws SQLException {
         int ret = 0;
         String sql = "SELECT count(*) FROM user_groups WHERE groupid=? AND status = 0";
         PreparedStatement stm = con.prepareStatement(sql);
@@ -915,8 +914,8 @@ public class DBManager implements Serializable {
         stm.close();
         return ret;
     }
-    
-    public int getNumPost(int groupId) throws SQLException{
+
+    public int getNumPost(int groupId) throws SQLException {
         int ret = 0;
         String sql = "SELECT count(*) FROM post WHERE groupid=?";
         PreparedStatement stm = con.prepareStatement(sql);
@@ -929,8 +928,8 @@ public class DBManager implements Serializable {
         stm.close();
         return ret;
     }
-    
-    public boolean isClosedGroup(int groupId) throws SQLException{
+
+    public boolean isClosedGroup(int groupId) throws SQLException {
         boolean ret = false;
         String sql = "SELECT private FROM groups WHERE groupid=?";
         PreparedStatement stm = con.prepareStatement(sql);
@@ -943,8 +942,8 @@ public class DBManager implements Serializable {
         stm.close();
         return ret;
     }
-    
-    public void closeGroup(int groupId) throws SQLException{
+
+    public void closeGroup(int groupId) throws SQLException {
         String sql = "UPDATE groups SET private = (private+2) WHERE groupid=?";
         PreparedStatement stm = con.prepareStatement(sql);
         stm.setInt(1, groupId);
@@ -952,14 +951,14 @@ public class DBManager implements Serializable {
         stm.close();
     }
 
-    public static int calculatePrivateColumnInt(boolean chiuso, boolean privato){
-        return (chiuso?2:0)+(privato?0:1);
+    public static int calculatePrivateColumnInt(boolean chiuso, boolean privato) {
+        return (chiuso ? 2 : 0) + (privato ? 0 : 1);
     }
-    
+
     //arr[0] = true se e' privato
     //arr[1] = true se e' chiuso
-    public static boolean[] getPrivateAndClose(int i){
-        return new boolean[]{i==0||i==2,i==2||i==3};
+    public static boolean[] getPrivateAndClose(int i) {
+        return new boolean[]{i == 0 || i == 2, i == 2 || i == 3};
     }
-    
+
 }
