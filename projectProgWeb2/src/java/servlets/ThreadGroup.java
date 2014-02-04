@@ -114,9 +114,8 @@ public class ThreadGroup extends HttpServlet {
     }
     
     private String replaceEmail(String text){
-        String reg = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\\\.[A-Za-z]{2,4}";
         if(isValidEmailAddress(text)){
-            return "xxxXXxxx" + text.substring(text.indexOf("@"));
+            return text.substring(0,text.indexOf("@")+1)+"xxxXXxxx" ;
         }
         return text;
     }
