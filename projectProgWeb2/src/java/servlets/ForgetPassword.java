@@ -34,10 +34,14 @@ public class ForgetPassword extends HttpServlet {
         
         String code = Support.randomStringSHA1(10);
         String link = "http://localhost:8080/projectProgWeb2/changePass?code="+code;
-        String newPass = Support.randomStringSHA1(10);        
+        String newPass = Support.randomStringSHA1(10);   
+        newPass = newPass.substring(0, 10);
         
         try{
             int id = dbm.getIdFromUser(user);
+            if(id == -1){
+                id = dbm.getIdFromMail(user);
+            }
             String mail = dbm.getEmail(id);
             if(mail == null){
                 req.getSession().setAttribute(RequestUtils.MESSAGE, new beans.Message(beans.Message.MessageType.ERROR, 5));

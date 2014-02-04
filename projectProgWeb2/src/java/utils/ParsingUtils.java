@@ -167,6 +167,7 @@ public class ParsingUtils {
                 QRCodeClient client = new QRCodeClient();
                 BufferedInputStream ins = client.generate(link);
                 FileOutputStream fos = new FileOutputStream(aux);
+                System.err.println("sdfmsdfsdf");
                 BufferedOutputStream bos = new BufferedOutputStream(fos, 1024);
 
                 int length = 0;

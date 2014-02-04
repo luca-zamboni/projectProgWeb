@@ -645,6 +645,23 @@ public class DBManager implements Serializable {
         }
         return -1;
     }
+    
+    public int getIdFromMail(String mail) throws SQLException {
+        String sql = "select userid from users where email = ?";
+        PreparedStatement stm = con.prepareStatement(sql);
+        stm.setString(1, mail);
+        ResultSet rs;
+        rs = stm.executeQuery();
+        try {
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        } finally {
+            rs.close();
+            stm.close();
+        }
+        return -1;
+    }
 
     public String getUserFormId(int id) throws SQLException {
         String sql = "select username from users where userid = ?";

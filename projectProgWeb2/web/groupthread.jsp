@@ -47,7 +47,7 @@
             <div>
                 <c:forEach var="posts" items="${group.getPosts()}">
                     <div class="thcard">
-                        <img src="<c:out value="${posts.getAvatar()}"/>"  class="img-thumbnail prof" />
+                        <img src="<c:out value="${posts.getAvatar()}"/>" style="width:100px;"  class="img-thumbnail prof" />
                         <b><c:out value="${posts.getUser()}"/></b> at <c:out value="${posts.getDate()}"/> says:<br> <br> 
                         <div class="row">
                             <div class="col-md-6">
@@ -80,5 +80,6 @@
                 <c:import url="includes/addpost.jsp" />
             </div>
         </div>
+        <br><br><br><br>
     </body>
 </html>

@@ -14,13 +14,17 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.hibernate.validator.internal.constraintvalidators.EmailValidator;
 import utils.DBManager;
 import utils.RequestUtils;
+import utils.SessionUtils;
 import utils.Support;
 
 /**
@@ -42,14 +46,25 @@ public class ThreadGroup extends HttpServlet {
         try{
             
             connectToDatabase(req);
+            UserBean user = (UserBean) Support.getInSession(req, SessionUtils.USER);
+            
             this.req = req;
             this.resp = resp;
             groupid = Integer.parseInt((String) req.getParameter(RequestUtils.GROUP_ID));
             
             String title = dbm.getGroupTitleById(groupid);
+            if(user == null){
+                System.err.println("sdasd");
+                title = replaceEmail(title);
+            }
             int owner = dbm.getGroupOwnerById(groupid);
             ArrayList<Post> posts = dbm.getAllPost(groupid);
             for(Post a: posts){
+                
+                if(user == null){
+                    a.setText(replaceEmail(a.getText()));
+                    a.setUser(replaceEmail(a.getUser()));
+                }
                 
                 String path = req.getServletContext().getRealPath("/");
                 File f = new File(path + "/imgs_profiles/" + a.getUserid() + ".png");
@@ -96,6 +111,20 @@ public class ThreadGroup extends HttpServlet {
         }
         
         
+    }
+    
+    private String replaceEmail(String text){
+        String reg = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\\\.[A-Za-z]{2,4}";
+        if(isValidEmailAddress(text)){
+            return "xxxXXxxx" + text.substring(text.indexOf("@"));
+        }
+        return text;
+    }
+    
+    public boolean isValidEmailAddress(String email) {
+       java.util.regex.Pattern p = java.util.regex.Pattern.compile(".+@.+\\.[a-z]+");
+       java.util.regex.Matcher m = p.matcher(email);
+       return m.matches();
     }
     
     private void connectToDatabase(HttpServletRequest req) {
