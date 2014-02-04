@@ -140,6 +140,7 @@ public class Login extends HttpServlet {
     public String getAllGroups(ArrayList<Group> groups, String user) {
         String html = "";
         String haux = "";
+        boolean added = true;
         int i=0;
         if (groups.isEmpty()) {
             html += HtmlHelper.generateH(3, "You don't belong to any group");
@@ -181,8 +182,10 @@ public class Login extends HttpServlet {
                     ctrl = false;
                 }
                 if(ctrl){
-                    html += "</table>";
-                    html += haux;
+                    if(added){
+                        html += haux;
+                        added = false;
+                    }
                 }
                 if (aux.getOwnerName().equals(user)) {
                     html += "<tr class=\"success\">";
