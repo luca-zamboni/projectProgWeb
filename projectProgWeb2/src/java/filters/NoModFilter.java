@@ -40,7 +40,7 @@ public class NoModFilter implements Filter {
         
         HttpServletRequest req = (HttpServletRequest) request;
         HttpServletResponse resp = (HttpServletResponse) response;
-        DBManager dbm = Support.getDBMangaer(req);
+        DBManager dbm = Support.getDBManager(req);
         UserBean bean = (UserBean) Support.getInSession(req, SessionUtils.USER);
         if (bean != null && bean.getTypeToInt() == 0) {
             chain.doFilter(request, response);

@@ -34,7 +34,7 @@ public class AdminModeratori extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         try{
             
-            DBManager dbm = Support.getDBMangaer(req);
+            DBManager dbm = Support.getDBManager(req);
             UserBean user = (UserBean) Support.getInSession(req, SessionUtils.USER);
 
             ArrayList<Group> groups= dbm.getAllGroups(user.getUsername());

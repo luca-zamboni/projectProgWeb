@@ -44,7 +44,7 @@ public class OwnerFilter implements Filter {
             throws IOException, ServletException {
         UserBean bean = (UserBean) Support.getInSession((HttpServletRequest) request, SessionUtils.USER);
 
-        DBManager dbm = Support.getDBMangaer((HttpServletRequest) request);
+        DBManager dbm = Support.getDBManager((HttpServletRequest) request);
         if (bean == null || dbm == null) {
             ((HttpServletResponse) response).sendRedirect("./home");
             return;

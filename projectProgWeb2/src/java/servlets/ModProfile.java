@@ -182,7 +182,7 @@ public class ModProfile extends HttpServlet {
     }
 
     private void managePassword(HttpServletRequest request, String pass) throws SQLException {
-        DBManager dbm = Support.getDBMangaer(request);
+        DBManager dbm = Support.getDBManager(request);
         UserBean bean = (UserBean) Support.getInSession(request, SessionUtils.USER);
         dbm.setPassword(bean.getUserID(), pass);
     }

@@ -35,7 +35,7 @@ public class CloseGroup extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         try{
             
-            DBManager dbm = Support.getDBMangaer(req);
+            DBManager dbm = Support.getDBManager(req);
             int groupid = Integer.parseInt((String) req.getParameter(RequestUtils.GROUP_ID));
             
             dbm.closeGroup(groupid);

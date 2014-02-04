@@ -11,6 +11,7 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import utils.DBManager;
 
 /**
  * filtro che si occupa di proteggere il sito da utenti non loggati
@@ -25,8 +26,17 @@ public class FileAccess implements Filter {
     public void doFilter(ServletRequest request, ServletResponse response,
             FilterChain chain)
             throws IOException, ServletException {
+        
+        HttpServletRequest req = (HttpServletRequest) request;
+        HttpServletResponse res = (HttpServletResponse) response;
+        
+        DBManager dbm = (DBManager) req.getSession().getAttribute(SessionUtils.DBM);
+        UserBean ub = (UserBean) req.getSession().getAttribute(SessionUtils.USER);
+        
+        //TODO filter code
+        
         String path = request.getServletContext().getContextPath();
-        ((HttpServletResponse) response).sendRedirect(path+"/index.jsp");
+        res.sendRedirect(path+"/index.jsp");
 
     }
 

@@ -296,6 +296,46 @@ public class DBManager implements Serializable {
         return false;
     }
 
+    public boolean isModerator(int userid) throws SQLException {
+        boolean mod = false;
+
+        String sql = "SELECT type FROM users WHERE userid = ?";
+        PreparedStatement stm = con.prepareStatement(sql);
+        stm.setInt(1, userid);
+        ResultSet rs = stm.executeQuery();
+
+        try {
+            if (rs.next()) {
+                return rs.getInt(1) == 0;
+            }
+        } finally {
+            rs.close();
+            stm.close();
+        }
+
+        return mod;
+    }
+
+    public boolean isModerator(String user) throws SQLException {
+        boolean mod = false;
+
+        String sql = "SELECT type FROM users WHERE username = ?";
+        PreparedStatement stm = con.prepareStatement(sql);
+        stm.setString(1, user);
+        ResultSet rs = stm.executeQuery();
+
+        try {
+            if (rs.next()) {
+                return rs.getInt(1) == 0;
+            }
+        } finally {
+            rs.close();
+            stm.close();
+        }
+
+        return mod;
+    }
+
     public int insertPost(int userid, int groupid, String post) throws SQLException {
         Date d = new Date();
         String aux = "" + d.getTime();
@@ -527,6 +567,53 @@ public class DBManager implements Serializable {
         return ret;
     }
 
+    private ArrayList<Group> getGroups() throws SQLException {
+        ArrayList<Group> mGroups = new ArrayList();
+
+        String sql = "SELECT groups.groupid, groupname, creationdate, groups.ownerid, post.date, groups.private "
+                + "FROM groups, post WHERE groups.groupid = post.groupid "
+                + "ORDER BY post.date DESC ";
+        PreparedStatement stm = con.prepareStatement(sql);
+        ResultSet rs = stm.executeQuery();
+
+        try {
+            while (rs.next()) {
+
+                int i1, i4, i6;
+                String s2;
+                Date s3, s5;
+                i1 = rs.getInt(1);
+                s2 = rs.getString(2);
+                long d = Long.parseLong(rs.getString(3));
+                s3 = new Date();
+                s3.setTime(d);
+                i4 = rs.getInt(4);
+                d = Long.parseLong(rs.getString(5));
+                s5 = new Date();
+                s5.setTime(d);
+                i6 = rs.getInt(6);
+
+                Group aux = new Group();
+
+                aux.setGroupid(i1);
+                aux.setTitle(s2);
+                aux.setDate(s3);
+                aux.setOwner(i4);
+                aux.setLastPostDate(s5);
+                aux.setPriva(i6 % 2 == 0);
+                aux.setNumPost(getNumPost(i1));
+                aux.setNumPartecipanti(getNumPartecipanti(i1));
+
+                mGroups.add(aux);
+            }
+        } finally {
+            rs.close();
+            stm.close();
+        }
+
+        return mGroups;
+    }
+
     private ArrayList<Group> getGroups(int status, String user) throws SQLException, ParseException {
         String sql = "select groups.groupid,groupname,creationdate,groups.ownerid,post.date,groups.private "
                 + "from groups,users,user_groups,post "
@@ -577,7 +664,6 @@ public class DBManager implements Serializable {
                         + "FROM groups,post "
                         + "WHERE post.groupid = groups.groupid "
                         + "AND groups.private = 1 "
-                        + "GROUP BY groups.groupid "
                         + "ORDER by post.date DESC ";
 
                 stm = con.prepareStatement(sql);
@@ -625,8 +711,12 @@ public class DBManager implements Serializable {
     }
 
     public ArrayList<Group> getAllGroups(String user) throws SQLException, ParseException {
-        return getGroups(0, user);
 
+        if (isModerator(user)) {
+            return getGroups();
+        } else {
+            return getGroups(0, user);
+        }
     }
 
     public int getIdFromUser(String user) throws SQLException {
@@ -645,7 +735,7 @@ public class DBManager implements Serializable {
         }
         return -1;
     }
-    
+
     public int getIdFromMail(String mail) throws SQLException {
         String sql = "select userid from users where email = ?";
         PreparedStatement stm = con.prepareStatement(sql);
