@@ -37,7 +37,7 @@ public class AdminModeratori extends HttpServlet {
             DBManager dbm = Support.getDBManager(req);
             UserBean user = (UserBean) Support.getInSession(req, SessionUtils.USER);
 
-            ArrayList<Group> groups= dbm.getAllGroups(user.getUsername());
+            ArrayList<Group> groups= dbm.getGroups();
             
             for(Group p : groups){
                 p.setNumPost(dbm.getNumPost(p.getGroupid()));
@@ -53,12 +53,12 @@ public class AdminModeratori extends HttpServlet {
                     p.setAvatarOwner(DEFAULT_IMG_PATH + "img.jpg" );
                 }
             }
-
+            
             req.setAttribute(RequestUtils.GROUPS, groups);
             
             Support.forward(getServletContext(), req, resp, "/adminmod.jsp", null);
-        
-        }catch(SQLException | ParseException ex){
+            
+        }catch(SQLException ex){
             Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
         }
         

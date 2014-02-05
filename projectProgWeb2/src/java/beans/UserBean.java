@@ -17,8 +17,8 @@ import servlets.ModProfile;
 public class UserBean{
 
     public enum UserType {
-        MODERATOR,
-        SIMPLE
+        SIMPLE,
+        MODERATOR
     }
 
     public static final String DEFAULT_IMG_PATH = "img/";
