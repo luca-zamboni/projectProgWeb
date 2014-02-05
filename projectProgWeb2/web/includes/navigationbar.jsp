@@ -21,9 +21,19 @@
                 </div>
             </c:if>
 
+<<<<<<< HEAD
             <div class="col-xs-2 col-md-2 col-lg-2" style="margin-top:10px;">
                 <div class="btn btn-default">
                     <a href="./home" class="glyphicon glyphicon-home"></a>
+=======
+                <div class="col-xs-2 col-md-2 col-lg-2" style="margin-top:10px;">
+                    <a href="./home"><div class="btn btn-default">
+                        <span class="glyphicon glyphicon-home"></span>
+                    </div></a>
+                    <a href="./logout"><div class="btn btn-default">
+                        <span class="glyphicon glyphicon-log-out"></span>
+                    </div></a>                
+>>>>>>> 95481e018f148d19aaf4b4ba4580de30d58ed518
                 </div>
             <c:if test="${user != null}">
                 <div class="btn btn-default">

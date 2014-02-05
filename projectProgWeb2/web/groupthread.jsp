@@ -16,7 +16,7 @@
         <jsp:include page="includes/navigationbar.jsp" />
         <div class="container">
             <jsp:include page="includes/messagedisplayer.jsp" />
-            <h1 style="text-align:center"><c:out value="${group.getTitle()}"/></h1>
+            <h1 style="text-align:center"><c:out value="${group.getTitle()}" /></h1>
             <div class="panel-group" id="accordion">
                 <div class="panel panel-default">
                   <div class="panel-heading">

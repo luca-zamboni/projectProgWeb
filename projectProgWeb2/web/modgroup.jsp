@@ -33,7 +33,7 @@
                                 <p>Privato?<input id="ckpriv" type="checkbox" name="<%= RequestUtils.GROUP_PRIVATE%>" checked /></p>
                                 </c:when>
                                 <c:otherwise >
-                                <p>Privato?<input type="checkbox" name="<%= RequestUtils.GROUP_PRIVATE%>" /></p>
+                                <p>Privato?<input id="ckpriv" type="checkbox" name="<%= RequestUtils.GROUP_PRIVATE%>" /></p>
                                 </c:otherwise>
                             </c:choose>
                         <div id="inviti">

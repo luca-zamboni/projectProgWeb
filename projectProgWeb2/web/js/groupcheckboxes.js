@@ -6,6 +6,7 @@
 $(document).ready(function() {
     var toggleInviti = function(obj) {
         if ($(obj).prop('checked')) {
+    console.log("asndjh");
             $("#inviti").slideDown();
         }
         else {
@@ -14,6 +15,7 @@ $(document).ready(function() {
     };
     $("#ckpriv").on('change', function() {
         toggleInviti($(this));
+    console.log("asndjh");
     });
     toggleInviti($("#ckpriv"));
 });

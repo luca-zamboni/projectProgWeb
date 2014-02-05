@@ -36,11 +36,10 @@
                         </a>
                     </div>
                     <div class="col-xs-2 col-md-2 col-lg-2" style="margin-top:10px;">
-                        <div class="btn btn-success pull-left">
                             <a href="groupCreate">
+                        <div class="btn btn-success pull-left">
                                 <span class="glyphicon glyphicon-edit"></span>
-                            </a>
-                        </div>&nbsp;
+                        </div></a>&nbsp;
                         <c:if test="${user.getTypeToInt() == 0}">
                             <div class="btn btn-primary">
                                  <a href="./adminmoderatori"> Admin</a>
@@ -48,9 +47,9 @@
                         </c:if>
                     </div>
                     <div class="col-xs-2 col-md-2 col-lg-2 pull-right" style="margin-top:10px;">
-                        <div class="btn btn-default">
-                            <a href="./logout" class="glyphicon glyphicon-log-out"></a>
-                        </div>                
+                        <a href="./logout"><div class="btn btn-default">
+                            <span class="glyphicon glyphicon-log-out"></span>
+                        </div></a>                
                     </div>
                 </div>
             </div>
@@ -110,8 +109,8 @@
                                 </span>
                                 <p style="text-align:center;">
                                     <img src="img/img.jpg" class="prof" >
-                                    <span class="badge" style="position:relative;left:-5%;top:-20%"><
-                                        c:out value="${group.numPartecipanti}" />
+                                    <span class="badge" style="position:relative;left:-5%;top:-20%">
+                                        <c:out value="${group.numPartecipanti}" />
                                     </span>
                                     </img>
                                 </p>
