@@ -62,7 +62,7 @@
                                         </c:when>
                                         <c:otherwise >
                                             Ultima risposta: 
-                                            <fmt:formatDate pattern="dd-MM-yyyy hh:mm" value="${group.lastPostDate}" />
+                                            <strong><fmt:formatDate pattern="dd-MM-yyyy hh:mm" value="${group.lastPostDate}" /></strong>
                                         </c:otherwise>
                                     </c:choose>
                                 </p>

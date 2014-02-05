@@ -12,7 +12,7 @@ import java.util.ArrayList;
  *
  * @author luca
  */
-public class Group implements Serializable{
+public class Group implements Serializable, Comparable<Group>{
     private int groupid;
     private String title;
     private String avatarOwner;
@@ -27,7 +27,7 @@ public class Group implements Serializable{
     private ArrayList<Post> posts = new ArrayList();
     private ArrayList<UserBean> users = new ArrayList<>();
     private ArrayList<String> allFiles = new ArrayList<>();
-    
+
     public Group() {
     }
 
@@ -69,7 +69,7 @@ public class Group implements Serializable{
     public void setNumPost(int numPost) {
         this.numPost = numPost;
     }
-    
+
     public String getNameOwner() {
         return nameOwner;
     }
@@ -136,11 +136,11 @@ public class Group implements Serializable{
     }
 
     public void setDate(Date date) {
-        this.date=date;
+        this.date = date;
     }
 
     public void setLastPostDate(Date lastPostDate) {
-        this.lastPostDate=lastPostDate;
+        this.lastPostDate = lastPostDate;
     }
 
     public Date getDate() {
@@ -150,7 +150,10 @@ public class Group implements Serializable{
     public Date getLastPostDate() {
         return lastPostDate;
     }
-    
-    
-    
+
+    @Override
+    public int compareTo(Group p) {
+        return lastPostDate.compareTo(p.lastPostDate);
+    }
+
 }

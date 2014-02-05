@@ -17,6 +17,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
@@ -739,6 +740,7 @@ public class DBManager implements Serializable {
             rs.close();
             stm.close();
         }
+        Collections.sort(mGroups);
         return mGroups;
     }
 
