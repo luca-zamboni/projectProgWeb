@@ -37,7 +37,7 @@ public class MailUtils {
     public static void sendMail(List<Integer> users,DBManager dbm,int groupId,String title){
         if (users != null) {
             for (int us : users) {
-                String link = "http://localhost:8080/projectProgWeb2/accinvmail.jsp?gid=" + groupId;
+                String link = "http://localhost:8080/projectProgWeb2/accinvito?gid=" + groupId;
                 String subject = "Invito a un gruppo";
                 String mail = "Sei stato invitato al gruppo " + title
                         + " clicca sul link per accettare l'invito.\n"

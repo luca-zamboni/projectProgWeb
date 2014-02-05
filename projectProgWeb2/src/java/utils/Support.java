@@ -109,7 +109,7 @@ public class Support {
         return dateAsText;
     }
     
-    public static void putDBMangaer(HttpServletRequest request, DBManager dbm){
+    public static void putDBManager(HttpServletRequest request, DBManager dbm){
         addToSession(request, SessionUtils.DBM, dbm);
     }
     

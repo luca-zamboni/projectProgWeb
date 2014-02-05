@@ -128,9 +128,9 @@ public class DBManager implements Serializable {
                 stm2.close();
             }
         }
-        
+
         usersInDb.removeAll(users);
-        
+
         for (int id : usersInDb) {
             sql2 = "UPDATE user_groups SET status = 1 WHERE groupid = ? AND userid = ?";
             stm2 = con.prepareStatement(sql2);
@@ -514,9 +514,9 @@ public class DBManager implements Serializable {
         }
         return mUsers;
     }
-    
+
     public ArrayList<Integer> getAllUserIDs() throws SQLException {
-        String sql = "SELECT "+USERID+" FROM users";
+        String sql = "SELECT " + USERID + " FROM users";
         PreparedStatement stm = con.prepareStatement(sql);
         ResultSet rs;
         rs = stm.executeQuery();
@@ -601,12 +601,13 @@ public class DBManager implements Serializable {
         return ret;
     }
 
-    private ArrayList<Group> getGroups() throws SQLException {
+    public ArrayList<Group> getGroups() throws SQLException {
         ArrayList<Group> mGroups = new ArrayList();
 
         String sql = "SELECT groups.groupid, groupname, creationdate, groups.ownerid, post.date, groups.private "
                 + "FROM groups, post WHERE groups.groupid = post.groupid "
-                + "ORDER BY post.date DESC ";
+                + "GROUP BY groups.groupid "
+                + "ORDER BY post.date DESC";
         PreparedStatement stm = con.prepareStatement(sql);
         ResultSet rs = stm.executeQuery();
 
@@ -648,7 +649,7 @@ public class DBManager implements Serializable {
         return mGroups;
     }
 
-    private ArrayList<Group> getGroups(int status, String user) throws SQLException, ParseException {
+    public ArrayList<Group> getGroups(int status, String user) throws SQLException, ParseException {
         String sql = "select groups.groupid,groupname,creationdate,groups.ownerid,post.date,groups.private "
                 + "from groups,users,user_groups,post "
                 + "WHERE groups.groupid = user_groups.groupid "
@@ -698,6 +699,7 @@ public class DBManager implements Serializable {
                         + "FROM groups,post "
                         + "WHERE post.groupid = groups.groupid "
                         + "AND groups.private = 1 "
+                        + "GROUP BY groups.groupid "
                         + "ORDER by post.date DESC ";
 
                 stm = con.prepareStatement(sql);
@@ -745,12 +747,7 @@ public class DBManager implements Serializable {
     }
 
     public ArrayList<Group> getAllGroups(String user) throws SQLException, ParseException {
-
-        if (isModerator(user)) {
-            return getGroups();
-        } else {
-            return getGroups(0, user);
-        }
+        return getGroups(0, user);
     }
 
     public int getIdFromUser(String user) throws SQLException {
@@ -887,13 +884,14 @@ public class DBManager implements Serializable {
     }
 
     public boolean insertUser(String user, String passwd, String email) throws SQLException {
-        String sql = "insert into " + USER_TABLE + "(" + USERNAME + "," + PASSWORD + "," + EMAIL + ") values(?,?,?)";
+        String sql = "insert into " + USER_TABLE + "(" + USERNAME + "," + PASSWORD + "," + EMAIL + ", type ) values(?,?,?,?)";
         PreparedStatement stm = null;
         try {
             stm = con.prepareStatement(sql);
             stm.setString(1, user);
             stm.setString(2, passwd);
             stm.setString(3, email);
+            stm.setInt(4, 1);
             stm.executeUpdate();
             return true;
         } catch (SQLException ex) {

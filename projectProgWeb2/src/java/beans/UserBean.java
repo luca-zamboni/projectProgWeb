@@ -17,7 +17,6 @@ import servlets.ModProfile;
 public class UserBean{
 
     public enum UserType {
-
         SIMPLE,
         MODERATOR
     }
