@@ -20,7 +20,9 @@
     </head>
     <body>
         <% UserBean user = (UserBean) Support.getInSession(request, SessionUtils.USER);%>
-        <% String date =  (user.getLastLogin()==-1?"Never":Support.getDateFromTime(user.getLastLogin())); %>
+        <% String date =  (user.getLastLogin()==-1?"Never":Support.getDateFromTime(user.getLastLogin()));
+            pageContext.setAttribute("date", date);
+        %>
         <div class="navbar mynavbar" style="display:none;background-color: white;" >
             <div class="container">
                 <div class="row">
@@ -56,7 +58,7 @@
                 <div class="col-xs-12 col-md-3 col-lg-3" style="text-align: center;">
                     <div class="card">
                         <h4>Hello, <c:out value="${user.username}"/>! </h4>
-                        <p>L' ultimo accesso è stato: 
+                        <p>L' ultimo accesso è stato: <br>
                             <strong><c:out value="${date}"/></strong>
                         </p>
                     </div>
