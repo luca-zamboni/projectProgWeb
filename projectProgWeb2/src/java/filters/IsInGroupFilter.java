@@ -50,12 +50,11 @@ public class IsInGroupFilter implements Filter {
             }
             if (dbm.isPrivateGroup(groupid)) {
                 UserBean bean = (UserBean) Support.getInSession(req, SessionUtils.USER);
-                if ((bean != null && dbm.isInGroup(bean.getUserID(), groupid)) || (bean.getTypeToInt()==0)) {
+                if (bean != null && ( dbm.isInGroup(bean.getUserID(), groupid) || (bean.getTypeToInt()==0) )) {
                     chain.doFilter(request, response);
                     return;
                 } else {
-                    Message msg = new Message(Message.MessageType.ERROR, -1, "non hai accesso a questa parte del sito");
-                    Support.forward(req.getServletContext(), req, resp, "/home", msg);
+                    resp.sendRedirect(req.getContextPath()+"/home");
                 }
             } else {
                 chain.doFilter(request, response);

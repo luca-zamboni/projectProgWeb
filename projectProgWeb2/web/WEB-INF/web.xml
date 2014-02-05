@@ -45,6 +45,7 @@
     <filter-mapping>
         <filter-name>NoModFilter</filter-name>
         <servlet-name>AdminModeratori</servlet-name>
+        <url-pattern>/datatable/*</url-pattern>
         <dispatcher>REQUEST</dispatcher>
     </filter-mapping>
     <filter-mapping>
