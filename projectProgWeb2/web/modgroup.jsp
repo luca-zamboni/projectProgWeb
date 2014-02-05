@@ -42,10 +42,10 @@
                                 <c:if test="${userb.userID!=sessionScope.user.userID}">
                                     <c:choose>
                                         <c:when test="${group.priva}" >
-                                            <input type="checkbox" name="usercheckboxes" value="<c:out value="${userb.username}"/>" checked="">
+                                            <input type="checkbox" name="usercheckboxes" value="<c:out value="${userb.userID}"/>" checked="">
                                         </c:when>
                                         <c:otherwise >
-                                            <input type="checkbox" name="usercheckboxes" value="<c:out value="${userb.username}"/>">
+                                            <input type="checkbox" name="usercheckboxes" value="<c:out value="${userb.userID}"/>">
                                         </c:otherwise>
                                     </c:choose>
                                     <c:out value="${userb.username}"/>

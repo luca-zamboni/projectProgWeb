@@ -5,8 +5,11 @@
  */
 package utils;
 
+import beans.UserBean;
 import java.security.Security;
+import java.sql.SQLException;
 import java.util.Date;
+import java.util.List;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -18,6 +21,7 @@ import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
+import servlets.GroupCreate;
 
 /**
  *
@@ -29,6 +33,25 @@ public class MailUtils {
     private final static String USERNAME = "websender.project@gmail.com";
     private final static String PASSWORD = "hippogrifone792";
     private final static String PORT = "465";
+    
+    public static void sendMail(List<Integer> users,DBManager dbm,int groupId,String title){
+        if (users != null) {
+            for (int us : users) {
+                String link = "http://localhost:8080/projectProgWeb2/accinvmail.jsp?gid=" + groupId;
+                String subject = "Invito a un gruppo";
+                String mail = "Sei stato invitato al gruppo " + title
+                        + " clicca sul link per accettare l'invito.\n"
+                        + link;
+                String to = "";
+                try {
+                    to = dbm.getEmail(us);
+                } catch (SQLException ex) {
+                    Logger.getLogger(GroupCreate.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                sendMail(to, subject, mail);
+            }
+        }
+    }
 
     public static boolean sendMail(String dest, String subject, String text) {
         boolean success = true;

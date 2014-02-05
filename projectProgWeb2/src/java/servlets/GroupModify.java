@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
@@ -21,6 +22,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import utils.DBManager;
+import utils.MailUtils;
 import utils.RequestUtils;
 import utils.SessionUtils;
 import utils.Support;
@@ -93,28 +95,38 @@ public class GroupModify extends HttpServlet {
         UserBean user = (UserBean) Support.getInSession(request, SessionUtils.USER);
         String title = request.getParameter(RequestUtils.GROUP_TITLE);
         String isPrivate = request.getParameter(RequestUtils.GROUP_PRIVATE);
-        String[] users = request.getParameterValues(RequestUtils.GROUP_USERS);
+        String[] usernames = request.getParameterValues(RequestUtils.GROUP_USERS);
         int groupId = Integer.parseInt((grpString == null) ? "-1" : grpString);
-        
-        
-        int rowChanged = updateGroup(groupId, title, isPrivate,null, users, user);
+
+        List<Integer> users = new ArrayList<>();
+        try {
+            for (String username : usernames) {
+                users.add(Integer.parseInt(username));
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+
+        int rowChanged = updateGroup(groupId, title, isPrivate, null, users, user);
+
+        MailUtils.sendMail(users, dbm, groupId, title);
 
         Message msg = buildMessage(groupId, title);
 
         if (msg.getType() == Message.MessageType.ERROR) {
-            Support.forward(getServletContext(), request, response, "/modgroup?gid="+groupId, msg);
+            Support.forward(getServletContext(), request, response, "/modgroup?gid=" + groupId, msg);
         } else {
             Support.forward(getServletContext(), request, response, "/home", msg);
         }
     }
 
-    private int updateGroup(int groupId, String title, String aPrivate, String chiuso, String[] users, UserBean user) {
+    private int updateGroup(int groupId, String title, String aPrivate, String chiuso, List<Integer> users, UserBean user) {
         int ret = 0;
         boolean check = title != null && !title.equals("");
         boolean prvt = aPrivate != null;
         if (check) {
             try {
-                ret = dbm.updateGroup(groupId, title, users, user.getUserID(), chiuso!=null,prvt);
+                ret = dbm.updateGroup(groupId, title, users, user.getUserID(), chiuso != null, prvt);
             } catch (Exception e) {
                 e.printStackTrace();
                 ret = 0;
@@ -133,7 +145,7 @@ public class GroupModify extends HttpServlet {
         } else if (groupId == 0) {
             msg = new Message(Message.MessageType.ERROR, 22, "Impossibile "
                     + "modificare.");
-        }  else {
+        } else {
             msg = new Message(Message.MessageType.SUCCESS, -1, "Gruppo "
                     + " modificato con successo!");
         }
