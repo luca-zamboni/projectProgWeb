@@ -63,8 +63,10 @@
         <filter-name>AlreadyLogged</filter-name>
         <servlet-name>login</servlet-name>
         <servlet-name>Register</servlet-name>
+        <servlet-name>ChangePass</servlet-name>
         <servlet-name>ForgetPassword</servlet-name>
         <servlet-name>Index</servlet-name>
+        <servlet-name>Explore</servlet-name>
     </filter-mapping>
     <filter-mapping>
         <filter-name>GetFilter</filter-name>
@@ -73,7 +75,6 @@
     <filter-mapping>
         <filter-name>LoginFilter</filter-name>
         <servlet-name>GroupCreate</servlet-name>
-        <servlet-name>ChangePass</servlet-name>
         <servlet-name>Logout</servlet-name>
         <servlet-name>ModProfile</servlet-name>
         <servlet-name>AddPost</servlet-name>
@@ -83,6 +84,7 @@
         <servlet-name>AcceptInvitation</servlet-name>
         <servlet-name>AdminModeratori</servlet-name>
         <servlet-name>CloseGroup</servlet-name>
+        <servlet-name>Profile</servlet-name>
         <dispatcher>REQUEST</dispatcher>
     </filter-mapping>
     <filter-mapping>

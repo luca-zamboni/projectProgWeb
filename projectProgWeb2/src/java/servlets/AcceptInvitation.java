@@ -89,7 +89,6 @@ public class AcceptInvitation extends HttpServlet {
         } else {
             m = new Message(Message.MessageType.ERROR, 999);
         }
-        System.err.println("asdiohashdojbasdòasyidgauisdgè9asoàugdp");
     }
 
     public String[] getCredentials(HttpServletRequest request) {
