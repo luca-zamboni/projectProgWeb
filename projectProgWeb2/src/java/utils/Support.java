@@ -113,7 +113,7 @@ public class Support {
         addToSession(request, SessionUtils.DBM, dbm);
     }
     
-    public static DBManager getDBMangaer(HttpServletRequest request){
+    public static DBManager getDBManager(HttpServletRequest request){
         return (DBManager) request.getSession().getAttribute(SessionUtils.DBM);
     }
     

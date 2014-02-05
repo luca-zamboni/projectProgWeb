@@ -77,7 +77,7 @@
                             </c:forEach>
                         </c:when>
                         <c:otherwise>
-                                <td>NO grouppi</td>
+                                <td>NO gruppi</td>
                                 <td></td>
                                 <td></td>
                                 <td></td>

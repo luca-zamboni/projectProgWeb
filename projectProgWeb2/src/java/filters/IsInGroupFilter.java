@@ -43,7 +43,7 @@ public class IsInGroupFilter implements Filter {
 
         int groupid = Integer.parseInt((String) req.getParameter(RequestUtils.GROUP_ID));
         try {
-            DBManager dbm = Support.getDBMangaer(req);
+            DBManager dbm = Support.getDBManager(req);
             if (dbm == null || DBManager.con==null) {
                 dbm = new DBManager(req);
                 Support.putDBMangaer(req, dbm);

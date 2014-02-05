@@ -128,7 +128,7 @@ public class ThreadGroup extends HttpServlet {
     
     private void connectToDatabase(HttpServletRequest req) {
         try {
-            dbm = Support.getDBMangaer(req);
+            dbm = Support.getDBManager(req);
             if(dbm==null)
                 dbm = new DBManager(req);
         } catch (SQLException ex) {

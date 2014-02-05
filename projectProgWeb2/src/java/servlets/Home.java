@@ -43,9 +43,15 @@ public class Home extends HttpServlet {
         try {
             response.setContentType("text/html;charset=UTF-8");
             
-            DBManager dbm = Support.getDBMangaer(request);
+            DBManager dbm = Support.getDBManager(request);
             
             UserBean user = (UserBean) Support.getInSession(request, SessionUtils.USER);
+            
+            if (user==null) {
+                user=new UserBean(-1, -1, "guest", 1);
+                dbm = new DBManager(request);
+                Support.addToSession(request, SessionUtils.DBM, dbm); //TODO hotfix here pay attention
+            }
             
             ArrayList<Group> groups= dbm.getAllGroups(user.getUsername());
             
@@ -62,12 +68,16 @@ public class Home extends HttpServlet {
             Support.forward(getServletContext(), request, response, "/home.jsp", null);
         } catch (SQLException ex) {
             Logger.getLogger(Home.class.getName()).log(Level.SEVERE, null, ex);
+            ex.printStackTrace();
         } catch (ParseException ex) {
             Logger.getLogger(Home.class.getName()).log(Level.SEVERE, null, ex);
+            ex.printStackTrace();
         } catch (ServletException ex) {
             Logger.getLogger(Home.class.getName()).log(Level.SEVERE, null, ex);
+            ex.printStackTrace();
         } catch (IOException ex) {
             Logger.getLogger(Home.class.getName()).log(Level.SEVERE, null, ex);
+            ex.printStackTrace();
         }
     }
 
