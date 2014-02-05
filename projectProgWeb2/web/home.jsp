@@ -114,8 +114,15 @@
                                 </p>
                                 <p>Numero di post: <c:out value="${group.numPost}"/></p>
                                 <p style="margin-top:3px;">
-                                    Ultima risposta: 
-                                    <fmt:formatDate pattern="dd-MM-yyyy hh:mm" value="${group.lastPostDate}" />
+                                    <c:choose>
+                                        <c:when test="${group.isChiuso()}" >
+                                            Gruppo CHIUSO!
+                                        </c:when>
+                                        <c:otherwise >
+                                            Ultima risposta: 
+                                            <fmt:formatDate pattern="dd-MM-yyyy hh:mm" value="${group.lastPostDate}" />
+                                        </c:otherwise>
+                                    </c:choose>
                                 </p>
                         </div>
                     </div>

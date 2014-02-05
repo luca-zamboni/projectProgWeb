@@ -81,6 +81,7 @@ public class ThreadGroup extends HttpServlet {
             boolean isPrivate = dbm.isPrivateGroup(groupid);
             
             group = new Group(groupid, title, owner, isPrivate);
+            group.setChiuso(dbm.isClosedGroup(groupid));
             group.setPosts(posts);
             if(isPrivate){
                 group.setUsers(dbm.getAllUserInGroup(groupid));

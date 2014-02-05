@@ -17,6 +17,9 @@
         <div class="container">
             <jsp:include page="includes/messagedisplayer.jsp" />
             <h1 style="text-align:center"><c:out escapeXml="true" value="${group.getTitle()}" /></h1>
+            <c:if test="${group.isChiuso()}">
+                <h3 style="text-align:center; color:red;">QUesto gruppo è stato chiudo dall'amministratore</h3>
+            </c:if>
             <div class="panel-group" id="accordion">
                 <div class="panel panel-default">
                   <div class="panel-heading">

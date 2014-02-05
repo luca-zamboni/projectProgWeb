@@ -4,6 +4,9 @@ import beans.Message;
 import utils.SessionUtils;
 import beans.UserBean;
 import java.io.IOException;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
@@ -12,7 +15,9 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import utils.DBManager;
 import utils.RequestUtils;
+import utils.Support;
 
 /**
  * filtro che si occupa di proteggere il sito da utenti non loggati
@@ -32,11 +37,18 @@ public class AddPostFilter implements Filter {
 
         HttpServletRequest httpRequest = (HttpServletRequest) request;
         String url = ((HttpServletRequest) request).getRequestURI();
-        
+        DBManager dbm = Support.getDBManager(httpRequest);
         if (bean == null) {
             
         } else {
-            chain.doFilter(request, response);
+            String groupid = request.getParameter("gid");
+            int gid = Integer.parseInt(groupid);
+            try {
+                if(!dbm.isClosedGroup(gid))
+                    chain.doFilter(request, response);
+            } catch (SQLException ex) {
+                Logger.getLogger(AddPostFilter.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
 
     }

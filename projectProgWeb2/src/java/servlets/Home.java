@@ -51,6 +51,10 @@ public class Home extends HttpServlet {
             
             ArrayList<Group> inv = dbm.getAllPendingsGroups(user.getUsername());
             
+            for(Group p : groups){
+                p.setChiuso(dbm.isClosedGroup(p.getGroupid()));
+            }
+            
             for(Group p : inv){
                 p.setNameOwner(dbm.getUserFormId(p.getOwner()));
             }
