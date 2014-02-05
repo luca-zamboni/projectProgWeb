@@ -20,6 +20,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import org.apache.commons.lang.StringEscapeUtils;
 import utils.DBManager;
 import utils.MailUtils;
 import utils.RequestUtils;
@@ -80,6 +81,8 @@ public class GroupCreate extends HttpServlet {
         String title = request.getParameter(RequestUtils.GROUP_TITLE);
         String isPrivate = request.getParameter(RequestUtils.GROUP_PRIVATE);
         String[] users = request.getParameterValues(RequestUtils.USERCHECK);
+        
+        title = StringEscapeUtils.escapeHtml(title);
 
         int groupId = addGroup(title, isPrivate, users, user);
         System.err.println(groupId);

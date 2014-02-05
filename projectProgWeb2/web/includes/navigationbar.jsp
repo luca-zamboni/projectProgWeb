@@ -21,12 +21,12 @@
                 </div>
 
                 <div class="col-xs-2 col-md-2 col-lg-2" style="margin-top:10px;">
-                    <div class="btn btn-default">
-                        <a href="./home" class="glyphicon glyphicon-home"></a>
-                    </div>
-                    <div class="btn btn-default">
-                        <a href="./logout" class="glyphicon glyphicon-log-out"></a>
-                    </div>                
+                    <a href="./home"><div class="btn btn-default">
+                        <span class="glyphicon glyphicon-home"></span>
+                    </div></a>
+                    <a href="./logout"><div class="btn btn-default">
+                        <span class="glyphicon glyphicon-log-out"></span>
+                    </div></a>                
                 </div>
             <% }%>
         </div>
