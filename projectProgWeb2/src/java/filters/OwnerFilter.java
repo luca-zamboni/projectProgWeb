@@ -46,7 +46,7 @@ public class OwnerFilter implements Filter {
 
         DBManager dbm = Support.getDBManager((HttpServletRequest) request);
         if (bean == null || dbm == null) {
-            ((HttpServletResponse) response).sendRedirect("./home");
+            ((HttpServletResponse) response).sendRedirect(((HttpServletRequest) request).getContextPath()+"/home");
             return;
         }
 
@@ -63,7 +63,7 @@ public class OwnerFilter implements Filter {
                 return;
             }
 
-            ((HttpServletResponse) response).sendRedirect("./home");
+            ((HttpServletResponse) response).sendRedirect(((HttpServletRequest) request).getContextPath()+"/home");
 
             /**
              * Destroy method for this filter

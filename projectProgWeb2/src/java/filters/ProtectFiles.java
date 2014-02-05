@@ -46,7 +46,7 @@ public class ProtectFiles implements Filter {
         i+=2;
         try{
             
-            DBManager dbm = Support.getDBMangaer(req);
+            DBManager dbm = Support.getDBManager(req);
             
             int gr = Integer.parseInt(split[i-1]);
             UserBean user = (UserBean) Support.getInSession(req, SessionUtils.USER);
@@ -54,11 +54,11 @@ public class ProtectFiles implements Filter {
             if(dbm.isInGroup(user.getUserID(), gr)){
                 chain.doFilter(request, response);
             }else{
-                res.sendRedirect("../home");
+                res.sendRedirect(((HttpServletRequest) request).getContextPath()+"/home");
             }
             
         }catch(Exception e){
-            res.sendRedirect("../home");
+            res.sendRedirect(((HttpServletRequest) request).getContextPath()+"/home");
         }
         
     }

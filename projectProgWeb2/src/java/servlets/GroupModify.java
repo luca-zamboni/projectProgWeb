@@ -64,7 +64,7 @@ public class GroupModify extends HttpServlet {
         request.setAttribute(RequestUtils.GROUP_USERS, members);
         if (msg != null) {
             Support.forward(getServletContext(), request, response,
-                    "./home", msg);
+                    request.getContextPath()+"/home", msg);
         } else {
             Support.forward(getServletContext(), request, response, "/modgroup.jsp", msg);
         }

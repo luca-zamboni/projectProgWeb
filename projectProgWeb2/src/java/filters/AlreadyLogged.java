@@ -35,13 +35,13 @@ public class AlreadyLogged implements Filter {
         UserBean bean = (UserBean) ((HttpServletRequest) request).getSession().getAttribute(SessionUtils.USER);
 
         HttpServletRequest httpRequest = (HttpServletRequest) request;
-        String url = ((HttpServletRequest) request).getRequestURI();
+        String url = ((HttpServletRequest) request).getContextPath();
 
         if (bean == null) { // non e' loggato
             chain.doFilter(request, response);
         } else {
             request.setAttribute(RequestUtils.MESSAGE, new Message(Message.MessageType.ERROR,6));
-            ((HttpServletResponse) response).sendRedirect(url + "./home");
+            ((HttpServletResponse) response).sendRedirect(url + "/home");
         }
     }
 

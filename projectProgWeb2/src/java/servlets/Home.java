@@ -47,12 +47,6 @@ public class Home extends HttpServlet {
             
             UserBean user = (UserBean) Support.getInSession(request, SessionUtils.USER);
             
-            if (user==null) {
-                user=new UserBean(-1, -1, "guest", 1);
-                dbm = new DBManager(request);
-                Support.addToSession(request, SessionUtils.DBM, dbm); //TODO hotfix here pay attention
-            }
-            
             ArrayList<Group> groups= dbm.getAllGroups(user.getUsername());
             
             ArrayList<Group> inv = dbm.getAllPendingsGroups(user.getUsername());
