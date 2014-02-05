@@ -51,7 +51,7 @@
                                 <p style="margin-top:3px;">
                                     <c:choose>
                                         <c:when test="${group.isChiuso()}" >
-                                            Gruppo CHIUSO!
+                                            <span class="label label-warning">Gruppo CHIUSO!</span>
                                         </c:when>
                                         <c:otherwise >
                                             Ultima risposta: 

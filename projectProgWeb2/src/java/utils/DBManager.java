@@ -655,7 +655,7 @@ public class DBManager implements Serializable {
                 + "WHERE groups.groupid = user_groups.groupid "
                 + "AND users.userid= user_groups.userid "
                 + "AND post.groupid= groups.groupid "
-                + "AND username = ? AND user_groups.status = ? AND groups.private = 0 "
+                + "AND username = ? AND user_groups.status = ? AND (groups.private =0 OR groups.private=2)  "
                 + "GROUP BY groups.groupid "
                 + "ORDER by post.date DESC ";
         PreparedStatement stm = con.prepareStatement(sql);
@@ -698,7 +698,7 @@ public class DBManager implements Serializable {
                 sql = "SELECT groups.groupid,groupname,creationdate,groups.ownerid,post.date,groups.private "
                         + "FROM groups,post "
                         + "WHERE post.groupid = groups.groupid "
-                        + "AND groups.private = 1 "
+                        + "AND (groups.private = 1 OR groups.private = 3) "
                         + "GROUP BY groups.groupid "
                         + "ORDER by post.date DESC ";
 
