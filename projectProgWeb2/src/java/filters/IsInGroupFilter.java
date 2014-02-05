@@ -50,7 +50,7 @@ public class IsInGroupFilter implements Filter {
             }
             if (dbm.isPrivateGroup(groupid)) {
                 UserBean bean = (UserBean) Support.getInSession(req, SessionUtils.USER);
-                if ((bean != null && dbm.isInGroup(bean.getUserID(), groupid)) || (bean.getType()==UserBean.UserType.MODERATOR)) {
+                if ((bean != null && dbm.isInGroup(bean.getUserID(), groupid)) || (bean.getTypeToInt()==0)) {
                     chain.doFilter(request, response);
                     return;
                 } else {
