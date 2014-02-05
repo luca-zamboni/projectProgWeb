@@ -79,11 +79,11 @@ public class GroupCreate extends HttpServlet {
         HttpSession session = request.getSession();
         UserBean user = (UserBean) Support.getInSession(request, SessionUtils.USER);
 
-        String title = request.getParameter(RequestUtils.GROUP_TITLE);
+        final String title = StringEscapeUtils.escapeHtml(request.getParameter(RequestUtils.GROUP_TITLE));
         String isPrivate = request.getParameter(RequestUtils.GROUP_PRIVATE);
         String[] usernames = request.getParameterValues(RequestUtils.USERCHECK);
-        
-        List<Integer> users = new ArrayList<>();
+
+        final List<Integer> users = new ArrayList<>();
         try {
             for (String username : usernames) {
                 users.add(dbm.getIdFromUser(username));
@@ -91,20 +91,22 @@ public class GroupCreate extends HttpServlet {
         } catch (Exception ex) {
             ex.printStackTrace();
         }
-        
-        title = StringEscapeUtils.escapeHtml(title);
 
-        int groupId = addGroup(title, isPrivate, usernames, user);
+        final int groupId = addGroup(title, isPrivate, usernames, user);
         System.err.println(groupId);
         String path = request.getServletContext().getRealPath("/");
         File a = new File(path + "/files/" + groupId + "/");
         File b = new File(path + "/pdf/" + groupId + "/");
         a.mkdir();
         b.mkdir();
-        
-        
 
-        MailUtils.sendMail(users, dbm, groupId, title);
+        new Thread(new Runnable() {
+
+            @Override
+            public void run() {
+                MailUtils.sendMail(users, dbm, groupId, title);
+            }
+        }).start();
 
         Message msg = buildMessage(groupId, title);
 

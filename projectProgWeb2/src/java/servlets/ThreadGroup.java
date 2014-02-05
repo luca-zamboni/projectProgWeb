@@ -84,7 +84,7 @@ public class ThreadGroup extends HttpServlet {
             group.setChiuso(dbm.isClosedGroup(groupid));
             group.setPosts(posts);
             if(isPrivate){
-                group.setUsers(dbm.getAllUserInGroup(groupid));
+                group.setUsers(dbm.getMembers(groupid));
             }
             
             for(Post aux :posts){

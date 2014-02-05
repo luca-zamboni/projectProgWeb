@@ -197,13 +197,26 @@ public class DBManager implements Serializable {
 
     }
 
-    public ArrayList<UserBean> getAllUserInGroup(int groupid) throws SQLException {
+    public ArrayList<UserBean> getMembers(int groupid) throws SQLException {
         ArrayList<UserBean> us = getAllUser();
         ArrayList<UserBean> ret = new ArrayList<>();
         for (UserBean a : us) {
             if (isInGroup(a.getUserID(), groupid)) {
                 ret.add(a);
             }
+
+        }
+        return ret;
+    }
+    
+    public ArrayList<UserBean> getAllUsersInGroup(int groupid) throws SQLException {
+        ArrayList<UserBean> us = getAllUser();
+        ArrayList<UserBean> ret = new ArrayList<>();
+        for (UserBean a : us) {
+            if (isInGroup(a.getUserID(), groupid)||isPending(a.getUserID(), groupid)) {
+                ret.add(a);
+            }
+
         }
         return ret;
     }
@@ -431,6 +444,7 @@ public class DBManager implements Serializable {
         }
         return false;
     }
+    
 
     public int getGroupOwnerById(int id) throws SQLException {
         String sql = "SELECT ownerid FROM groups WHERE groupid = ?";
@@ -997,7 +1011,7 @@ public class DBManager implements Serializable {
         }
 
         if (users) {
-            ret.setUsers(this.getAllUserInGroup(groupId));
+            ret.setUsers(this.getMembers(groupId));
         }
 
         if (posts) {

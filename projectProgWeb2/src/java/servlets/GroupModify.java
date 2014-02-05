@@ -8,9 +8,7 @@ package servlets;
 import beans.Group;
 import beans.Message;
 import beans.UserBean;
-import java.io.File;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,6 +21,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import utils.DBManager;
 import utils.MailUtils;
+import utils.Pair;
 import utils.RequestUtils;
 import utils.SessionUtils;
 import utils.Support;
@@ -57,16 +56,28 @@ public class GroupModify extends HttpServlet {
             dbm = new DBManager(request);
             ub = dbm.getAllUser();
             group = dbm.fillGroupById(groupId, true, false, false);
-            request.setAttribute(RequestUtils.GROUP, group);
+            members = dbm.getAllUsersInGroup(groupId);
         } catch (Exception e) {
             System.out.println(e.toString());
             e.printStackTrace(System.err);
         }
-        request.setAttribute(RequestUtils.USERLIST, ub);
-        request.setAttribute(RequestUtils.GROUP_USERS, members);
+        
+        ArrayList<Pair<UserBean,Boolean>> utenti = new ArrayList<>();
+        for(UserBean u : ub){
+            boolean check=false;
+            for(UserBean m : members)
+                if(m.getUserID()==u.getUserID()){
+                    check=true;
+                    break;
+                }
+            utenti.add(new Pair(u,check));
+        }
+        
+        request.setAttribute(RequestUtils.GROUP, group);
+        request.setAttribute(RequestUtils.GROUP_USERS, utenti);
         if (msg != null) {
             Support.forward(getServletContext(), request, response,
-                    request.getContextPath()+"/home", msg);
+                    request.getContextPath() + "/home", msg);
         } else {
             Support.forward(getServletContext(), request, response, "/modgroup.jsp", msg);
         }
@@ -93,12 +104,12 @@ public class GroupModify extends HttpServlet {
 
         String grpString = request.getParameter(RequestUtils.GROUP_ID);
         UserBean user = (UserBean) Support.getInSession(request, SessionUtils.USER);
-        String title = request.getParameter(RequestUtils.GROUP_TITLE);
+        final String title = request.getParameter(RequestUtils.GROUP_TITLE);
         String isPrivate = request.getParameter(RequestUtils.GROUP_PRIVATE);
         String[] usernames = request.getParameterValues(RequestUtils.GROUP_USERS);
-        int groupId = Integer.parseInt((grpString == null) ? "-1" : grpString);
+        final int groupId = Integer.parseInt((grpString == null) ? "-1" : grpString);
 
-        List<Integer> users = new ArrayList<>();
+        final List<Integer> users = new ArrayList<>();
         try {
             for (String username : usernames) {
                 users.add(Integer.parseInt(username));
@@ -108,8 +119,15 @@ public class GroupModify extends HttpServlet {
         }
 
         int rowChanged = updateGroup(groupId, title, isPrivate, null, users, user);
+        
+        new Thread(new Runnable() {
 
-        MailUtils.sendMail(users, dbm, groupId, title);
+            @Override
+            public void run() {
+                 MailUtils.sendMail(users, dbm, groupId, title);
+            }
+        }).start();
+       
 
         Message msg = buildMessage(groupId, title);
 
