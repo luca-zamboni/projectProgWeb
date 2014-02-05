@@ -868,13 +868,14 @@ public class DBManager implements Serializable {
     }
 
     public boolean insertUser(String user, String passwd, String email) throws SQLException {
-        String sql = "insert into " + USER_TABLE + "(" + USERNAME + "," + PASSWORD + "," + EMAIL + ") values(?,?,?)";
+        String sql = "insert into " + USER_TABLE + "(" + USERNAME + "," + PASSWORD + "," + EMAIL + ", type ) values(?,?,?,?)";
         PreparedStatement stm = null;
         try {
             stm = con.prepareStatement(sql);
             stm.setString(1, user);
             stm.setString(2, passwd);
             stm.setString(3, email);
+            stm.setInt(4, 1);
             stm.executeUpdate();
             return true;
         } catch (SQLException ex) {
