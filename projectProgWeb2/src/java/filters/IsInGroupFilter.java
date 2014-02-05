@@ -46,11 +46,11 @@ public class IsInGroupFilter implements Filter {
             DBManager dbm = Support.getDBManager(req);
             if (dbm == null || DBManager.con==null) {
                 dbm = new DBManager(req);
-                Support.putDBMangaer(req, dbm);
+                Support.putDBManager(req, dbm);
             }
             if (dbm.isPrivateGroup(groupid)) {
                 UserBean bean = (UserBean) Support.getInSession(req, SessionUtils.USER);
-                if (bean != null && dbm.isInGroup(bean.getUserID(), groupid)) {
+                if ((bean != null && dbm.isInGroup(bean.getUserID(), groupid)) || (bean.getType()==UserBean.UserType.MODERATOR)) {
                     chain.doFilter(request, response);
                 } else {
                     Support.forward(req.getServletContext(), req, resp, "/login", new Message(Message.MessageType.ERROR, 6));
