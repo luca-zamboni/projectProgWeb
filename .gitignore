@@ -1,3 +1,8 @@
 /dist/
 build
 nbproject
+.DS*
+nbbuild.xml
+build.xml
+/projectProgWeb/dist/
+/projectProgWeb2/dist/
