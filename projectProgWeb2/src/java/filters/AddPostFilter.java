@@ -41,7 +41,7 @@ public class AddPostFilter implements Filter {
         String groupid = request.getParameter("gid");
         int gid = groupid == null ? -1 : Integer.parseInt(groupid);
         try {
-            if (bean == null || (bean.getTypeToInt() == 0 && !dbm.isInGroup(bean.getUserID(), gid))) {
+            if (bean == null || (bean.getTypeToInt() == 0 && !dbm.isInGroup(bean.getUserID(), gid) && dbm.isPrivateGroup(gid))) {
                 return;
             } else {
                 try {
