@@ -592,7 +592,8 @@ public class DBManager implements Serializable {
 
         String sql = "SELECT groups.groupid, groupname, creationdate, groups.ownerid, post.date, groups.private "
                 + "FROM groups, post WHERE groups.groupid = post.groupid "
-                + "ORDER BY post.date DESC ";
+                + "GROUP BY groups.groupid "
+                + "ORDER BY post.date DESC";
         PreparedStatement stm = con.prepareStatement(sql);
         ResultSet rs = stm.executeQuery();
 
@@ -684,6 +685,7 @@ public class DBManager implements Serializable {
                         + "FROM groups,post "
                         + "WHERE post.groupid = groups.groupid "
                         + "AND groups.private = 1 "
+                        + "GROUP BY groups.groupid "
                         + "ORDER by post.date DESC ";
 
                 stm = con.prepareStatement(sql);
