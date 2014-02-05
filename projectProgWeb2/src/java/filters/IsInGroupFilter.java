@@ -40,8 +40,14 @@ public class IsInGroupFilter implements Filter {
         HttpServletRequest req = (HttpServletRequest) request;
         HttpServletResponse resp = (HttpServletResponse) response;
         String url = ((HttpServletRequest) request).getRequestURI();
+        
+        String grpstr = (String) req.getParameter(RequestUtils.GROUP_ID);
+        
+        if (grpstr==null || grpstr.equals("")) {
+            resp.sendRedirect(req.getContextPath()+"/home");
+        }
 
-        int groupid = Integer.parseInt((String) req.getParameter(RequestUtils.GROUP_ID));
+        int groupid = Integer.parseInt(grpstr);
         try {
             DBManager dbm = Support.getDBManager(req);
             if (dbm == null || DBManager.con==null) {

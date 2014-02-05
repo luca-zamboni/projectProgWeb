@@ -303,7 +303,7 @@ public class DBManager implements Serializable {
         rs = stm.executeQuery();
         try {
             if (rs.next()) {
-                return rs.getInt(1) == 0;
+                return rs.getInt(1)%2 == 0;
             }
         } finally {
             rs.close();
