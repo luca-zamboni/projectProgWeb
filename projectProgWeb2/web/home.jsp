@@ -26,26 +26,26 @@
         <div class="navbar mynavbar" style="display:none;background-color: white;" >
             <div class="container">
                 <div class="row">
-                    <div class="col-xs-5 col-md-6 col-lg-5"><a href ="/projectProgWeb2/home" class="mybrand">StudyTalk</a></div>
+                    <div class="col-xs-5 col-md-6 col-lg-5"><a href ="home" class="mybrand">StudyTalk</a></div>
                     <div class="col-xs-5 col-md-3 col-lg-3 nav-prof" style="text-align: center" >
-                        <a href="profile.jsp">
+                        <a href="profile">
                             <img src="<%=user.getAvatar()%>" />  
                             <%= user.getUsername()%>
                         </a>
                     </div>
                     <div class="col-xs-2 col-md-2 col-lg-2" style="margin-top:10px;">
-                            <a href="groupCreate">
+                            <a href="groupCreate"">
                         <div class="btn btn-success pull-left">
                                 <span class="glyphicon glyphicon-edit"></span>
                         </div></a>&nbsp;
                         <c:if test="${user.getTypeToInt() == 0}">
                             <div class="btn btn-primary">
-                                 <a href="/projectProgWeb2/adminmoderatori"> Admin</a>
+                                 <a href="adminmoderatori"> Admin</a>
                             </div>
                         </c:if>
                     </div>
                     <div class="col-xs-2 col-md-2 col-lg-2 pull-right" style="margin-top:10px;">
-                        <a href="/projectProgWeb2/logout"><div class="btn btn-default">
+                        <a href="logout"><div class="btn btn-default">
                             <span class="glyphicon glyphicon-log-out"></span>
                         </div></a>                
                     </div>

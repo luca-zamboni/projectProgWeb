@@ -35,7 +35,7 @@ public class LoginFilter implements Filter {
 
         //System.out.print("url " + url );
         if (bean == null) {
-            httpResponse.sendRedirect("");
+            httpResponse.sendRedirect(httpRequest.getContextPath()+"/index");
         } else {
             chain.doFilter(request, response);
             return;
