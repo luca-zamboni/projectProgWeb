@@ -22,6 +22,7 @@ import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.http.HttpServletRequest;
+import org.apache.commons.lang.StringEscapeUtils;
 //import models.Group;
 //import models.Post;
 
@@ -189,7 +190,8 @@ public class DBManager implements Serializable {
         stm2.executeUpdate();
         stm2.close();
 
-        insertPost(owner, groupid, "Creation of group " + title);
+        String g = StringEscapeUtils.escapeHtml(title);
+        insertPost(owner, groupid, "Creation of group " + g);
 
         return groupid;
 
