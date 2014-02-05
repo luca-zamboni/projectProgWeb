@@ -42,7 +42,7 @@ public class Login extends HttpServlet {
     private String user;
     private String password;
     private DBManager dbm;
-    private String lastLogin = "";
+    private String lastLogin;
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -161,7 +161,8 @@ public class Login extends HttpServlet {
             haux += "</tr>";
             html += "<table>";
             for (Group aux : groups) {
-                long l = Long.parseLong(lastLogin);
+                
+                long l = lastLogin==null||lastLogin.equals("") ? Long.MAX_VALUE:Long.parseLong(lastLogin);
                 if (aux.getLastChange() < l && ctrl) {
                     html +="</table>";
                     html += "<table class=\"table table-condensed table-hover\">";
