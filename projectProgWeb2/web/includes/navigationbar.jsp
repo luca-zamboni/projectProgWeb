@@ -7,7 +7,8 @@
 <%@page import="utils.SessionUtils"%>
 <%@page import="beans.UserBean"%>
 <%@page import="utils.Support"%>
-<% UserBean user = (UserBean) Support.getInSession(request, SessionUtils.USER);%>
+<%  UserBean user = (UserBean) Support.getInSession(request, SessionUtils.USER);
+    pageContext.setAttribute("user", user); %>
 <div class="navbar mynavbar" style="display:none;background-color: white;" >
     <div class="container">
         <div class="row">
@@ -15,8 +16,8 @@
             <c:if test="${user != null}">
                 <div class="col-xs-5 col-md-3 col-lg-3 nav-prof" style="text-align: center" >
                     <a href="profile">
-                        <img src="<%=user.getAvatar()%>" />  
-                        <%= user.getUsername()%>
+                        <img src="<c:out value="${ user.getAvatar()}"/>" />  
+                        <c:out value="${user.getUsername()}"/>
                     </a>
                 </div>
             </c:if>

@@ -29,8 +29,8 @@
                     <div class="col-xs-5 col-md-6 col-lg-5"><a href ="home" class="mybrand">StudyTalk</a></div>
                     <div class="col-xs-5 col-md-3 col-lg-3 nav-prof" style="text-align: center" >
                         <a href="profile">
-                            <img src="<%=user.getAvatar()%>" />  
-                            <%= user.getUsername()%>
+                            <img src="<c:out value="${ user.getAvatar()}"/>" />  
+                        <c:out value="${user.getUsername()}"/>
                         </a>
                     </div>
                     <div class="col-xs-2 col-md-2 col-lg-2" style="margin-top:10px;">
