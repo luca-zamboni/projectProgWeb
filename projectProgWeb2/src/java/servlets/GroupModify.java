@@ -72,15 +72,25 @@ public class GroupModify extends HttpServlet {
                 }
             utenti.add(new Pair(u,check));
         }
-        
-        request.setAttribute(RequestUtils.GROUP, group);
-        request.setAttribute(RequestUtils.GROUP_USERS, utenti);
-        if (msg != null) {
-            Support.forward(getServletContext(), request, response,
-                    request.getContextPath() + "/home", msg);
-        } else {
-            Support.forward(getServletContext(), request, response, "/modgroup.jsp", msg);
+        try {
+            if(dbm.isClosedGroup(group.getGroupid())){
+                Support.forward(getServletContext(), request, response,
+                        request.getContextPath() + "/home", msg);
+            }else{
+                request.setAttribute(RequestUtils.GROUP, group);
+                request.setAttribute(RequestUtils.GROUP_USERS, utenti);
+                if (msg != null) {
+                    Support.forward(getServletContext(), request, response,
+                            request.getContextPath() + "/home", msg);
+                } else {
+                    Support.forward(getServletContext(), request, response, "/modgroup.jsp", msg);
+                }
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(GroupModify.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
+        
     }
 
     /**

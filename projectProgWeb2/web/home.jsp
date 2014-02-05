@@ -92,7 +92,7 @@
                     <div class="col-xs-12 col-md-3 col-lg-3">
                         <div class="card">
                             <a href="threadgroup?gid=<c:out value="${group.groupid}" />"></a>
-                            <c:if test="${userID==group.owner}" >
+                            <c:if test="${userID==group.owner && !group.isChiuso()}" >
                                 <a class="mod glyphicon glyphicon-edit" href="modgroup?gid=<c:out value="${group.groupid}" />"></a>
                             </c:if>
                             <strong><c:out value="${group.title}" /></strong>
