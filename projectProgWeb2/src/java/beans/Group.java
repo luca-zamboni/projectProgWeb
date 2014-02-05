@@ -153,7 +153,7 @@ public class Group implements Serializable, Comparable<Group>{
 
     @Override
     public int compareTo(Group p) {
-        return lastPostDate.compareTo(p.lastPostDate);
+        return -1*lastPostDate.compareTo(p.lastPostDate);
     }
 
 }
