@@ -64,7 +64,7 @@
                             <strong>meglio</strong></p><br/>
                         <p>
                             <a class="btn btn-success" style="padding:15px;font-size: 25px;" href="register">Iscriviti adesso!</a>
-                            <a class="btn btn-warning" style="padding:15px;font-size: 25px;" href="home">Naviga</a>
+                            <a class="btn btn-warning" style="padding:15px;font-size: 25px;" href="explore">Naviga</a>
                         </p>
                     </div>
                 </div>

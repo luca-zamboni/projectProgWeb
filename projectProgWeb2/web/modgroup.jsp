@@ -38,17 +38,17 @@
                             </c:choose>
                         <div id="inviti">
                             <p><b>Invita:</b></p>
-                            <c:forEach items="${userlist}" var="userb" >
-                                <c:if test="${userb.userID!=sessionScope.user.userID}">
+                            <c:forEach items="${usercheckboxes}" var="member" >
+                                <c:if test="${member.first.userID!=sessionScope.user.userID}">
                                     <c:choose>
-                                        <c:when test="${group.priva}" >
-                                            <input type="checkbox" name="usercheckboxes" value="<c:out value="${userb.userID}"/>" checked="">
+                                        <c:when test="${member.second}" >
+                                            <input type="checkbox" name="usercheckboxes" value="<c:out value="${member.first.userID}"/>" checked="">
                                         </c:when>
                                         <c:otherwise >
-                                            <input type="checkbox" name="usercheckboxes" value="<c:out value="${userb.userID}"/>">
+                                            <input type="checkbox" name="usercheckboxes" value="<c:out value="${member.first.userID}"/>">
                                         </c:otherwise>
                                     </c:choose>
-                                    <c:out value="${userb.username}"/>
+                                    <c:out value="${member.first.username}"/>
                                     </input>
                                 </c:if>
                             </c:forEach><br>

@@ -197,13 +197,26 @@ public class DBManager implements Serializable {
 
     }
 
-    public ArrayList<UserBean> getAllUserInGroup(int groupid) throws SQLException {
+    public ArrayList<UserBean> getMembers(int groupid) throws SQLException {
         ArrayList<UserBean> us = getAllUser();
         ArrayList<UserBean> ret = new ArrayList<>();
         for (UserBean a : us) {
             if (isInGroup(a.getUserID(), groupid)) {
                 ret.add(a);
             }
+
+        }
+        return ret;
+    }
+    
+    public ArrayList<UserBean> getAllUsersInGroup(int groupid) throws SQLException {
+        ArrayList<UserBean> us = getAllUser();
+        ArrayList<UserBean> ret = new ArrayList<>();
+        for (UserBean a : us) {
+            if (isInGroup(a.getUserID(), groupid)||isPending(a.getUserID(), groupid)) {
+                ret.add(a);
+            }
+
         }
         return ret;
     }
@@ -431,6 +444,7 @@ public class DBManager implements Serializable {
         }
         return false;
     }
+    
 
     public int getGroupOwnerById(int id) throws SQLException {
         String sql = "SELECT ownerid FROM groups WHERE groupid = ?";
@@ -641,7 +655,7 @@ public class DBManager implements Serializable {
                 + "WHERE groups.groupid = user_groups.groupid "
                 + "AND users.userid= user_groups.userid "
                 + "AND post.groupid= groups.groupid "
-                + "AND username = ? AND user_groups.status = ? AND groups.private = 0 "
+                + "AND username = ? AND user_groups.status = ? AND (groups.private =0 OR groups.private=2)  "
                 + "GROUP BY groups.groupid "
                 + "ORDER by post.date DESC ";
         PreparedStatement stm = con.prepareStatement(sql);
@@ -684,7 +698,7 @@ public class DBManager implements Serializable {
                 sql = "SELECT groups.groupid,groupname,creationdate,groups.ownerid,post.date,groups.private "
                         + "FROM groups,post "
                         + "WHERE post.groupid = groups.groupid "
-                        + "AND groups.private = 1 "
+                        + "AND (groups.private = 1 OR groups.private = 3) "
                         + "GROUP BY groups.groupid "
                         + "ORDER by post.date DESC ";
 
@@ -995,7 +1009,7 @@ public class DBManager implements Serializable {
         }
 
         if (users) {
-            ret.setUsers(this.getAllUserInGroup(groupId));
+            ret.setUsers(this.getMembers(groupId));
         }
 
         if (posts) {

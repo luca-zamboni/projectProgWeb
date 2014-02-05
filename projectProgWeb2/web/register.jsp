@@ -20,7 +20,7 @@
             body{
                 background: #222 url('img/login_back.jpg') no-repeat;
             }
-            
+
             input{
                 display:block;
                 margin: 0 auto 10px;
@@ -28,21 +28,7 @@
         </style> 
     </head>
     <body>
-        <div class="navbar mynavbar" >
-            <div class="container">
-                <div class="row">
-                    <div class="col-xs-12 col-md-2 col-lg-2"><p class="mybrand">StudyTalk</p></div>
-                    <div class="col-xs-12 col-md-10 col-lg-10">
-                        <form  action="login" method="POST" class="pull-right">
-                            <input placeholder=username type=text name="<%=RequestUtils.USERNAME%>" />
-                            <input placeholder=password type=password name="<%=RequestUtils.PASSWD%>" />
-                            <input class="btn btn-primary" type="submit" value="Entra!" />
-                            <a class="btn btn-warning" href="ForgetPassword">Password dimenticata?</a>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <jsp:include page="includes/navigationbar.jsp" />
         <div class="container">
             <div class="row">
                 <div class="col-xs-1 col-md-2 col-lg-3">&nbsp;</div>
@@ -62,8 +48,8 @@
         </div>
     </body>
     <script type="text/javascript" >
-        $(document).ready(function(){
-           $(".bubble").fadeIn('slow'); 
+        $(document).ready(function() {
+            $(".bubble").fadeIn('slow');
         });
     </script>
 </html>
