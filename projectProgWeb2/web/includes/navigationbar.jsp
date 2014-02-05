@@ -21,13 +21,9 @@
                 </div>
             </c:if>
             <div class="col-xs-2 col-md-2 col-lg-2" style="margin-top:10px;">
-                <div class="btn btn-default">
-                    <a href="home">
-                        <div class="col-xs-2 col-md-2 col-lg-2" style="margin-top:10px;">
+                    <a href="home"><div class="btn btn-default">
                             <span class="glyphicon glyphicon-home"></span>
-                        </div>
-                    </a>             
-                </div>
+                </a> </div>
                 <c:if test="${user != null}">
                     <a href="logout">
                         <div class="btn btn-default">
