@@ -74,7 +74,7 @@ public class ModProfile extends HttpServlet {
             throws ServletException, IOException {
         String param = request.getParameter(RequestUtils.PARAM);
         //Java quando gli passi un file in post sfancula tutto XD
-        //ceercare di prendere gli altri parametrinn va(Guardato su internet)
+        //ceercare di prendere gli altri parametri nn va(Guardato su internet)
 
         if (param != null && param.equals(RequestUtils.PASSWORDMOD)) {
             try {
@@ -98,12 +98,12 @@ public class ModProfile extends HttpServlet {
                 } catch (Exception ex) {
                     Support.forward(getServletContext(), request, response, "/profile.jsp", new Message(Message.MessageType.ERROR, -1));
                 }
-                response.sendRedirect("./profile.jsp");
+                Support.forward(getServletContext(), request, response, "/profile.jsp",null);
             } else {
                 Support.forward(getServletContext(), request, response, "/profile.jsp", new Message(Message.MessageType.ERROR, 7));
             }
         } else {
-            response.sendRedirect("./profile.jsp");
+            Support.forward(getServletContext(), request, response, "/profile.jsp",null);
         }
     }
 
