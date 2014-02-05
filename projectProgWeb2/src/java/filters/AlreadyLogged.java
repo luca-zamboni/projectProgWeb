@@ -18,6 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import utils.RequestUtils;
 import utils.SessionUtils;
+import utils.Support;
 
 /**
  *
@@ -35,13 +36,15 @@ public class AlreadyLogged implements Filter {
         UserBean bean = (UserBean) ((HttpServletRequest) request).getSession().getAttribute(SessionUtils.USER);
 
         HttpServletRequest httpRequest = (HttpServletRequest) request;
+        HttpServletResponse httpResponse = (HttpServletResponse) response;
         String url = ((HttpServletRequest) request).getContextPath();
 
         if (bean == null) { // non e' loggato
             chain.doFilter(request, response);
+            return;
         } else {
-            request.setAttribute(RequestUtils.MESSAGE, new Message(Message.MessageType.ERROR,6));
-            ((HttpServletResponse) response).sendRedirect(url + "/home");
+            Support.forward(filterConfig.getServletContext(), httpRequest, 
+                    httpResponse, url+"/home", new Message(Message.MessageType.ERROR, 6));
         }
     }
 

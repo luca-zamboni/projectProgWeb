@@ -34,25 +34,12 @@ public class LoginFilter implements Filter {
         String url = ((HttpServletRequest) request).getRequestURI();
 
         //System.out.print("url " + url );
-        if (httpRequest.getMethod().equalsIgnoreCase("GET")) {
-            if (bean == null) {
-                httpResponse.sendRedirect("");
-                return;
-            }
+        if (bean == null) {
+            httpResponse.sendRedirect("");
+        } else {
+            chain.doFilter(request, response);
+            return;
         }
-//        } else {
-//            String path = request.getServletContext().getContextPath();
-//            if(url.equals(path+"/home.jsp")){
-//                chain.doFilter(request, response);
-//            }else{
-//                if (bean == null) {
-//                    ((HttpServletResponse) response).sendRedirect("./");
-//                }else{
-//                    chain.doFilter(request, response);
-//                }
-//            }
-//        }
-        chain.doFilter(request, response);
     }
 
     @Override

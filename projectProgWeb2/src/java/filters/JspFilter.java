@@ -33,15 +33,12 @@ public class JspFilter implements Filter {
 
         HttpServletResponse res = ((HttpServletResponse) response);
         HttpServletRequest req = ((HttpServletRequest) request);
-        
-        System.err.println("YOLO");
 
         if (req.getMethod().equalsIgnoreCase("GET")) {
             res.sendRedirect("/projectProgWeb2/index");
-            System.err.println("YOLOGET");
+            return;
         } else {
             chain.doFilter(request, response);
-            System.err.println("YOLOOTHER");
         }
 
     }

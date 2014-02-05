@@ -41,7 +41,7 @@
                             <input placeholder=username type=text name="<%=RequestUtils.USERNAME%>" />
                             <input placeholder=password type=password name="<%=RequestUtils.PASSWD%>" />
                             <input class="btn btn-primary" type="submit" value="Entra!" />
-                            <a class="btn btn-warning" href="forgetPassword.jsp">Password dimenticata?</a>
+                            <a class="btn btn-warning" href="ForgetPassword">Password dimenticata?</a>
                         </form>
                     </div>
                 </div>
@@ -63,7 +63,7 @@
                         <p>Per studiare sempre al 
                             <strong>meglio</strong></p><br/>
                         <p>
-                            <a class="btn btn-success" style="padding:15px;font-size: 25px;" href="register.jsp">Iscriviti adesso!</a>
+                            <a class="btn btn-success" style="padding:15px;font-size: 25px;" href="register">Iscriviti adesso!</a>
                             <a class="btn btn-warning" style="padding:15px;font-size: 25px;" href="home">Naviga</a>
                         </p>
                     </div>

@@ -27,6 +27,13 @@ public class ForgetPassword extends HttpServlet {
     DBManager dbm;
 
     @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        Support.forward(getServletContext(), req, resp, "/forgetPassword.jsp", null);
+    }
+    
+    
+
+    @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         connectDatabase(req);
         
@@ -45,7 +52,7 @@ public class ForgetPassword extends HttpServlet {
             String mail = dbm.getEmail(id);
             if(mail == null){
                 req.getSession().setAttribute(RequestUtils.MESSAGE, new beans.Message(beans.Message.MessageType.ERROR, 5));
-                resp.sendRedirect("./forgetPassword.jsp");
+                Support.forward(getServletContext(), req, resp, "/forgetPassword.jsp", null);
             }else{
                 
                 String subject = "Cambio password";

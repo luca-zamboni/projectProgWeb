@@ -31,23 +31,23 @@ import utils.Support;
  * @author luca
  */
 public class NoModFilter implements Filter {
-    
+
     private FilterConfig filterConfig = null;
 
     public void doFilter(ServletRequest request, ServletResponse response,
             FilterChain chain)
             throws IOException, ServletException {
-        
+
         HttpServletRequest req = (HttpServletRequest) request;
         HttpServletResponse resp = (HttpServletResponse) response;
         DBManager dbm = Support.getDBManager(req);
         UserBean bean = (UserBean) Support.getInSession(req, SessionUtils.USER);
         if (bean != null && bean.getTypeToInt() == 0) {
             chain.doFilter(request, response);
-        }else{
-            Support.forward(req.getServletContext(), req, resp, "/home", null);
+            return;
+        } else {
+            Support.forward(req.getServletContext(), req, resp, req.getContextPath()+"/home", null);
         }
-
     }
 
     @Override
