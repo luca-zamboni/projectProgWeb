@@ -19,9 +19,11 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.http.HttpServletRequest;
+import org.apache.commons.lang.StringEscapeUtils;
 //import models.Group;
 //import models.Post;
 
@@ -85,7 +87,7 @@ public class DBManager implements Serializable {
         }
     }
 
-    public int updateGroup(int group, String newTitle, String[] users,
+    public int updateGroup(int group, String newTitle, List<Integer> users,
             int owner, boolean chiuso, boolean privato) throws SQLException {
         int rowChanged;
         String sql = "UPDATE groups SET groupname = ? WHERE groupid = ?";
@@ -105,12 +107,12 @@ public class DBManager implements Serializable {
 
         stm.close();
 
-        ArrayList<UserBean> usersInDb = getAllUser();
+        ArrayList<Integer> usersInDb = getAllUserIDs();
         PreparedStatement stm2;
 
         String sql2;
-        for (String user : users) {
-            int id = getIdFromUser(user);
+        for (int id : users) {
+            //int id = getIdFromUser(user);
             if (!isPending(id, group) && !isKicked(id, group) && !isInGroup(id, group)) {
                 sql2 = "INSERT INTO user_groups(userid,groupid,status) VALUES (?,?,2)";
                 stm2 = con.prepareStatement(sql2);
@@ -127,10 +129,10 @@ public class DBManager implements Serializable {
                 stm2.close();
             }
         }
-
-        usersInDb.removeAll(Arrays.asList(users));
-        for (UserBean user : usersInDb) {
-            int id = user.getUserID();
+        
+        usersInDb.removeAll(users);
+        
+        for (int id : usersInDb) {
             sql2 = "UPDATE user_groups SET status = 1 WHERE groupid = ? AND userid = ?";
             stm2 = con.prepareStatement(sql2);
             stm2.setInt(1, group);
@@ -189,7 +191,8 @@ public class DBManager implements Serializable {
         stm2.executeUpdate();
         stm2.close();
 
-        insertPost(owner, groupid, "Creation of group " + title);
+        String g = StringEscapeUtils.escapeHtml(title);
+        insertPost(owner, groupid, "Creation of group " + g);
 
         return groupid;
 
@@ -491,6 +494,24 @@ public class DBManager implements Serializable {
                 tmp.setUserId(rs.getInt(2));
                 tmp.setAvatar(rs.getString(3));
                 mUsers.add(tmp);
+            }
+        } finally {
+            rs.close();
+            stm.close();
+        }
+        return mUsers;
+    }
+    
+    public ArrayList<Integer> getAllUserIDs() throws SQLException {
+        String sql = "SELECT "+USERID+" FROM users";
+        PreparedStatement stm = con.prepareStatement(sql);
+        ResultSet rs;
+        rs = stm.executeQuery();
+        ArrayList<Integer> mUsers = new ArrayList<>();
+        try {
+            UserBean tmp;
+            while (rs.next()) {
+                mUsers.add(rs.getInt(1));
             }
         } finally {
             rs.close();

@@ -5,6 +5,7 @@
  */
 package beans;
 
+import java.util.Comparator;
 import javax.ejb.Stateless;
 import servlets.ModProfile;
 
@@ -13,7 +14,7 @@ import servlets.ModProfile;
  * @author jibbo
  */
 @Stateless
-public class UserBean {
+public class UserBean{
 
     public enum UserType {
 
