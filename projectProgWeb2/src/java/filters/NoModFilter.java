@@ -46,7 +46,7 @@ public class NoModFilter implements Filter {
             chain.doFilter(request, response);
             return;
         } else {
-            Support.forward(req.getServletContext(), req, resp, req.getContextPath()+"/home", null);
+            resp.sendRedirect(req.getContextPath()+"/home");
         }
     }
 

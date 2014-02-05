@@ -50,8 +50,7 @@ public class ProtectFiles implements Filter {
             
             int gr = Integer.parseInt(split[i-1]);
             UserBean user = (UserBean) Support.getInSession(req, SessionUtils.USER);
-            System.err.println(dbm.isInGroup(user.getUserID(), gr));
-            if(dbm.isInGroup(user.getUserID(), gr) || !dbm.isPrivateGroup(gr) || dbm.isModerator(user.getUserID())){
+            if(!dbm.isPrivateGroup(gr) || user!=null && (dbm.isInGroup(user.getUserID(), gr) || dbm.isModerator(user.getUserID()))){
                 chain.doFilter(request, response);
             }else{
                 res.sendRedirect(((HttpServletRequest) request).getContextPath()+"/home");
