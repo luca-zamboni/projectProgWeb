@@ -42,7 +42,6 @@ public class ChangePass extends HttpServlet {
             Support.forward(getServletContext(), req, resp, "/changepassword.jsp", new Message(Message.MessageType.ERROR, 4));
         }else{
             if(!dbm.setNewPassword(code)){
-                Support.forward(getServletContext(), req, resp, "/changepassword.jsp", new Message(Message.MessageType.ERROR, 0));
                 Support.forward(getServletContext(), req, resp, "/index.jsp", new Message(Message.MessageType.ERROR, 0));
             }
             Support.forward(getServletContext(), req, resp, "/index.jsp",null);
