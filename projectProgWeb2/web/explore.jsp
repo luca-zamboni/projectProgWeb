@@ -43,7 +43,14 @@
                                 <p style="text-align:center;">
                                     <img src="img/img.jpg" class="prof" >
                                     <span class="badge" style="position:relative;left:-5%;top:-20%">
-                                        <c:out value="${group.numPartecipanti}" />
+                                        <c:choose>
+                                            <c:when test="${group.priva}" >
+                                                <c:out value="${group.numPartecipanti}" />
+                                            </c:when>
+                                            <c:otherwise >
+                                                Tutti
+                                            </c:otherwise>
+                                        </c:choose>
                                     </span>
                                     </img>
                                 </p>

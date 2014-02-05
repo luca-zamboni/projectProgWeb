@@ -116,7 +116,6 @@
                                            Tutti
                                         </c:otherwise>
                                     </c:choose>
-        
                                     </span>
                                     </img>
                                 </p>
