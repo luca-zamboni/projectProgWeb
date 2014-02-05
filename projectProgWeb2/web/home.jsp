@@ -20,7 +20,7 @@
     </head>
     <body>
         <% UserBean user = (UserBean) Support.getInSession(request, SessionUtils.USER);%>
-        <% String date =  (user.getLastLogin()==-1?"Never":Support.getDateFromTime(user.getLastLogin()));
+        <% String date =  (user.getLastLogin()==-1?"Primo Accesso":Support.getDateFromTime(user.getLastLogin()));
             pageContext.setAttribute("date", date);
         %>
         <div class="navbar mynavbar" style="display:none;background-color: white;" >

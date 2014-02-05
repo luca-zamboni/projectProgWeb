@@ -20,12 +20,10 @@
                     </a>
                 </div>
             </c:if>
-            <div class="col-xs-2 col-md-2 col-lg-2" style="margin-top:10px;">
+            <div class="col-xs-2 col-md-2 col-lg-2 pull-right" style="margin-top:10px;">
                 <div class="btn btn-default">
                     <a href="home">
-                        <div class="col-xs-2 col-md-2 col-lg-2" style="margin-top:10px;">
-                            <span class="glyphicon glyphicon-home"></span>
-                        </div>
+                         <span class="glyphicon glyphicon-home"></span>
                     </a>             
                 </div>
                 <c:if test="${user != null}">
