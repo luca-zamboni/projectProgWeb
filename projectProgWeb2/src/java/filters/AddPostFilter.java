@@ -32,23 +32,28 @@ public class AddPostFilter implements Filter {
     public void doFilter(ServletRequest request, ServletResponse response,
             FilterChain chain)
             throws IOException, ServletException {
-        
+
         UserBean bean = (UserBean) ((HttpServletRequest) request).getSession().getAttribute(SessionUtils.USER);
 
         HttpServletRequest httpRequest = (HttpServletRequest) request;
         String url = ((HttpServletRequest) request).getRequestURI();
         DBManager dbm = Support.getDBManager(httpRequest);
-        if (bean == null) {
-            
-        } else {
-            String groupid = request.getParameter("gid");
-            int gid = Integer.parseInt(groupid);
-            try {
-                if(!dbm.isClosedGroup(gid))
-                    chain.doFilter(request, response);
-            } catch (SQLException ex) {
-                Logger.getLogger(AddPostFilter.class.getName()).log(Level.SEVERE, null, ex);
+        String groupid = request.getParameter("gid");
+        int gid = groupid == null ? -1 : Integer.parseInt(groupid);
+        try {
+            if (bean == null || (bean.getType() == UserBean.UserType.MODERATOR && !dbm.isInGroup(bean.getUserID(), gid))) {
+                return;
+            } else {
+                try {
+                    if (!dbm.isClosedGroup(gid)) {
+                        chain.doFilter(request, response);
+                    }
+                } catch (SQLException ex) {
+                    Logger.getLogger(AddPostFilter.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
     }

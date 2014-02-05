@@ -43,8 +43,7 @@ public class AlreadyLogged implements Filter {
             chain.doFilter(request, response);
             return;
         } else {
-            Support.forward(filterConfig.getServletContext(), httpRequest, 
-                    httpResponse, url+"/home", new Message(Message.MessageType.ERROR, 6));
+            httpResponse.sendRedirect("/projectProgWeb2/home");
         }
     }
 

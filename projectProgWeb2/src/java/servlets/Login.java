@@ -106,7 +106,7 @@ public class Login extends HttpServlet {
     public void connectDatabase(HttpServletRequest request) {
         try {
             dbm = new DBManager(request);
-            Support.putDBMangaer(request, dbm);
+            Support.putDBManager(request, dbm);
         } catch (SQLException ex) {
             Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
         }
