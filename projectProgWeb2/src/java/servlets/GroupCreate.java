@@ -48,15 +48,7 @@ public class GroupCreate extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        ArrayList<UserBean> ub = null;
-        try {
-            dbm = new DBManager(request);
-            ub = dbm.getAllUser();
-        } catch (Exception e) {
-            System.out.println(e.toString());
-            e.printStackTrace();
-        }
-        request.setAttribute(RequestUtils.USERLIST, ub);
+        setUsers(request);
         Support.forward(getServletContext(), request, response, "/creategroup.jsp", null);
     }
 
@@ -111,6 +103,7 @@ public class GroupCreate extends HttpServlet {
         Message msg = buildMessage(groupId, title);
 
         if (msg.getType() == Message.MessageType.ERROR) {
+            setUsers(request);
             Support.forward(getServletContext(), request, response, "/creategroup.jsp", msg);
         } else {
             Support.forward(getServletContext(), request, response, "/home", msg);
@@ -130,6 +123,20 @@ public class GroupCreate extends HttpServlet {
         }
 
         return ret;
+    }
+    
+    private void setUsers(HttpServletRequest request) {
+        
+        ArrayList<UserBean> ub = null;
+        try {
+            dbm = Support.getDBManager(request);
+            ub = dbm.getAllUser();
+        } catch (Exception e) {
+            System.out.println(e.toString());
+            e.printStackTrace();
+        }
+        request.setAttribute(RequestUtils.USERLIST, ub);
+        
     }
 
     private Message buildMessage(int groupId, String groupTitle) {
